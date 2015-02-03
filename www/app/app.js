@@ -3,7 +3,7 @@
 
   angular
       .module('krakenApp', ['ngMaterial', 'visualizers'])
-      .controller('AppCtrl', ['$scope', 'visualizersService', '$mdSidenav', '$mdBottomSheet', '$log', VisualizerAppController ])
+      .controller('AppCtrl', ['$scope', 'visualizerService', '$mdSidenav', '$mdBottomSheet', '$log', VisualizerAppController ])
       .config(function($mdThemingProvider) {
 
         // Place theme overrides here.
@@ -18,10 +18,10 @@
    * Main Controller for the Kraken App
    * @param $scope
    * @param $mdSidenav
-   * @param visualizersService
+   * @param visualizerService
    * @constructor
    */
-  function VisualizerAppController($scope, visualizersService, $mdSidenav, $mdBottomSheet, $log ) {
+  function VisualizerAppController($scope, visualizerService, $mdSidenav, $mdBottomSheet, $log ) {
     var allVisualizers = [ ];
 
     $scope.selected      = null;
@@ -41,7 +41,7 @@
      *
      */
     function loadVisualizers() {
-      visualizersService
+      visualizerService
         .loadAll()
         .then( function( visualizers ) {
           allVisualizers = visualizers;
