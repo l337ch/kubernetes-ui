@@ -95,14 +95,13 @@ https://github.com/google/material-design-icons
   background: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4NCiAgICA8cGF0aCBkPSJNMCAwaDM2djM2aC0zNnoiIGZpbGw9Im5vbmUiLz4NCiAgICA8cGF0aCBkPSJNNCAyN2gyOHYtM2gtMjh2M3ptMC04aDI4di0zaC0yOHYzem0wLTExdjNoMjh2LTNoLTI4eiIvPg0KPC9zdmc+) no-repeat  center center;
 }
 
-.svg-kraken {
-  background-position: 0% 0;
-  background-repeat: no-repeat;
-  background-image: url(logo.svg);
-  position: relative;
-  width: 64px;
-  height: 64px;
-  display: inline-block;
-  overflow: hidden;
+.kraken-logo {
+  background-image: url("/assets/img/kubernetes.svg");
+  background-size: 40px 40px;
+  width: 40px;
+  height: 40px;
 }
-
+.kraken-text {
+  line-height: 40px; vertical-align: middle;
+  padding: 2px;
+}

@@ -11,23 +11,13 @@
     <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="./app.css" >
   </head>
-
   <body ng-app="krakenApp" layout="column" ng-controller="AppCtrl">
-
-
-
-    <!--
-         Use `flex` [below] to have the side bar and content area
-         fill the available vertical display area
-     -->
-
     <div layout="row" flex>
-
       <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')">
         <md-toolbar class="md-default-theme">
           <h1 class="md-toolbar-tools">
             <a ng-href="." layout="row" flex="" href="/">
-              <span class="svg-kraken" role="img" aria-label="Pods"></span>
+              <span class="kraken-logo"></span><span class="kraken-text">kubernetes</span>
             </a>
           </h1>
         </md-toolbar>
@@ -35,19 +25,13 @@
           <md-item ng-repeat="it in visualizers">
             <md-item-content>
               <md-button ng-click="selectVisualizer(it)" ng-class="{'selected' : it === selected }">
-                <span class="{{it.classname}} visualizer"></span>
+                <span class="{{it.classname}} visualizer">kubernetes</span>
                 {{it.name}}
               </md-button>
             </md-item-content>
           </md-item>
         </md-list>
       </md-sidenav>
-
-      <!--
-          Use `flex` [below] to have the content area
-          fill the available horizontal display area on the right side
-      -->
-
       <div layout="column" flex class="content-wrapper" id="content">
         <md-toolbar layout="row">
           <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
@@ -63,17 +47,13 @@
         </md-content>
       </div>
     </div>
-
     <script src="./bower_components/hammerjs/hammer.js"></script>
     <script src="./bower_components/angular/angular.js"></script>
     <script src="./bower_components/angular-route/angular-route.js"></script>
     <script src="./bower_components/angular-aria/angular-aria.js"></script>
     <script src="./bower_components/angular-animate/angular-animate.js"></script>
-
     <script src="./bower_components/angular-material/angular-material.js"></script>
-
     <script src="./app.js"></script>
     <script src="./src/visualizers/visualizerService.js"></script>
-
   </body>
 </html>
