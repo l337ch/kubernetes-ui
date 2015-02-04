@@ -12,7 +12,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
-  console.log("Page Controller reporting for duty.");
+  console.log("loading page controller.");
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
@@ -34,3 +34,16 @@ app.directive('includeReplace', function () {
         }
     };
 });
+
+app.controller('PodCtrl', ['$scope', '$interval',
+    function($scope, $interval) {
+      $scope.mode = 'query';
+      $scope.determinateValue = 30;
+      $interval(function() {
+        $scope.determinateValue += 1;
+        if ($scope.determinateValue > 100) {
+          $scope.determinateValue = 30;
+        }
+      }, 100, 0, true);
+    }
+  ]);
