@@ -1,0 +1,18 @@
+<md-toolbar layout="row">
+         <h1 class="md-toolbar-tools">
+            <a ng-href="." layout="row" flex="" href="/">
+              <span class="kraken-logo"></span><span class="kraken-text">kubernetes</span>
+            </a>
+          </h1>
+      <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
+        <span class="visuallyhidden">Menu</span>
+      </button>
+    </md-toolbar>
+            <div layout="row" flex>
+		<div ng-include="'/views/templates/sidebar.html'" include-replace></div>
+
+		        <div layout="column" flex id="content">
+            <md-content layout="column" flex class="md-padding">
+            <div ng-view></div>
+            </md-content>
+        </div>

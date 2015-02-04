@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" ng-app="krakenApp">
   <head>
     <title>Kraken</title>
 
@@ -9,51 +9,17 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
     <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
-    <link rel="stylesheet" href="./app.css" >
+    <link rel="stylesheet" href="/assets/css/app.css" >
   </head>
-  <body ng-app="krakenApp" layout="column" ng-controller="AppCtrl">
-    <div layout="row" flex>
-      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')">
-        <md-toolbar class="md-default-theme">
-          <h1 class="md-toolbar-tools">
-            <a ng-href="." layout="row" flex="" href="/">
-              <span class="kraken-logo"></span><span class="kraken-text">kubernetes</span>
-            </a>
-          </h1>
-        </md-toolbar>
-        <md-list>
-          <md-item ng-repeat="it in visualizers">
-            <md-item-content>
-              <md-button ng-click="selectVisualizer(it)" ng-class="{'selected' : it === selected }">
-                <span class="{{it.classname}} visualizer"></span>
-                {{it.name}}
-              </md-button>
-            </md-item-content>
-          </md-item>
-        </md-list>
-      </md-sidenav>
-      <div layout="column" flex class="content-wrapper" id="content">
-        <md-toolbar layout="row">
-          <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
-            <span class="visuallyhidden">Menu</span>
-          </button>
-          <h1>Kraken</h1>
-        </md-toolbar>
-        <md-content layout="column" flex class="md-padding">
-            <span class="{{selected.classname}} visualizer" role="img" aria-label="{{selected.name}}"></span>
-            <h2>{{selected.name}}</h2>
-            <p>{{selected.content}}</p>
-            <div ng-include="selected.url"></div>
-        </md-content>
-      </div>
-    </div>
+  <body layout="column" ng-controller="PageCtrl">
+<div ng-include="'/views/templates/header.html'" include-replace></div>
+<div ng-include="'/views/templates/footer.html'" include-replace></div>
     <script src="./bower_components/hammerjs/hammer.js"></script>
     <script src="./bower_components/angular/angular.js"></script>
     <script src="./bower_components/angular-route/angular-route.js"></script>
     <script src="./bower_components/angular-aria/angular-aria.js"></script>
     <script src="./bower_components/angular-animate/angular-animate.js"></script>
     <script src="./bower_components/angular-material/angular-material.js"></script>
-    <script src="./app.js"></script>
-    <script src="./src/visualizers/visualizerService.js"></script>
+    <script src="/assets/js/app.js"></script>
   </body>
 </html>
