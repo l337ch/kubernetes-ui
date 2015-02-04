@@ -1,4 +1,4 @@
-`npm` is configured to automatically run `bower install`. Simply run:
+`npm` is configured to automatically run `bower install`. From the `www` directory, simply run:
 
 ```
 npm install
@@ -19,7 +19,7 @@ npm update
 
 ### Serving the App during Development
 
-The app can be served through `kubecfg`, but for some types of review a local web server is convenient. One can be installed as follows:
+The app can be served through `kubectl`, but for some types of review a local web server is convenient. One can be installed as follows:
 
 ```
 sudo npm install -g http-server
@@ -28,6 +28,7 @@ sudo npm install -g http-server
 The server can then be launched:
 
 ```
+cd app
 http-server -a localhost -p 8000
 ```
 
