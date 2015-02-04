@@ -17,7 +17,7 @@
         name: 'Pods',
         classname: 'svg-pods',
         content: 'Container Pods',
-        url: 'podcontroller.html'
+        url: '/pages/podcontroller.html'
       },
       {
         name: 'Services',
