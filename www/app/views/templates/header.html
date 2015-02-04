@@ -8,11 +8,11 @@
         <span class="visuallyhidden">Menu</span>
       </button>
     </md-toolbar>
-            <div layout="row" flex>
-		<div ng-include="'/views/templates/sidebar.html'" include-replace></div>
-
-		        <div layout="column" flex id="content">
-            <md-content layout="column" flex class="md-padding">
-            <div ng-view></div>
-            </md-content>
+        <div layout="row" flex>
+			<div ng-include="'/views/templates/sidebar.html'" include-replace></div>
+				<div layout="column" flex id="content">
+            		<md-content layout="column" flex class="md-padding">
+            			<ng-view></ng-view>
+            		</md-content>
+        		</div>
         </div>
