@@ -1,7 +1,7 @@
 # Kubernetes Kraken
 
 ```
-kubecfg --proxy --www=www/
+kubectl proxy --www=www/
 ```
 
 Kubernetes is an open source system for managing containerized applications across multiple hosts,
@@ -17,6 +17,15 @@ Kubernetes is:
 Kubernetes builds upon a decade and a half of experience at Google running production workloads at scale, combined with best-of-breed ideas and practices from the community.
 
 <hr>
+
+## Documentation
+  - **Developer Documentation**
+    - for people who want to run kraken locally
+    - in [www](www)
+  - **Collaboration Documentation**
+    - in [docs/devel](docs/devel/collab.md)
+    - for people who want to contribute code to kraken
+    - covers development conventions
 
 ## Community, discussion and support
 
