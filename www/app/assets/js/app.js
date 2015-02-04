@@ -3,6 +3,7 @@ var app = angular.module('krakenApp', ['ngRoute','ngMaterial']);
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
+    .when("/pods", {templateUrl: "/pages/pods.html", controller: "PageCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
