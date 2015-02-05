@@ -73,6 +73,21 @@ app.controller('PodCtrl', ['$scope', '$interval', 'podService',
           $scope.determinateValue = 30;
         }
       }, 100, 0, true);
+
+      var allPods = { };
+
+      loadPods();
+
+      function loadPods() {
+        podService
+          .loadAll()
+          .then( function( pods ) {
+            allPods = pods;
+  
+            $scope.pods = pods;
+            $scope.selected = pods.items[0];
+          });
+      }
     }
   ]);
 
