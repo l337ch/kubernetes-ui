@@ -18,7 +18,7 @@
              ng-switch-when="0"
              md-swipe-left="next()"
              md-swipe-right="previous()" >
-            View for Item #1<br/>
+            View for {{data.firstLabel}}<br/>
             data.selectedIndex = 0
         </div>
         <div role="tabpanel"
@@ -36,7 +36,7 @@
              ng-switch-when="2"
              md-swipe-left="next()"
              md-swipe-right="previous()" >
-            View for Item #3<br/>
+            View for {{data.thirdLabel}}<br/>
             data.selectedIndex = 2
         </div>
     </ng-switch>
