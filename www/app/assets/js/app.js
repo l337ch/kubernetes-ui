@@ -1,4 +1,5 @@
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial',
+  'pods', 'replicationControllers', 'services']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -62,8 +63,8 @@ app.controller('ClusterCtrl', ['$scope', '$interval',
  * Visualizer for pods
  =========================================================*/
 
-app.controller('PodCtrl', ['$scope', '$interval',
-    function($scope, $interval) {
+app.controller('PodCtrl', ['$scope', '$interval', 'podService',
+    function($scope, $interval, podService) {
       $scope.mode = 'query';
       $scope.determinateValue = 30;
       $interval(function() {
@@ -80,7 +81,7 @@ app.controller('PodCtrl', ['$scope', '$interval',
  * Visualizer for replication controllers
  =========================================================*/
 
-app.controller('ReplicationCtrl', ['$scope', '$interval',
+app.controller('ReplicationCtrl', ['$scope', '$interval', 'replicationControllerService',
     function($scope, $interval) {
       $scope.mode = 'query';
       $scope.determinateValue = 30;
@@ -98,7 +99,7 @@ app.controller('ReplicationCtrl', ['$scope', '$interval',
  * Visualizer for services
  =========================================================*/
 
-app.controller('ServicesCtrl', ['$scope', '$interval',
+app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
     function($scope, $interval) {
       $scope.mode = 'query';
       $scope.determinateValue = 30;
