@@ -221,6 +221,9 @@ gulp.task('styles:app', function() {
 // });
 
 
+// Environment based configuration
+// https://github.com/kraken-people/kubernetes-kraken/issues/21
+
 gulp.task('copy:components', function() {
 
   var jsFilter = gulpFilter('**/*.js');
