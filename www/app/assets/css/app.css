@@ -4,6 +4,8 @@
   padding: 2px;
 }
 .tabsHomeTabs {
+  height: 100%;
+  width: 100%;
   /*
  * Animation styles
  */
@@ -22,8 +24,8 @@
   position: relative;
   background: white;
   border: 0px solid black;
-  height: 300px;
-  width: 1024px;
+  height: 640px;
+  width: 100%;
   overflow: hidden;
 }
 .tabsHomeTabs [role="tabpanel"] {
@@ -123,9 +125,9 @@ md-list .md-button.selected {
   overflow: hidden;
 }
 #content md-content {
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
 }
 #content .md-button.action {
   background-color: transparent;
