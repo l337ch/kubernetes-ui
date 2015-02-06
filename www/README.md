@@ -63,11 +63,11 @@ cd app
 http-server -a localhost -p 8000
 ```
 
-### Building A Visualizer
+### Building a New Visualizer or Component 
 
 A custom visualizer can be created by adding files in the structure below
-* Angular js files can be placed in `master/components/<visualizer name>/js`. All js files will be minifies and concatenated into `app/assets/app.js`
-* CSS, images, and html files can be placed in `master/components/<visualizer name>`. All files (except .js) will be copied to `app/components/<visualizer name>` in the same folder structure. The directory will be regenerated on each gulp build. An example directory structure for a _graph-visualizer_ is below:
+* Angular js files can be placed in `master/components/<visualizer name>/js`. All js files will be minified and concatenated into `app/assets/app.js`
+* CSS, images, and html files can be placed in `master/components/<component name>`. All files (except .js) will be copied to `app/components/<component name>` in the same folder structure. The directory will be regenerated on each new gulp build. An example directory structure for a _graph-visualizer_ is below:
 ```
 graph-visualizer
 ├── css
@@ -81,7 +81,3 @@ graph-visualizer
 └── views
     └── partials
 ```
-
-
-
-
