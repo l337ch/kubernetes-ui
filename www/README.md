@@ -3,10 +3,10 @@
 We have two kinds of dependencies in this project: tools and angular framework code.  The tools help
 us manage and test the application.
 
-* We get the tools we depend upon via `npm`, the [node package manager][npm].
-* We get the angular code via `bower`, a [client-side code package manager][bower].
+* We get the tools we depend upon via `npm`, the [node package manager](https://www.npmjs.com/).
+* We get the angular code via `bower`, a [client-side code package manager](http://bower.io/).
 
-We have preconfigured `npm` to automatically run `bower` so we can simply do:
+We have preconfigured `npm` to automatically run `bower` so we can simply do (in `www/master`):
 
 ```
 npm install
@@ -28,12 +28,6 @@ it easier to serve the files by a webserver.*
 
 ```
 npm start
-```
-
-*Note: Make sure you have bower installed prior to running `npm start`:*
-
-```bash
-sudo npm install -g bower
 ```
 
 The `gulp` command will start a file watcher which will update the generated `app` code after any changes are saved. Note: gulp file watcher does not currently support adding or deleting files, this will require a restart of gulp). Two new directories will also be created in the project.
