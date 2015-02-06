@@ -1,65 +1,3 @@
-.whiteframedemoBasicUsage md-whiteframe {
-  background: #fff;
-  margin: 2px;
-  padding: 2px; }
-
-.tabsHomeTabs {
-  /*
- * Animation styles
- */ }
-  .tabsHomeTabs #tab1-content {
-    background-color: #3F51B5; }
-  .tabsHomeTabs #tab2-content {
-    background-color: #673AB7; }
-  .tabsHomeTabs #tab3-content {
-    background-color: #00796B; }
-  .tabsHomeTabs .tabpanel-container {
-    display: block;
-    position: relative;
-    background: white;
-    border: 0px solid black;
-    height: 300px;
-    width: 1024px;
-    overflow: hidden; }
-  .tabsHomeTabs [role="tabpanel"] {
-    color: white;
-    width: 100%;
-    height: 100%;
-    -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-    transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-    position: absolute; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave.ng-leave-active, .tabsHomeTabs [role="tabpanel"].ng-enter {
-    top: -300px; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave, .tabsHomeTabs [role="tabpanel"].ng-enter.ng-enter-active {
-    top: 0; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave {
-    z-index: 100; }
-  .tabsHomeTabs .tabpanel-container [role="tabpanel"] {
-    padding: 20px; }
-  .tabsHomeTabs .after-tabs-area {
-    padding: 25px; }
-  .tabsHomeTabs .after-tabs-area > span {
-    margin-top: 25px;
-    padding-right: 15px;
-    vertical-align: middle;
-    line-height: 30px;
-    height: 35px; }
-  .tabsHomeTabs .after-tabs-area > md-checkbox {
-    margin-top: 26px;
-    margin-left: 0px; }
-  .tabsHomeTabs .md-header {
-    background-color: #1976D2 !important; }
-  .tabsHomeTabs md-tab {
-    color: #90caf9 !important; }
-  .tabsHomeTabs md-tab.active, .tabsHomeTabs md-tab:focus {
-    color: white !important; }
-  .tabsHomeTabs md-tab[disabled] {
-    opacity: 0.5; }
-  .tabsHomeTabs .md-header .md-ripple {
-    border-color: #FFFF8D !important; }
-  .tabsHomeTabs md-tabs-ink-bar {
-    background-color: #FFFF8D !important; }
-
 .menuBtn {
   background-color: transparent;
   border: none;
@@ -67,7 +5,7 @@
   margin: 16px;
   position: absolute;
   width: 36px;
-} 
+}
 md-toolbar h1 {
   font-size: 1.250em;
   font-weight: 400;
@@ -85,50 +23,45 @@ md-list .md-button {
   height: 1px;
   margin: -1px;
   overflow: hidden;
-  padding: 0; 
+  padding: 0;
   position: absolute;
   width: 1px;
 }
-
 md-list .md-button {
   color: inherit;
   font-weight: 500;
   text-align: left;
   width: 100%;
 }
-  md-list .md-button.selected {
-    color: #03a9f4;
-  }
-
+md-list .md-button.selected {
+  color: #03a9f4;
+}
 #content {
   overflow: hidden;
 }
-  #content md-content {
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-top: 5px;
-  }
-    #content .md-button.action {
-      background-color: transparent;
-      border: none;
-      height: 38px;
-      margin: 8px auto 16px 0;
-      position: absolute;
-      top: 10px;
-      right: 25px;
-      width: 36px;
-    }
-
-    #content img {
-      display: block;
-      height: auto;
-      max-width: 500px;
-    }
-
+#content md-content {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+}
+#content .md-button.action {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 8px auto 16px 0;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  width: 36px;
+}
+#content img {
+  display: block;
+  height: auto;
+  max-width: 500px;
+}
 .content-wrapper {
   position: relative;
 }
-
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -139,20 +72,16 @@ md-list .md-button {
   position: absolute;
   width: 1px;
 }
-
 md-toolbar h1 {
   font-size: 1.250em;
   font-weight: 400;
 }
-
 .menuBtn {
-  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGcgaWQ9IkhlYWRlciI+CiAgICA8Zz4KICAgICAgICA8cmVjdCB4PSItNjE4IiB5PSItMjIzMiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPgogICAgPC9nPgo8L2c+CjxnIGlkPSJMYWJlbCI+CjwvZz4KPGcgaWQ9Ikljb24iPgogICAgPGc+CiAgICAgICAgPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+CiAgICAgICAgPHBhdGggZD0iTTMsMThoMTh2LTJIM1YxOHogTTMsMTNoMTh2LTJIM1YxM3ogTTMsNnYyaDE4VjZIM3oiIHN0eWxlPSJmaWxsOiNmM2YzZjM7Ii8+CiAgICA8L2c+CjwvZz4KPGcgaWQ9IkdyaWQiIGRpc3BsYXk9Im5vbmUiPgogICAgPGcgZGlzcGxheT0iaW5saW5lIj4KICAgIDwvZz4KPC9nPgo8L3N2Zz4=) no-repeat  center center;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGcgaWQ9IkhlYWRlciI+CiAgICA8Zz4KICAgICAgICA8cmVjdCB4PSItNjE4IiB5PSItMjIzMiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPgogICAgPC9nPgo8L2c+CjxnIGlkPSJMYWJlbCI+CjwvZz4KPGcgaWQ9Ikljb24iPgogICAgPGc+CiAgICAgICAgPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+CiAgICAgICAgPHBhdGggZD0iTTMsMThoMTh2LTJIM1YxOHogTTMsMTNoMTh2LTJIM1YxM3ogTTMsNnYyaDE4VjZIM3oiIHN0eWxlPSJmaWxsOiNmM2YzZjM7Ii8+CiAgICA8L2c+CjwvZz4KPGcgaWQ9IkdyaWQiIGRpc3BsYXk9Im5vbmUiPgogICAgPGcgZGlzcGxheT0iaW5saW5lIj4KICAgIDwvZz4KPC9nPgo8L3N2Zz4=) no-repeat center center;
 }
-
 .actionBtn {
-  background: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4NCiAgICA8cGF0aCBkPSJNMCAwaDM2djM2aC0zNnoiIGZpbGw9Im5vbmUiLz4NCiAgICA8cGF0aCBkPSJNNCAyN2gyOHYtM2gtMjh2M3ptMC04aDI4di0zaC0yOHYzem0wLTExdjNoMjh2LTNoLTI4eiIvPg0KPC9zdmc+) no-repeat  center center;
+  background: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4NCiAgICA8cGF0aCBkPSJNMCAwaDM2djM2aC0zNnoiIGZpbGw9Im5vbmUiLz4NCiAgICA8cGF0aCBkPSJNNCAyN2gyOHYtM2gtMjh2M3ptMC04aDI4di0zaC0yOHYzem0wLTExdjNoMjh2LTNoLTI4eiIvPg0KPC9zdmc+) no-repeat center center;
 }
-
 .kraken-logo {
   background-image: url("/assets/img/kubernetes.svg");
   background-size: 40px 40px;
@@ -160,6 +89,7 @@ md-toolbar h1 {
   height: 40px;
 }
 .kraken-text {
-  line-height: 40px; vertical-align: middle;
+  line-height: 40px;
+  vertical-align: middle;
   padding: 2px;
 }
