@@ -4,6 +4,12 @@
 npm start
 ```
 
+*Note: Make sure you have bower installed prior to running `npm start`:*
+
+```bash
+sudo npm install -g bower
+```
+
 The `gulp` command will start a file watcher which will update the generated `app` code after any changes are saved. Note: gulp file watcher does not currently support adding or deleting files, this will require a restart of gulp). Two new directories will also be created in the project.
 
 * `master/node_modules` - contains npm dependencies
