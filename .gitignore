@@ -5,4 +5,3 @@ www/master/js/config/production.json
 www/master/components/*/config/development.json
 www/master/components/*/config/production.json
 www/master/js/config/generated-config.js
-www/app/assets/js/app.js
