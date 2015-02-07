@@ -24,11 +24,16 @@
           pollingError++;
         }
 
-        $timeout(startPolling, 1000); }).
-        error(function(data, status, headers, config) {
-          pollingError++;
-          $timeout(startPolling, 1000);
-        });
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        $timeout(startPolling, 1000);
+      }).error(function(data, status, headers, config) {
+        pollingError++;
+
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        $timeout(startPolling, 1000);
+      });
     };
 
     startPolling();
