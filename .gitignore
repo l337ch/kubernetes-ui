@@ -1,2 +1,6 @@
 npm-debug.log
 www/app/components
+www/master/js/config/development.json
+www/master/js/config/production.json
+www/master/js/config/generated-config.js
+www/app/assets/js/app.js
