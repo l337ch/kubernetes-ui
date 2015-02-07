@@ -7,9 +7,10 @@
   var PollK8sDataService = function($http, $timeout) {
     var k8sdatamodel = undefined;
     var pollingError = 0;
+    var promise = undefined;
 
     var startPolling = function() {
-      // TODO: maybe display an error to the end user.
+      // TODO: maybe display an error in the UI to the end user.
       if (pollingError > 3) {
         console.log('Have ' + pollingError + ' consecutive polling errors.');
       }
@@ -26,23 +27,27 @@
 
         // TODO: externalized this poll interval as a config value in
         // www/master/js/config
-        $timeout(startPolling, 1000);
+        promise = $timeout(startPolling, 1000);
       }).error(function(data, status, headers, config) {
         pollingError++;
 
         // TODO: externalized this poll interval as a config value in
         // www/master/js/config
-        $timeout(startPolling, 1000);
+        promise = $timeout(startPolling, 1000);
       });
     };
 
     startPolling();
 
     return {
-      getSnapshot : function() {
-        return k8sdatamodel;
+      k8sdatamodel : k8sdatamodel,
+      restart: function() {
+        startPolling();
+      },
+      stop: function() {
+        $timeout.cancel(promise);
       }
     };
   };
 
-})
+})();
