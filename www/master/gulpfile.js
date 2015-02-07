@@ -22,6 +22,8 @@ var gulp        = require('gulp'),
     ngAnnotate  = require('gulp-ng-annotate'),
     sourcemaps  = require('gulp-sourcemaps'),
     del         = require('del'),
+    ngConstant  = require('gulp-ng-constant'),
+    argv        = require('yargs').argv,
     PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
@@ -76,6 +78,7 @@ var source = {
   scripts: {
     app:    [ 'js/app.init.js',
               'js/modules/*.js',
+              'js/config/generated-config.js',
               'js/modules/controllers/*.js',
               'js/modules/directives/*.js',
               'js/modules/services/*.js',
@@ -104,14 +107,21 @@ var source = {
       main: ['less/app.less', '!less/components/*.less'],
       dir:  'less',
       watch: ['less/*.less', 'less/**/*.less', '!less/components/*.less']
+
     }
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files],
+    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js'],
     dest:  'components',
-    watch: ['components/**/*.*', component_ignored_files]
+    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js']
+  },
+
+  config: {
+    watch: ['js/config/development.json', 'js/config/production.json', 'js/config/development.json', 'js/config/production.json'],
+    dest: 'js/config'
   }
+
   //,
   // bootstrap: {
   //   main: 'less/bootstrap/bootstrap.less',
@@ -142,7 +152,10 @@ var build = {
 
 
 // JS APP
-gulp.task('scripts:app', function() {
+gulp.task('scripts:app', ['config', 'scripts:app:base']);
+
+// JS APP BUILD
+gulp.task('scripts:app:base', function() {
     // Minify and copy all JavaScript (except vendor scripts)
     return gulp.src(source.scripts.app)
         .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
@@ -223,6 +236,21 @@ gulp.task('styles:app', function() {
 
 // Environment based configuration
 // https://github.com/kraken-people/kubernetes-kraken/issues/21
+
+gulp.task('config', function () {
+  var enviroment = argv.env || 'development'; // change this to whatever default environment you need.
+
+  return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])
+    .pipe(concat('generated-config.js'))
+    .pipe(ngConstant({
+      name: 'krakenApp',
+      deps: [],
+      constants: { ngConstant: true }
+    }))
+    .pipe(gulp.dest(source.config.dest));
+});
+
+
 
 gulp.task('copy:components', function() {
 
