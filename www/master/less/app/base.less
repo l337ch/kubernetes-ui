@@ -10,64 +10,58 @@
   margin: 2px;
   padding: 2px; }
 
-.tabsHomeTabs {
+.tabsDefaultTabs {
   height: 100%;
   width: 100%;
   /*
  * Animation styles
  */ }
-  .tabsHomeTabs #tab1-content {
-    background-color: #3F51B5; }
-  .tabsHomeTabs #tab2-content {
-    background-color: #673AB7; }
-  .tabsHomeTabs #tab3-content {
-    background-color: #00796B; }
-  .tabsHomeTabs .tabpanel-container {
+
+.tabsDefaultTabs .remove-tab {
+  margin-bottom: 40px; }
+.tabsDefaultTabs .md-button {
+  display: block; }
+.tabsDefaultTabs .demo-tab {
     display: block;
     position: relative;
     background: white;
     border: 0px solid black;
     height: 640px;
     width: 100%;
-    overflow: hidden; }
-  .tabsHomeTabs [role="tabpanel"] {
-    color: white;
-    width: 100%;
-    height: 100%;
-    -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-    transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
-    position: absolute; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave.ng-leave-active, .tabsHomeTabs [role="tabpanel"].ng-enter {
-    top: -300px; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave, .tabsHomeTabs [role="tabpanel"].ng-enter.ng-enter-active {
-    top: 0; }
-  .tabsHomeTabs [role="tabpanel"].ng-leave {
-    z-index: 100; }
-  .tabsHomeTabs .tabpanel-container [role="tabpanel"] {
-    padding: 20px; }
-  .tabsHomeTabs .after-tabs-area {
-    padding: 25px; }
-  .tabsHomeTabs .after-tabs-area > span {
-    margin-top: 25px;
-    padding-right: 15px;
-    vertical-align: middle;
-    line-height: 30px;
-    height: 35px; }
-  .tabsHomeTabs .after-tabs-area > md-checkbox {
-    margin-top: 26px;
-    margin-left: 0px; }
-  .tabsHomeTabs .md-header {
-    background-color: #1976D2 !important; }
-  .tabsHomeTabs md-tab {
-    color: #90caf9 !important; }
-  .tabsHomeTabs md-tab.active, .tabsHomeTabs md-tab:focus {
-    color: white !important; }
-  .tabsHomeTabs md-tab[disabled] {
-    opacity: 0.5; }
-  .tabsHomeTabs .md-header .md-ripple {
-    border-color: #FFFF8D !important; }
-  .tabsHomeTabs md-tabs-ink-bar {
-    background-color: #FFFF8D !important; }
+  }
+
+.tabsDefaultTabs .tab0, .tabsDefaultTabs .tab1, .tabsDefaultTabs .tab2, .tabsDefaultTabs .tab3 {
+  background-color: #bbdefb; }
+.tabsDefaultTabs .md-header {
+  background-color: #1976D2 !important; }
+.tabsDefaultTabs md-tab {
+  color: #90caf9 !important; }
+.tabsDefaultTabs md-tab.active, .tabsDefaultTabs md-tab:focus {
+  color: white !important; }
+.tabsDefaultTabs md-tab[disabled] {
+  opacity: 0.5; }
+.tabsDefaultTabs .md-header .md-ripple {
+  border-color: #FFFF8D !important; }
+.tabsDefaultTabs md-tabs-ink-bar {
+  background-color: #FFFF8D !important; }
+.tabsDefaultTabs .title {
+  padding-top: 8px;
+  padding-right: 8px;
+  text-align: left;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 24px; }
+.tabsDefaultTabs [layout-align] > * {
+  margin-left: 8px; }
+.tabsDefaultTabs form > [layout] > * {
+  margin-left: 8px; }
+.tabsDefaultTabs .long > input {
+  width: 264px; }
+.tabsDefaultTabs .md-button {
+  max-height: 30px; }
+.tabsDefaultTabs .md-button.add-tab {
+  margin-top: 20px;
+  max-height: 30px !important; }
 
 .menuBtn {
   background-color: transparent;
