@@ -5,17 +5,16 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial',
-  'pods', 'replicationControllers', 'services']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
-    .when("/clusters", {templateUrl: "/pages/clusters.html", controller: "PageCtrl"})
-    .when("/pods", {templateUrl: "/pages/pods.html", controller: "PageCtrl"})
-    .when("/replication", {templateUrl: "/pages/replication.html", controller: "PageCtrl"})
-    .when("/services", {templateUrl: "/pages/services.html", controller: "PageCtrl"})
-    .when("/labels", {templateUrl: "/pages/labels.html", controller: "PageCtrl"})
+    .when("/clusters", {templateUrl: "/components/dashboard/pages/clusters.html", controller: "PageCtrl"})
+    .when("/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PageCtrl"})
+    .when("/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "PageCtrl"})
+    .when("/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "PageCtrl"})
+    .when("/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "PageCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
@@ -54,12 +53,20 @@ app.directive('includeReplace', function () {
  * Module: constants.js
  * Define constants to inject across the application
  =========================================================*/
+angular.module("krakenApp.config", [])
+
+.constant("k8sApiServer", "http://localhost:9000/api/v1beta2")
+
+.constant("ngConstant", true)
+
+;
 /**=========================================================
  * Module: home-page.js
  * Page Controller
  =========================================================*/
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope, $mdSidenav, $timeout){
+app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
+
 
   // *********************
   // Internal methods
@@ -68,7 +75,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
   var t = false;
 
   $scope.shouldLockOpen = function() {
-    console.log(t);
     return t;
   }
 
@@ -110,6 +116,95 @@ app.controller('AppCtrl', ["$scope", function( $scope ) {
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state
  =========================================================*/
+app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
+
+  var urlBase = k8sApiServer;
+  var _get = function ($http, baseUrl, id) {
+    var fullUrl = baseUrl;
+    if(id !== undefined)
+      fullUrl += '/' + id;
+
+    return $http.get(fullUrl);
+  };
+
+  this.$get = ["$http", "$q", function($http, $q){
+    var api = {};
+
+    api.getPods = function (id) {
+      return _get($http, urlBase + '/pods', id);
+    };
+
+    api.getMinions = function (id) {
+      return _get($http, urlBase + '/minions', id);
+    };
+
+
+    api.getServices = function (id) {
+      return _get($http, urlBase + '/services', id);
+    };
+
+    api.getReplicationControllers = function (id) {
+      return _get($http, urlBase + '/replicationControllers', id)
+    };
+
+    return api;
+  }]
+}]);
+
+(function() {
+  'use strict';
+
+  angular.module('pollK8sData', []).service('pollK8sDataService', PollK8sDataService);
+
+  var PollK8sDataService = function($http, $timeout) {
+    var k8sdatamodel = undefined;
+    var pollingError = 0;
+    var promise = undefined;
+
+    var startPolling = function() {
+      // TODO: maybe display an error in the UI to the end user.
+      if (pollingError > 3) {
+        console.log('Have ' + pollingError + ' consecutive polling errors.');
+      }
+
+      // TODO: Pass in the real URL
+      $http.get('http://turing-glider-846.appspot.com/graph').
+        success(function(data, status, headers, config) {
+        if (data) {
+          k8sdatamodel = data;
+          pollingError = 0;
+        } else {
+          pollingError++;
+        }
+
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        promise = $timeout(startPolling, 1000);
+      }).error(function(data, status, headers, config) {
+        pollingError++;
+
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        promise = $timeout(startPolling, 1000);
+      });
+    };
+
+    startPolling();
+
+    return {
+      k8sdatamodel : k8sdatamodel,
+      restart: function() {
+        startPolling();
+      },
+      stop: function() {
+        $timeout.cancel(promise);
+      }
+    };
+  };
+  PollK8sDataService.$inject = ["$http", "$timeout"];
+
+})();
+
 /**=========================================================
  * Module: toggle-state.js
  * Services to share toggle state functionality
@@ -154,8 +249,8 @@ app.controller('LabelCtrl', ['$scope', '$interval',
  * Visualizer for pods
  =========================================================*/
 
-app.controller('PodCtrl', ['$scope', '$interval', 'podService',
-    function($scope, $interval, podService) {
+app.controller('PodCtrl', ['$scope', '$interval', 'k8sApiService',
+    function($scope, $interval, k8sApiService) {
       $scope.mode = 'query';
       $scope.determinateValue = 30;
       $interval(function() {
@@ -170,9 +265,8 @@ app.controller('PodCtrl', ['$scope', '$interval', 'podService',
       loadPods();
 
       function loadPods() {
-        podService
-          .loadAll()
-          .then( function( pods ) {
+        k8sApiService.getPods()
+          .success( function( pods ) {
             allPods = pods;
 
             $scope.pods = pods;

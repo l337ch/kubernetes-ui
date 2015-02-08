@@ -5,17 +5,16 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial',
-  'pods', 'replicationControllers', 'services']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
-    .when("/clusters", {templateUrl: "/pages/clusters.html", controller: "PageCtrl"})
-    .when("/pods", {templateUrl: "/pages/pods.html", controller: "PageCtrl"})
-    .when("/replication", {templateUrl: "/pages/replication.html", controller: "PageCtrl"})
-    .when("/services", {templateUrl: "/pages/services.html", controller: "PageCtrl"})
-    .when("/labels", {templateUrl: "/pages/labels.html", controller: "PageCtrl"})
+    .when("/clusters", {templateUrl: "/components/dashboard/pages/clusters.html", controller: "PageCtrl"})
+    .when("/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PageCtrl"})
+    .when("/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "PageCtrl"})
+    .when("/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "PageCtrl"})
+    .when("/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "PageCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
