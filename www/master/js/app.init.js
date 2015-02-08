@@ -45,3 +45,6 @@ app.directive('includeReplace', function () {
         }
     };
 });
+
+// stub for config
+angular.module("krakenApp.config", []);
