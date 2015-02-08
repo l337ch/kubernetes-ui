@@ -16,16 +16,20 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
     var api = {};
 
     api.getPods = function (id) {
-      console.log("pod url is ", urlBase + '/pods')
       return _get($http, urlBase + '/pods', id);
     };
+
+    api.getMinions = function (id) {
+      return _get($http, urlBase + '/minions', id);
+    };
+
 
     api.getServices = function (id) {
       return _get($http, urlBase + '/services', id);
     };
 
     api.getReplicationControllers = function (id) {
-      return _get($http, urlBase + '/replicationcontrollers', id)
+      return _get($http, urlBase + '/replicationControllers', id)
     };
 
     return api;
