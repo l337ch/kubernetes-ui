@@ -53,13 +53,6 @@ app.directive('includeReplace', function () {
  * Module: constants.js
  * Define constants to inject across the application
  =========================================================*/
-angular.module("krakenApp.config", [])
-
-.constant("k8sApiServer", "http://localhost:9000/api/v1beta2")
-
-.constant("ngConstant", true)
-
-;
 /**=========================================================
  * Module: home-page.js
  * Page Controller
@@ -116,6 +109,9 @@ app.controller('AppCtrl', ["$scope", function( $scope ) {
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state
  =========================================================*/
+// angular.module('services.k8api', []);
+// angular.module('services.k8api')
+// angular.module('services.k8sApi')
 app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
 
   var urlBase = k8sApiServer;
@@ -151,6 +147,10 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
   }]
 }]);
 
+// app.config(function(k8sApiService){
+//   //Providers are the only service you can pass into app.config
+//   k8sApiService.urlBase = k8sApiServer;
+// });
 (function() {
   'use strict';
 
