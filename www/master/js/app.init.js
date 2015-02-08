@@ -7,14 +7,10 @@
 
 var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config']);
 
+
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/dashboard", {templateUrl: "/components/dashboard/pages/home.html", controller: "DashboardCtrl"})
-    .when("/dashboard/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PodCtrl"})
-    .when("/dashboard/clusters", {templateUrl: "/components/dashboard/pages/clusters.html", controller: "ClustersCtrl"})
-    .when("/dashboard/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "ReplicationCtrl"})
-    .when("/dashboard/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "ServicesCtrl"})
-    .when("/dashboard/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "LabelsCtrl"})
     .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
