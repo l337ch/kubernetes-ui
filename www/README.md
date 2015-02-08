@@ -57,7 +57,19 @@ cd app
 http-server -a localhost -p 8000
 ```
 
-### Building a New Visualizer or Component 
+### Configuration
+#### Configuration Settings
+A json file can be used by `gulp` to automatically create angular constants. This is useful for setting per environment variables such as api endpoints.
+*  ```www/master/js/config/development.json``` or ```www/master/js/config/production.json``` can be created from the ```www/master/js/config/development.example.json``` file.
+* ```development.example.json``` should be kept up to date with default values, since ```development.json``` is not under source control.
+* Component configuration can be added to ```www/master/components/<component name>/config/development.json``` and it will be combined with the main app config files and compiled into the intermediary ```www/master/js/config/generated-config.js``` file.
+* All ```generated-config.js``` is compiled into ```app.js```
+* Production config can be generated using ```gulp config --env production``` or ```gulp --env production```
+
+#### Kubernetes Server Configuration
+By default the k8s api server does not support CORS, so the `kube-apiserver.service` must be started with `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your host here>`
+
+### Building a New Visualizer or Component
 
 A custom visualizer can be created by adding files in the structure below
 * Angular js files can be placed in `master/components/<visualizer name>/js`. All js files will be minified and concatenated into `app/assets/app.js`
