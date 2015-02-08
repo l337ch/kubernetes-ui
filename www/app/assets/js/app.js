@@ -56,6 +56,13 @@ angular.module("krakenApp.config", []);
  * Module: constants.js
  * Define constants to inject across the application
  =========================================================*/
+angular.module("krakenApp.config", [])
+
+.constant("k8sApiServer", "http://localhost:8080/api/v1beta2")
+
+.constant("ngConstant", true)
+
+;
 /**=========================================================
  * Module: home-page.js
  * Page Controller
