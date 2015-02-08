@@ -65,7 +65,8 @@ angular.module("krakenApp.config", [])
  * Page Controller
  =========================================================*/
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope, $mdSidenav, $timeout){
+app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
+
 
   // *********************
   // Internal methods
@@ -74,7 +75,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
   var t = false;
 
   $scope.shouldLockOpen = function() {
-    console.log(t);
     return t;
   }
 
@@ -97,7 +97,7 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('AppCtrl', function( $scope ) {
+app.controller('AppCtrl', ["$scope", function( $scope ) {
     $scope.data = {
       selectedIndex : 0,
       secondLocked : true,
@@ -111,7 +111,7 @@ app.controller('AppCtrl', function( $scope ) {
     $scope.previous = function() {
       $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
     };
-  });
+  }]);
 /**=========================================================
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state
@@ -130,24 +130,28 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
     return $http.get(fullUrl);
   };
 
-  this.$get = function($http, $q){
+  this.$get = ["$http", "$q", function($http, $q){
     var api = {};
 
     api.getPods = function (id) {
-      console.log("pod url is ", urlBase + '/pods')
       return _get($http, urlBase + '/pods', id);
     };
+
+    api.getMinions = function (id) {
+      return _get($http, urlBase + '/minions', id);
+    };
+
 
     api.getServices = function (id) {
       return _get($http, urlBase + '/services', id);
     };
 
     api.getReplicationControllers = function (id) {
-      return _get($http, urlBase + '/replicationcontrollers', id)
+      return _get($http, urlBase + '/replicationControllers', id)
     };
 
     return api;
-  }
+  }]
 }]);
 
 // app.config(function(k8sApiService){
@@ -204,6 +208,7 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
       }
     };
   };
+  PollK8sDataService.$inject = ["$http", "$timeout"];
 
 })();
 
@@ -417,6 +422,7 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
+  PodDataService.$inject = ["$q"];
 
 })();
 
@@ -451,6 +457,7 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
+  ReplicationControllerDataService.$inject = ["$q"];
 
 })();
 
@@ -522,5 +529,6 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
+  ServiceDataService.$inject = ["$q"];
 
 })();
