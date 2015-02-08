@@ -243,7 +243,7 @@ gulp.task('config', function () {
   return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])
     .pipe(concat('generated-config.js'))
     .pipe(ngConstant({
-      name: 'krakenApp',
+      name: 'krakenApp.config',
       deps: [],
       constants: { ngConstant: true }
     }))

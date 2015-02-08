@@ -5,8 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial',
-  'pods', 'replicationControllers', 'services']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -54,6 +53,13 @@ app.directive('includeReplace', function () {
  * Module: constants.js
  * Define constants to inject across the application
  =========================================================*/
+angular.module("krakenApp.config", [])
+
+.constant("k8sApiServer", "http://localhost:8080/api/v1beta2")
+
+.constant("ngConstant", true)
+
+;
 /**=========================================================
  * Module: home-page.js
  * Page Controller
@@ -110,6 +116,60 @@ app.controller('AppCtrl', ["$scope", function( $scope ) {
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state
  =========================================================*/
+(function() {
+  'use strict';
+
+  angular.module('pollK8sData', []).service('pollK8sDataService', PollK8sDataService);
+
+  var PollK8sDataService = function($http, $timeout) {
+    var k8sdatamodel = undefined;
+    var pollingError = 0;
+    var promise = undefined;
+
+    var startPolling = function() {
+      // TODO: maybe display an error in the UI to the end user.
+      if (pollingError > 3) {
+        console.log('Have ' + pollingError + ' consecutive polling errors.');
+      }
+
+      // TODO: Pass in the real URL
+      $http.get('http://turing-glider-846.appspot.com/graph').
+        success(function(data, status, headers, config) {
+        if (data) {
+          k8sdatamodel = data;
+          pollingError = 0;
+        } else {
+          pollingError++;
+        }
+
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        promise = $timeout(startPolling, 1000);
+      }).error(function(data, status, headers, config) {
+        pollingError++;
+
+        // TODO: externalized this poll interval as a config value in
+        // www/master/js/config
+        promise = $timeout(startPolling, 1000);
+      });
+    };
+
+    startPolling();
+
+    return {
+      k8sdatamodel : k8sdatamodel,
+      restart: function() {
+        startPolling();
+      },
+      stop: function() {
+        $timeout.cancel(promise);
+      }
+    };
+  };
+  PollK8sDataService.$inject = ["$http", "$timeout"];
+
+})();
+
 /**=========================================================
  * Module: toggle-state.js
  * Services to share toggle state functionality
