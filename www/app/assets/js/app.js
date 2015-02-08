@@ -45,6 +45,9 @@ app.directive('includeReplace', function () {
         }
     };
 });
+
+// stub for config
+angular.module("krakenApp.config", []);
 /**=========================================================
  * Module: config.js
  * App routes and resources configuration
