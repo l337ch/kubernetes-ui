@@ -3,7 +3,7 @@
  * Page Controller
  =========================================================*/
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
+app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope, $mdSidenav, $timeout){
 
 
   // *********************
