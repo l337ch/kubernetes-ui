@@ -11,7 +11,7 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
     .when("/clusters", {templateUrl: "/pages/clusters.html", controller: "PageCtrl"})
-    .when("/pods", {templateUrl: "/pages/pods.html", controller: "PageCtrl"})
+    .when("/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PageCtrl"})
     .when("/replication", {templateUrl: "/pages/replication.html", controller: "PageCtrl"})
     .when("/services", {templateUrl: "/pages/services.html", controller: "PageCtrl"})
     .when("/labels", {templateUrl: "/pages/labels.html", controller: "PageCtrl"})

@@ -11,7 +11,7 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
     .when("/clusters", {templateUrl: "/pages/clusters.html", controller: "PageCtrl"})
-    .when("/pods", {templateUrl: "/pages/pods.html", controller: "PageCtrl"})
+    .when("/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PageCtrl"})
     .when("/replication", {templateUrl: "/pages/replication.html", controller: "PageCtrl"})
     .when("/services", {templateUrl: "/pages/services.html", controller: "PageCtrl"})
     .when("/labels", {templateUrl: "/pages/labels.html", controller: "PageCtrl"})
@@ -55,7 +55,7 @@ app.directive('includeReplace', function () {
  =========================================================*/
 angular.module("krakenApp.config", [])
 
-.constant("k8sApiServer", "http://localhost:8080/api/v1beta2")
+.constant("k8sApiServer", "http://localhost:9000/api/v1beta2")
 
 .constant("ngConstant", true)
 
@@ -97,7 +97,7 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('AppCtrl', ["$scope", function( $scope ) {
+app.controller('AppCtrl', function( $scope ) {
     $scope.data = {
       selectedIndex : 0,
       secondLocked : true,
@@ -111,11 +111,49 @@ app.controller('AppCtrl', ["$scope", function( $scope ) {
     $scope.previous = function() {
       $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
     };
-  }]);
+  });
 /**=========================================================
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state
  =========================================================*/
+// angular.module('services.k8api', []);
+// angular.module('services.k8api')
+// angular.module('services.k8sApi')
+app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
+
+  var urlBase = k8sApiServer;
+  var _get = function ($http, baseUrl, id) {
+    var fullUrl = baseUrl;
+    if(id !== undefined)
+      fullUrl += '/' + id;
+
+    return $http.get(fullUrl);
+  };
+
+  this.$get = function($http, $q){
+    var api = {};
+
+    api.getPods = function (id) {
+      console.log("pod url is ", urlBase + '/pods')
+      return _get($http, urlBase + '/pods', id);
+    };
+
+    api.getServices = function (id) {
+      return _get($http, urlBase + '/services', id);
+    };
+
+    api.getReplicationControllers = function (id) {
+      return _get($http, urlBase + '/replicationcontrollers', id)
+    };
+
+    return api;
+  }
+}]);
+
+// app.config(function(k8sApiService){
+//   //Providers are the only service you can pass into app.config
+//   k8sApiService.urlBase = k8sApiServer;
+// });
 (function() {
   'use strict';
 
@@ -166,7 +204,6 @@ app.controller('AppCtrl', ["$scope", function( $scope ) {
       }
     };
   };
-  PollK8sDataService.$inject = ["$http", "$timeout"];
 
 })();
 
@@ -214,8 +251,8 @@ app.controller('LabelCtrl', ['$scope', '$interval',
  * Visualizer for pods
  =========================================================*/
 
-app.controller('PodCtrl', ['$scope', '$interval', 'podService',
-    function($scope, $interval, podService) {
+app.controller('PodCtrl', ['$scope', '$interval', 'k8sApiService',
+    function($scope, $interval, k8sApiService) {
       $scope.mode = 'query';
       $scope.determinateValue = 30;
       $interval(function() {
@@ -230,9 +267,8 @@ app.controller('PodCtrl', ['$scope', '$interval', 'podService',
       loadPods();
 
       function loadPods() {
-        podService
-          .loadAll()
-          .then( function( pods ) {
+        k8sApiService.getPods()
+          .success( function( pods ) {
             allPods = pods;
 
             $scope.pods = pods;
@@ -381,7 +417,6 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
-  PodDataService.$inject = ["$q"];
 
 })();
 
@@ -416,7 +451,6 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
-  ReplicationControllerDataService.$inject = ["$q"];
 
 })();
 
@@ -488,6 +522,5 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
       }
     };
   }
-  ServiceDataService.$inject = ["$q"];
 
 })();
