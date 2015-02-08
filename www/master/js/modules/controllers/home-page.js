@@ -13,7 +13,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
   var t = false;
 
   $scope.shouldLockOpen = function() {
-    console.log(t);
     return t;
   }
 
