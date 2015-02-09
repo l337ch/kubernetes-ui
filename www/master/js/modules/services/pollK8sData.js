@@ -1,9 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('pollK8sData', []).service('pollK8sDataService', PollK8sDataService);
+  angular.module('krakenApp')
+    .service('pollK8sDataService', ['$http', '$timeout', PollK8sDataService]);
 
-  var PollK8sDataService = function($http, $timeout) {
+  var pollK8sDataService = function PollK8sDataService($http, $timeout) {
     var k8sdatamodel = undefined;
     var pollingError = 0;
     var promise = undefined;
