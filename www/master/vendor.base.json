@@ -8,5 +8,6 @@
   "bower_components/angular-animate/angular-animate.js",
   "bower_components/lodash/dist/lodash.js",
   "bower_components/angular-lodash/angular-lodash.js",
-  "bower_components/angular-material/angular-material.js"
+  "bower_components/angular-material/angular-material.js",
+  "bower_components/string-format-js/format.js"
 ]
