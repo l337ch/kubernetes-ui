@@ -24,6 +24,8 @@ var gulp        = require('gulp'),
     del         = require('del'),
     ngConstant  = require('gulp-ng-constant'),
     argv        = require('yargs').argv,
+    foreach     = require('gulp-foreach'),
+    gcallback   = require('gulp-callback'),
     PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
@@ -144,12 +146,31 @@ var build = {
   }
 };
 
-
+function stringSrc(filename, string) {
+  var src = require('stream').Readable({ objectMode: true });
+  src._read = function () {
+    this.push(new gutil.File({ cwd: "", base: "", path: filename, contents: new Buffer(string) }));
+    this.push(null);
+  }
+  return src;
+}
 
 //---------------
 // TASKS
 //---------------
 
+gulp.task('bundle-manifest', function(){
+  var components = [];
+  var stream = gulp.src('./components/*/manifest.json')
+  .pipe(foreach(function(stream, file) {
+                var manifestFile = require(file.path);
+                components.push(manifestFile.name);
+                return stream
+                })).pipe(gcallback(function() {
+    stringSrc("tabs.js", '$scope.tabs = [' + components.join('","') + '];')
+    .pipe(gulp.dest("../app/assets/js"))
+  }));
+});
 
 // JS APP
 gulp.task('scripts:app', ['config', 'scripts:app:base']);
@@ -383,7 +404,8 @@ gulp.task('default', gulpsync.sync([
           'scripts:vendor',
           'copy:components',
           'scripts:app',
-          'start'
+          'start',
+          'bundle-manifest'
         ]), function(){
 
   gutil.log(gutil.colors.cyan('************'));
