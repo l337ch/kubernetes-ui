@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('krakenApp')
-    .service('pollK8sDataService', ['$http', '$timeout', PollK8sDataService]);
+    .service('pollK8sDataService', ['$http', '$timeout', pollK8sDataService]);
 
   var pollK8sDataService = function PollK8sDataService($http, $timeout) {
     var k8sdatamodel = undefined;
