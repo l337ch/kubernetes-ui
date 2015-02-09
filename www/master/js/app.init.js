@@ -5,8 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config']);
-
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
