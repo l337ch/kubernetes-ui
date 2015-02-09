@@ -532,33 +532,11 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
 })();
 
 /**=========================================================
- * Module: Pods
- * Visualizer for pods
+ * Module: Graph
+ * Visualizer for force directed graph
  =========================================================*/
 
-app.controller('PodCtrl', ['$scope', '$interval', 'k8sApiService',
-    function($scope, $interval, k8sApiService) {
-      $scope.mode = 'query';
-      $scope.determinateValue = 30;
-      $interval(function() {
-        $scope.determinateValue += 1;
-        if ($scope.determinateValue > 100) {
-          $scope.determinateValue = 30;
-        }
-      }, 100, 0, true);
-
-      var allPods = { };
-
-      loadPods();
-
-      function loadPods() {
-        k8sApiService.getPods()
-          .success( function( pods ) {
-            allPods = pods;
-
-            $scope.pods = pods;
-            $scope.selected = pods.items[0];
-          });
-      }
+app.controller('GraphCtrl', ['$scope', '$interval', 'pollK8sDataService',
+    function($scope, $interval, pollK8sDataService) {
     }
   ]);
