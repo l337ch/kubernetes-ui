@@ -167,7 +167,7 @@ gulp.task('bundle-manifest', function(){
                 components.push(manifestFile.name);
                 return stream
                 })).pipe(gcallback(function() {
-    stringSrc("tabs.js", '$scope.tabs = [' + components.join('","') + '];')
+    stringSrc("tabs.js", '$scope.tabs = ["' + components.join('","') + '"];')
     .pipe(gulp.dest("../app/assets/js"))
   }));
 });

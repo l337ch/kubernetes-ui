@@ -1,1 +1,1 @@
-$scope.tabs = [Dashboard","Graph Visualizer];
+$scope.tabs = ["Dashboard","Graph Visualizer"];
