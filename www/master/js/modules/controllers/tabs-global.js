@@ -11,9 +11,14 @@ app.controller('TabCtrl', ['$scope', '$location', 'tabs', function($scope, $loca
 
 	// Change the tab
 	$scope.switchTab = function(index) {
-	    switch(index) {
-	        case 0: $location.path('/dashboard');break;
-	        case 1: $location.path('/graph');break;
-	    }
+	    var cases = '';
+	    var i = 0;
+	    var nl = '\n';
+	    tabs.forEach(function(tab) {
+	      cases += 'case %d: $location.path("/%s");break;'.format(i,tab.toLowerCase()) + nl;
+	      i++;
+	    });
+	    var switchStmt = 'switch(index) {' + nl +  cases + nl + '}';
+	    eval(switchStmt);
 	}
 }]);
