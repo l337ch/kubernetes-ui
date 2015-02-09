@@ -7,3 +7,4 @@ www/master/components/*/config/production.json
 www/master/js/config/generated-config.js
 www/app/assets/js/app.js
 www/app/assets/css/app.css
+www/master/js/tabs.js

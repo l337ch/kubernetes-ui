@@ -5,9 +5,9 @@
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('TabCtrl', ['$scope', '$location', function($scope, $location){
+app.controller('TabCtrl', ['$scope', '$location', 'tabs', function($scope, $location, tabs){
 // Define the titles of your tabs
-$scope.tabs = ["Dashboard", "Graph Visualizer"];
+$scope.tabs = tabs;
 
 // Change the tab
 $scope.switchTab = function(index) {
