@@ -14,3 +14,4 @@ www/master/js/tabs.js
 www/master/node_modules/
 www/node_modules/
 www/npm-debug.log
+www/app/assets/js/base.js
