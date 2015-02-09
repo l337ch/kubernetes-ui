@@ -15,6 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/dashboard/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "ReplicationCtrl"})
     .when("/dashboard/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "ServicesCtrl"})
     .when("/dashboard/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "LabelsCtrl"})
+    .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
