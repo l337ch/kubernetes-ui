@@ -1,1 +1,0 @@
-$scope.tabs = [Dashboard","Graph Visualizer];
