@@ -9,12 +9,12 @@ var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
-    .when("/", {templateUrl: "/views/partials/home.html", controller: "PageCtrl"})
-    .when("/clusters", {templateUrl: "/components/dashboard/pages/clusters.html", controller: "PageCtrl"})
-    .when("/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PageCtrl"})
-    .when("/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "PageCtrl"})
-    .when("/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "PageCtrl"})
-    .when("/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "PageCtrl"})
+    .when("/dashboard", {templateUrl: "/components/dashboard/pages/home.html", controller: "DashboardCtrl"})
+    .when("/dashboard/pods", {templateUrl: "/components/dashboard/pages/pods.html", controller: "PodCtrl"})
+    .when("/dashboard/clusters", {templateUrl: "/components/dashboard/pages/clusters.html", controller: "ClustersCtrl"})
+    .when("/dashboard/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "ReplicationCtrl"})
+    .when("/dashboard/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "ServicesCtrl"})
+    .when("/dashboard/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "LabelsCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
@@ -30,9 +30,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
 
 }]);
 
-// app.run(['$route', function($route)  {
-//   $route.reload();
-// }]);
 
 app.run(['$route', angular.noop]);
 
@@ -56,12 +53,19 @@ angular.module("krakenApp.config", []);
  * Module: constants.js
  * Define constants to inject across the application
  =========================================================*/
+angular.module("krakenApp.config", [])
+
+.constant("k8sApiServer", "http://localhost:8080/api/v1beta2")
+
+.constant("ngConstant", true)
+
+;
 /**=========================================================
  * Module: home-page.js
  * Page Controller
  =========================================================*/
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
+app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope, $mdSidenav, $timeout){
 
 
   // *********************
@@ -93,21 +97,33 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('AppCtrl', ["$scope", function( $scope ) {
-    $scope.data = {
-      selectedIndex : 0,
-      secondLocked : true,
-      firstLabel : "Dashboard",
-      secondLabel : "Graph",
-      thirdLabel : "Other"
-    };
-    $scope.next = function() {
-      $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2) ;
-    };
-    $scope.previous = function() {
-      $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
-    };
-  }]);
+app.controller('DashboardCtrl', ["$scope", function($scope){
+}]);
+
+app.controller('ClustersCtrl', ["$scope", function($scope){
+}]);
+
+app.controller('ReplicationCtrl', ["$scope", function($scope){
+}]);
+
+app.controller('ServicesCtrl', ["$scope", function($scope){
+}]);
+
+app.controller('LabelsCtrl', ["$scope", function($scope){
+}]);
+
+app.controller('TabCtrl', ['$scope', '$location', function($scope, $location){
+// Define the titles of your tabs
+$scope.tabs = ["Dashboard", "Graph Visualizer"];
+
+// Change the tab
+$scope.switchTab = function(index) {
+    switch(index) {
+        case 0: $location.path('/dashboard');break;
+        case 1: $location.path('/dashboard/clusters');break;
+    }
+}
+}]);
 /**=========================================================
  * Module: sidebar.js
  * Wraps the sidebar and handles collapsed state

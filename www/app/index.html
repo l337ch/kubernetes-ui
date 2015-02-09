@@ -49,7 +49,17 @@
         </div>
       </div>
     </md-toolbar>
-    <md-content ng-view md-scroll-y flex></md-content>
+    <md-content md-scroll-y flex>
+  <md-whiteframe class="md-whiteframe-z2" layout layout-align="center center">
+  <div ng-controller="TabCtrl" class="tabsDefaultTabs">
+    <md-tabs md-selected="0">
+      <md-tab ng-repeat="tab in tabs" md-on-select="switchTab($index)" label="{{tab}}">
+        <div ng-view class="demo-tab tab{{$index%4}}" layout="column" layout-fill></div>
+     </md-tab>
+    </md-tabs>
+  </div>
+  </md-whiteframe>
+    </md-content>
   </div>
   <script src="/assets/js/base.js"></script>
   <script src="/assets/js/app.js"></script>

@@ -5,18 +5,30 @@
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('AppCtrl', function( $scope ) {
-    $scope.data = {
-      selectedIndex : 0,
-      secondLocked : true,
-      firstLabel : "Dashboard",
-      secondLabel : "Graph",
-      thirdLabel : "Other"
-    };
-    $scope.next = function() {
-      $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2) ;
-    };
-    $scope.previous = function() {
-      $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
-    };
-  });
+app.controller('DashboardCtrl', function($scope){
+});
+
+app.controller('ClustersCtrl', function($scope){
+});
+
+app.controller('ReplicationCtrl', function($scope){
+});
+
+app.controller('ServicesCtrl', function($scope){
+});
+
+app.controller('LabelsCtrl', function($scope){
+});
+
+app.controller('TabCtrl', ['$scope', '$location', function($scope, $location){
+// Define the titles of your tabs
+$scope.tabs = ["Dashboard", "Graph Visualizer"];
+
+// Change the tab
+$scope.switchTab = function(index) {
+    switch(index) {
+        case 0: $location.path('/dashboard');break;
+        case 1: $location.path('/dashboard/clusters');break;
+    }
+}
+}]);
