@@ -12,18 +12,18 @@
 </head>
 <body layout="row" ng-controller="PageCtrl">
   <md-sidenav layout="column"
-    md-is-locked-open="shouldLockOpen()"
-    style="overflow: hidden; display: flex;"
-    class="site-sidenav md-sidenav-left md-whiteframe-z2"
-    md-component-id="left"
-    md-closed>
+              md-is-locked-open="shouldLockOpen()"
+              style="overflow: hidden; display: flex;"
+              class="site-sidenav md-sidenav-left md-whiteframe-z2"
+              md-component-id="left"
+              md-closed>
     <md-toolbar>
-    <h1 class="md-toolbar-tools">
-      <a ng-href="/" layout="row" flex>
-        <span class="kraken-logo"></span>
-        <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
-      </a>
-    </h1>
+      <h1 class="md-toolbar-tools">
+        <a ng-href="/" layout="row" flex>
+          <span class="kraken-logo"></span>
+          <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
+        </a>
+      </h1>
     </md-toolbar>
     <md-content style="overflow: auto;">
     </md-content>
@@ -41,11 +41,9 @@
           </a>
         </h1>
         <div layout="row" flex class="fill-height">
-          <div class="md-toolbar-item md-breadcrumb">
-          </div>
+          <div class="md-toolbar-item md-breadcrumb"></div>
           <span flex></span> <!-- use up the empty space -->
-          <div class="md-toolbar-item md-tools" layout="row">
-          </div>
+          <div class="md-toolbar-item md-tools" layout="row"></div>
         </div>
       </div>
     </md-toolbar>
