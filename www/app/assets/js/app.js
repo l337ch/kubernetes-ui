@@ -15,6 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/dashboard/replication", {templateUrl: "/components/dashboard/pages/replication.html", controller: "ReplicationCtrl"})
     .when("/dashboard/services", {templateUrl: "/components/dashboard/pages/services.html", controller: "ServicesCtrl"})
     .when("/dashboard/labels", {templateUrl: "/components/dashboard/pages/labels.html", controller: "LabelsCtrl"})
+    .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
@@ -97,21 +98,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
 
 angular.module('whiteframeBasicUsage', ['ngMaterial']);
 
-app.controller('DashboardCtrl', ["$scope", function($scope){
-}]);
-
-app.controller('ClustersCtrl', ["$scope", function($scope){
-}]);
-
-app.controller('ReplicationCtrl', ["$scope", function($scope){
-}]);
-
-app.controller('ServicesCtrl', ["$scope", function($scope){
-}]);
-
-app.controller('LabelsCtrl', ["$scope", function($scope){
-}]);
-
 app.controller('TabCtrl', ['$scope', '$location', function($scope, $location){
 // Define the titles of your tabs
 $scope.tabs = ["Dashboard", "Graph Visualizer"];
@@ -120,7 +106,7 @@ $scope.tabs = ["Dashboard", "Graph Visualizer"];
 $scope.switchTab = function(index) {
     switch(index) {
         case 0: $location.path('/dashboard');break;
-        case 1: $location.path('/dashboard/clusters');break;
+        case 1: $location.path('/graph');break;
     }
 }
 }]);
@@ -544,3 +530,35 @@ app.controller('ServicesCtrl', ['$scope', '$interval', 'serviceService',
   ServiceDataService.$inject = ["$q"];
 
 })();
+
+/**=========================================================
+ * Module: Pods
+ * Visualizer for pods
+ =========================================================*/
+
+app.controller('PodCtrl', ['$scope', '$interval', 'k8sApiService',
+    function($scope, $interval, k8sApiService) {
+      $scope.mode = 'query';
+      $scope.determinateValue = 30;
+      $interval(function() {
+        $scope.determinateValue += 1;
+        if ($scope.determinateValue > 100) {
+          $scope.determinateValue = 30;
+        }
+      }, 100, 0, true);
+
+      var allPods = { };
+
+      loadPods();
+
+      function loadPods() {
+        k8sApiService.getPods()
+          .success( function( pods ) {
+            allPods = pods;
+
+            $scope.pods = pods;
+            $scope.selected = pods.items[0];
+          });
+      }
+    }
+  ]);
