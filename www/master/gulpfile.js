@@ -80,6 +80,7 @@ var source = {
   scripts: {
     app:    [ 'js/app.init.js',
               'js/modules/*.js',
+              'js/tabs.js',
               'js/config/generated-config.js',
               'js/modules/controllers/*.js',
               'js/modules/directives/*.js',
@@ -167,13 +168,13 @@ gulp.task('bundle-manifest', function(){
                 components.push(manifestFile.name);
                 return stream
                 })).pipe(gcallback(function() {
-    stringSrc("tabs.js", '$scope.tabs = [' + components.join('","') + '];')
-    .pipe(gulp.dest("../app/assets/js"))
+    stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
+    .pipe(gulp.dest("js"))
   }));
 });
 
 // JS APP
-gulp.task('scripts:app', ['config', 'scripts:app:base']);
+gulp.task('scripts:app', ['bundle-manifest', 'config', 'scripts:app:base']);
 
 // JS APP BUILD
 gulp.task('scripts:app:base', function() {
@@ -404,8 +405,7 @@ gulp.task('default', gulpsync.sync([
           'scripts:vendor',
           'copy:components',
           'scripts:app',
-          'start',
-          'bundle-manifest'
+          'start'
         ]), function(){
 
   gutil.log(gutil.colors.cyan('************'));

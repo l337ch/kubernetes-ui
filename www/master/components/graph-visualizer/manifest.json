@@ -1,9 +1,0 @@
-{
-  "manifest_version": 1,
-  "name": "Graph Visualizer",
-  "version": "1",
-
-  "default_locale": "en",
-  "description": "The basic Kraken graph visualizer...",
-  "icons": {}
-}
