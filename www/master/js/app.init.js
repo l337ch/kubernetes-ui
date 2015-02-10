@@ -63,3 +63,15 @@ app.config(function(k8sApiProvider, ENV){
     k8sApiProvider.setUrlBase(ENV.k8sApiServer);
   }
 });
+
+app.config(function(pollK8sDataServiceProvider, ENV){
+  if (ENV['k8sDataServer']) {
+    pollK8sDataServiceProvider.setEndpointUrl(ENV.k8sDataServer);
+  }
+  if (ENV['k8sDataPollIntervalSec']) {
+    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalSec);
+  }
+  if (ENV['k8sDataPollErrorThreshold']) {
+    pollK8sDataServiceProvider.setPollErrorThreshold(ENV.k8sDataPollErrorThreshold);
+  }
+});
