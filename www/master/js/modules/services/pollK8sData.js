@@ -1,11 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('krakenApp')
-    .service('pollK8sDataService', ['$http', '$timeout', pollK8sDataService]);
-
-  var pollK8sDataService = function PollK8sDataService($http, $timeout) {
-    var k8sdatamodel = undefined;
+  var pollK8sDataService = function PollK8sDataService(
+      $http, $timeout) {
+    // Now the sequenceNumber will be used for debugging and verification purposes.
+    var k8sdatamodel = { 'data': undefined, 'sequenceNumber': 0};
     var pollingError = 0;
     var promise = undefined;
 
@@ -15,11 +14,14 @@
         console.log('Have ' + pollingError + ' consecutive polling errors.');
       }
 
-      // TODO: Pass in the real URL
+      // TODO: Pass in the URL through constants config.
+      // TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
       $http.get('http://turing-glider-846.appspot.com/graph').
         success(function(data, status, headers, config) {
         if (data) {
-          k8sdatamodel = data;
+          // TODO: only reassign if the newly fetched data differs from the cached one.
+          k8sdatamodel.data = data;
+          k8sdatamodel.sequenceNumber++;
           pollingError = 0;
         } else {
           pollingError++;
@@ -49,5 +51,9 @@
       }
     };
   };
+
+  angular.module('krakenApp.services')
+    .service('pollK8sDataService',
+             ['$http', '$timeout', pollK8sDataService]);
 
 })();
