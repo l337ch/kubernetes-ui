@@ -5,7 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services']);
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -26,7 +26,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
 
 }]);
 
-
 app.run(['$route', angular.noop]);
 
 app.directive('includeReplace', function () {
@@ -41,3 +40,26 @@ app.directive('includeReplace', function () {
 
 // stub for config
 angular.module("krakenApp.config", []);
+
+angular.module('krakenApp.services',[])
+  .factory('globalsFactory', ['ENV', function(ENV){
+    return {
+        getConstant: function(constantName){
+          if (ENV[constantName]) {
+            return ENV[constantName];
+          } else {
+            return false;
+          }
+        }  
+    }
+}]);
+
+app.run(function($rootScope, globalsFactory) {
+  $rootScope._globals = globalsFactory;
+});
+
+app.config(function(k8sApiProvider, ENV){
+  if (ENV['k8sApiServer']) {
+    k8sApiProvider.setUrlBase(ENV.k8sApiServer);
+  }
+});

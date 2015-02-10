@@ -259,7 +259,14 @@ gulp.task('styles:app', function() {
 // Environment based configuration
 // https://github.com/kraken-people/kubernetes-kraken/issues/21
 
-gulp.task('config', function () {
+gulp.task('config', ['config:base', 'config:copy']);
+
+gulp.task('config:base', function () {
+  return stringSrc('generated-config.js', 'angular.module("krakenApp.config", [])' + '\n' + '.constant("ENV", {})')
+    .pipe(gulp.dest(source.config.dest));
+});
+
+gulp.task('config:copy', function () {
   var enviroment = argv.env || 'development'; // change this to whatever default environment you need.
 
   return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])

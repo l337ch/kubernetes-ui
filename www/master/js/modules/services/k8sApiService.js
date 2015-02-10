@@ -1,19 +1,26 @@
-// angular.module('services.k8api', []);
-// angular.module('services.k8api')
-// angular.module('services.k8sApi')
-app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
+app.provider('k8sApi', function(){
 
-  var urlBase = k8sApiServer;
+  var urlBase = '';
+
+  this.setUrlBase = function(value) {
+    urlBase = value;
+  }
+
   var _get = function ($http, baseUrl, id) {
-    var fullUrl = baseUrl;
-    if(id !== undefined)
-      fullUrl += '/' + id;
+    var _fullUrl = baseUrl;
+    if(id !== undefined) {
+      _fullUrl += '/' + id;
+    }
 
-    return $http.get(fullUrl);
+    return $http.get(_fullUrl);
   };
 
-  this.$get = function($http, $q){
+  this.$get = function($http, $q) {
     var api = {};
+
+    api.getUrlBase = function() {
+      return urlBase;
+    }
 
     api.getPods = function (id) {
       return _get($http, urlBase + '/pods', id);
@@ -22,7 +29,6 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
     api.getMinions = function (id) {
       return _get($http, urlBase + '/minions', id);
     };
-
 
     api.getServices = function (id) {
       return _get($http, urlBase + '/services', id);
@@ -34,9 +40,4 @@ app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
 
     return api;
   }
-}]);
-
-// app.config(function(k8sApiService){
-//   //Providers are the only service you can pass into app.config
-//   k8sApiService.urlBase = k8sApiServer;
-// });
+});
