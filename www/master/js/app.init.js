@@ -59,5 +59,7 @@ app.run(function($rootScope, globalsFactory) {
 });
 
 app.config(function(k8sApiProvider, ENV){
-  k8sApiProvider.setUrlBase(ENV.k8sApiServer);
+  if (ENV['k8sApiServer']) {
+    k8sApiProvider.setUrlBase(ENV.k8sApiServer);
+  }
 });
