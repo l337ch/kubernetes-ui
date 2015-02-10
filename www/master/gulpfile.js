@@ -79,6 +79,9 @@ var vendor = {
 var source = {
   scripts: {
     app:    [ 'js/app.init.js',
+              'js/app.config.js',
+              'js/app.directive.js',
+              'app.run.js',
               'js/modules/*.js',
               'js/tabs.js',
               'js/config/generated-config.js',
