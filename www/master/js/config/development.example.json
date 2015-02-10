@@ -1,6 +1,6 @@
 {
   'k8sApiServer' : 'http://localhost:8080/api/v1beta2',
   'k8sDataServer' : 'http://turing-glider-846.appspot.com/graph',
-  'k8sDataPollIntervalSec' : 1,  // seconds
+  'k8sDataPollIntervalSec' : 1,
   'k8sDataPollErrorThreshold' : 3
 }
