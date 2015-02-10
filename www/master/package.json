@@ -1,7 +1,7 @@
 {
   "name": "kubernetes-kraken",
   "description": "Kraken - UI for Kubernetes",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "repository": "https://github.com/kraken-people/kubernetes-kraken",
   "license": "Apache",
   "private": true,
