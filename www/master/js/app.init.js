@@ -26,7 +26,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
 
 }]);
 
-
 app.run(['$route', angular.noop]);
 
 app.directive('includeReplace', function () {
@@ -57,4 +56,8 @@ angular.module('krakenApp.services',[])
 
 app.run(function($rootScope, globalsFactory) {
   $rootScope._globals = globalsFactory;
+});
+
+app.config(function(k8sApiProvider, ENV){
+  k8sApiProvider.setUrlBase(ENV.k8sApiServer);
 });
