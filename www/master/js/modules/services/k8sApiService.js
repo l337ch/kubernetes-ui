@@ -1,9 +1,9 @@
 // angular.module('services.k8api', []);
 // angular.module('services.k8api')
 // angular.module('services.k8sApi')
-app.provider('k8sApiService', ['k8sApiServer', function(k8sApiServer, $http) {
+app.provider('k8sApiService', ['ENV', function(ENV, $http) {
 
-  var urlBase = k8sApiServer;
+  var urlBase = ENV.k8sApiServer;
   var _get = function ($http, baseUrl, id) {
     var fullUrl = baseUrl;
     if(id !== undefined)
