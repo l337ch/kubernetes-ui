@@ -52,5 +52,3 @@ app.config(function(pollK8sDataServiceProvider, ENV){
     pollK8sDataServiceProvider.setPollErrorThreshold(ENV.k8sDataPollErrorThreshold);
   }
 });
-
-}]);
