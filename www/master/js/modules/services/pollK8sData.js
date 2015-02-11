@@ -35,14 +35,14 @@
 
       var startPolling = function() {
 
-      	// TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
-      	$http.get(endpointUrl)
+        // TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
+        $http.get(endpointUrl)
         .success(function(data, status, headers, config) {
           if (data) {
-        		// TODO: only reassign if the newly fetched data differs from the cached one.
-        		k8sdatamodel.data = data;
-        		k8sdatamodel.sequenceNumber++;
-        		pollingError = 0;
+            // TODO: only reassign if the newly fetched data differs from the cached one.
+            k8sdatamodel.data = data;
+            k8sdatamodel.sequenceNumber++;
+            pollingError = 0;
             resetCounters();
           } else {
             bumpCounters();
