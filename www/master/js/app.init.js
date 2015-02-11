@@ -45,8 +45,11 @@ app.config(function(pollK8sDataServiceProvider, ENV){
   if (ENV['k8sDataServer']) {
     pollK8sDataServiceProvider.setEndpointUrl(ENV.k8sDataServer);
   }
-  if (ENV['k8sDataPollIntervalSec']) {
-    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalSec);
+  if (ENV['k8sDataPollIntervalMinSec']) {
+    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalMinSec);
+  }
+  if (ENV['k8sDataPollIntervalMaxSec']) {
+    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalMaxSec);
   }
   if (ENV['k8sDataPollErrorThreshold']) {
     pollK8sDataServiceProvider.setPollErrorThreshold(ENV.k8sDataPollErrorThreshold);
