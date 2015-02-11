@@ -3,17 +3,12 @@
 
   var pollK8sDataService = function PollK8sDataService(
       $http, $timeout) {
-    // Now the sequenceNumber will be used for debugging and verification purposes.
-    var k8sdatamodel = { 'data': undefined, 'sequenceNumber': 0};
+    // sequenceNumber can be used to watch for changes in data.
+    var k8sdatamodel = { 'data' : undefined, 'sequenceNumber': 0 };
     var pollingError = 0;
     var promise = undefined;
 
     var startPolling = function() {
-      // TODO: maybe display an error in the UI to the end user.
-      if (pollingError > 3) {
-        console.log('Have ' + pollingError + ' consecutive polling errors.');
-      }
-
       // TODO: Pass in the URL through constants config.
       // TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
       $http.get('http://turing-glider-846.appspot.com/graph').
@@ -23,30 +18,59 @@
           k8sdatamodel.data = data;
           k8sdatamodel.sequenceNumber++;
           pollingError = 0;
+          resetCounters();
         } else {
-          pollingError++;
+          bumpCounters();
         }
 
-        // TODO: externalized this poll interval as a config value in
-        // www/master/js/config
-        promise = $timeout(startPolling, 1000);
+        promise = $timeout(startPolling, pollingInterval);
       }).error(function(data, status, headers, config) {
-        pollingError++;
+        bumpCounters();
 
-        // TODO: externalized this poll interval as a config value in
-        // www/master/js/config
-        promise = $timeout(startPolling, 1000);
+        promise = $timeout(startPolling, pollingInterval);
       });
     };
 
-    startPolling();
+    // TODO: externalize these values.
+    var maximumInterval = 60000;
+    var initialInterval = 1000;
+
+    // Implement fibonacci back off when the service is down.
+    var pollingInterval = initialInterval;
+    var pollingIncrement = pollingInterval;
+
+    // Reset polling interval.
+    var resetCounters = function() {
+      pollingInterval = initialInterval;
+      pollingIncrement = pollingInterval;
+    };
+
+    // Bump error count and polling interval.
+    var bumpCounters = function() {
+      // Bump the error count.
+      pollingError++;
+
+      // TODO: maybe display an error in the UI to the end user.
+      console.log('Have ' + pollingError + ' consecutive polling errors.');
+
+      // Bump the polling interval.
+      var currentIncrement = pollingIncrement;
+      pollingIncrement = pollingInterval;
+      pollingInterval += currentIncrement;
+
+      // Reset when limit reached.
+      if (pollingInterval > maximumInterval) {
+        resetCounters();
+      }
+    };
 
     return {
-      k8sdatamodel : k8sdatamodel,
-      restart: function() {
+      'k8sdatamodel' : k8sdatamodel,
+      'start' : function() {
+        resetCounters();
         startPolling();
       },
-      stop: function() {
+      'stop' : function() {
         $timeout.cancel(promise);
       }
     };
