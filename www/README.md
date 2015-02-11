@@ -67,7 +67,17 @@ A json file can be used by `gulp` to automatically create angular constants. Thi
 * Production config can be generated using ```gulp config --env production``` or ```gulp --env production```
 
 #### Kubernetes Server Configuration
-By default the k8s api server does not support CORS, so the `kube-apiserver.service` must be started with `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your host here>`
+
+**RECOMMENDED**: By default the k8s api server does not support CORS,
+  so the `kube-apiserver.service` must be started with
+  `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your
+  host here>`
+
+**HACKS**: If you don't want to/cannot restart the k8s api server:
+* You can set up [a node proxy](https://github.com/bcbroussard/kraken-proxy) for the k8s api server which adds
+ ```Access-Control-Allow-Origin: *``` for you. 
+* Or you can start your browser with web security disabled. For
+  Chrome, you can [launch](http://www.chromium.org/developers/how-tos/run-chromium-with-flags) it with flag ```--disable-web-security```.
 
 ### Building a New Visualizer or Component
 
