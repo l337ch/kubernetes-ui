@@ -26,6 +26,7 @@ var gulp        = require('gulp'),
     argv        = require('yargs').argv,
     foreach     = require('gulp-foreach'),
     gcallback   = require('gulp-callback'),
+    tag_version = require('gulp-tag-version'),
     PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
@@ -79,6 +80,9 @@ var vendor = {
 var source = {
   scripts: {
     app:    [ 'js/app.init.js',
+              'js/app.config.js',
+              'js/app.directive.js',
+              'app.run.js',
               'js/modules/*.js',
               'js/tabs.js',
               'js/config/generated-config.js',
@@ -298,6 +302,13 @@ gulp.task('copy:components', function() {
       .pipe(minifyCSS())
       .pipe(cssFilter.restore())
       .pipe( gulp.dest(build.components.dir) );
+});
+
+
+// Assuming there's "version: 1.2.3" in package.json,
+// tag the last commit as "v1.2.3"//
+gulp.task('tag', function() {
+  return gulp.src(['./package.json']).pipe(tag_version());
 });
 
 // // BOOSTRAP

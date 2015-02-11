@@ -7,17 +7,6 @@
 
 var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services']);
 
-app.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider
-    .when("/dashboard", {templateUrl: "/components/dashboard/pages/home.html", controller: "DashboardCtrl"})
-    .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
-    .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
-    // else 404
-    .otherwise({
-        redirectTo: "/404"
-    });
-}]);
-
 app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
   console.log("loading page controller.");
   $scope.toggleSidenav = function(menuId) {
@@ -25,18 +14,6 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav)
   };
 
 }]);
-
-app.run(['$route', angular.noop]);
-
-app.directive('includeReplace', function () {
-    return {
-        require: 'ngInclude',
-        restrict: 'A', /* optional */
-        link: function (scope, el, attrs) {
-            el.replaceWith(el.children());
-        }
-    };
-});
 
 // stub for config
 angular.module("krakenApp.config", []);
@@ -75,3 +52,5 @@ app.config(function(pollK8sDataServiceProvider, ENV){
     pollK8sDataServiceProvider.setPollErrorThreshold(ENV.k8sDataPollErrorThreshold);
   }
 });
+
+}]);
