@@ -1,79 +1,66 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
-  <head>
-    <title>Kraken</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
-    <link rel="stylesheet" href="./app.css" >
-  </head>
-
-  <body ng-app="krakenApp" layout="column" ng-controller="AppCtrl">
-
-
-
-    <!--
-         Use `flex` [below] to have the side bar and content area
-         fill the available vertical display area
-     -->
-
-    <div layout="row" flex>
-
-      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')">
-        <md-toolbar class="md-default-theme">
-          <h1 class="md-toolbar-tools">
-            <a ng-href="." layout="row" flex="" href="/">
-              <span class="svg-kraken" role="img" aria-label="Pods"></span>
-            </a>
-          </h1>
-        </md-toolbar>
-        <md-list>
-          <md-item ng-repeat="it in visualizers">
-            <md-item-content>
-              <md-button ng-click="selectVisualizer(it)" ng-class="{'selected' : it === selected }">
-                <span class="{{it.classname}} visualizer"></span>
-                {{it.name}}
-              </md-button>
-            </md-item-content>
-          </md-item>
-        </md-list>
-      </md-sidenav>
-
-      <!--
-          Use `flex` [below] to have the content area
-          fill the available horizontal display area on the right side
-      -->
-
-      <div layout="column" flex class="content-wrapper" id="content">
-        <md-toolbar layout="row">
-          <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
-            <span class="visuallyhidden">Menu</span>
-          </button>
-          <h1>Kraken</h1>
-        </md-toolbar>
-        <md-content layout="column" flex class="md-padding">
-            <span class="{{selected.classname}} visualizer" role="img" aria-label="{{selected.name}}"></span>
-            <h2>{{selected.name}}</h2>
-            <p>{{selected.content}}</p>
-            <div ng-include="selected.url"></div>
-        </md-content>
+<html lang="en" ng-app="krakenApp">
+<head>
+  <title>Kubernetes Kraken</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.css">
+  <link rel="stylesheet" href="/assets/css/app.css" >
+    <link rel="stylesheet" href="/components/dashboard/css/dashboard.css" >
+  <link rel="shortcut icon" href="/assets/img/icons/favicon.png" type="image/vnd.microsoft.icon" />
+</head>
+<body layout="row" ng-controller="PageCtrl">
+  <md-sidenav layout="column"
+              md-is-locked-open="shouldLockOpen()"
+              style="overflow: hidden; display: flex;"
+              class="site-sidenav md-sidenav-left md-whiteframe-z2"
+              md-component-id="left"
+              md-closed>
+    <md-toolbar>
+      <h1 class="md-toolbar-tools">
+        <a ng-href="/" layout="row" flex>
+          <span class="kraken-logo"></span>
+          <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
+        </a>
+      </h1>
+    </md-toolbar>
+    <md-content style="overflow: auto;">
+    </md-content>
+  </md-sidenav>
+  <div layout="column" layout-fill tabIndex="-1" role="main">
+    <md-toolbar>
+      <div class="md-toolbar-tools" ng-click="openMenu()">
+        <button class="menu-icon" aria-label="Toggle Menu">
+          <md-icon icon="/assets/img/icons/ic_menu_24px.svg"></md-icon>
+        </button>
+        <h1 class="md-toolbar-tools" ng-style="{visibility: !shouldLockOpen() && 'visible' || 'hidden'}">
+          <a ng-href="/" layout="row" flex>
+            <span class="kraken-logo"></span>
+            <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
+          </a>
+        </h1>
+        <div layout="row" flex class="fill-height">
+          <div class="md-toolbar-item md-breadcrumb"></div>
+          <span flex></span> <!-- use up the empty space -->
+          <div class="md-toolbar-item md-tools" layout="row"></div>
+        </div>
       </div>
-    </div>
-
-    <script src="./bower_components/hammerjs/hammer.js"></script>
-    <script src="./bower_components/angular/angular.js"></script>
-    <script src="./bower_components/angular-route/angular-route.js"></script>
-    <script src="./bower_components/angular-aria/angular-aria.js"></script>
-    <script src="./bower_components/angular-animate/angular-animate.js"></script>
-
-    <script src="./bower_components/angular-material/angular-material.js"></script>
-
-    <script src="./app.js"></script>
-    <script src="./src/visualizers/visualizerService.js"></script>
-
-  </body>
+    </md-toolbar>
+    <md-content md-scroll-y flex>
+    <md-whiteframe class="md-whiteframe-z2" layout layout-align="center center">
+      <div ng-controller="TabCtrl" class="tabsDefaultTabs">
+        <md-tabs md-selected="0">
+          <md-tab ng-repeat="tab in tabs" md-on-select="switchTab($index)" label="{{tab}}">
+            <div ng-view class="demo-tab tab{{$index%4}}" layout="column" layout-fill></div>
+          </md-tab>
+        </md-tabs>
+      </div>
+    </md-whiteframe>
+    </md-content>
+  </div>
+  <script src="/assets/js/base.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
 </html>
