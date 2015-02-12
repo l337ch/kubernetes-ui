@@ -33,13 +33,9 @@
       // Now the sequenceNumber will be used for debugging and verification purposes.
       var k8sdatamodel = { 'data' : undefined, 'sequenceNumber' : 0 };
       var pollingError = 0;
-      var promise = undefined;
-      // Indicate whether polling has started.
-      var pollingStarted = false;
+      var promise = null;
 
       var startPolling = function() {
-	pollingStarted = true;
-
         // TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
         $http.get(endpointUrl)
         .success(function(data, status, headers, config) {
@@ -109,22 +105,27 @@
         }
       };
 
+      var isPolling = function() {
+        return !!promise;
+      };
+
       return {
         'k8sdatamodel' : k8sdatamodel,
-        'pollingStarted': pollingStarted,
         'start' : function() {
 	  // If polling has already started, then calling start() again would
 	  // just reset the counters and polling interval, but it will not
 	  // start a new thread polling in parallel to the existing polling
 	  // thread.
           resetCounters();
-	  if (pollingStarted == false) {
+	  if (!isPolling()) {
             startPolling();
 	  }
         },
         'stop' : function() {
-          pollingStarted = false;
-          $timeout.cancel(promise);
+          if (isPolling()) {
+	    $timeout.cancel(promise);
+	    promise = null;
+          }
         }
       };
     };
