@@ -7,12 +7,60 @@
 
 var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services']);
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
-  console.log("loading page controller.");
-  $scope.toggleSidenav = function(menuId) {
-    $mdSidenav(menuId).toggle();
+app.factory('menu', [
+  '$location',
+  '$rootScope',
+  'sections',
+function($location, $rootScope, sections) {
+
+  var self;
+
+  $rootScope.$on('$locationChangeSuccess', onLocationChange);
+
+  return self = {
+    selectSection: function(section) {
+      self.openedSection = section;
+    },
+    selectPage: function(section, page) {
+      page && page.url && $location.path(page.url);
+      self.currentSection = section;
+      self.currentPage = page;
+    },
+    isPageSelected: function(page) {
+      return self.currentPage === page;
+    }
   };
 
+  function onLocationChange() {
+    var path = $location.path();
+
+    var matchPage = function(section, page) {
+      if (path === page.url) {
+        self.selectSection(section);
+        self.selectPage(section, page);
+      }
+    };
+
+    sections.forEach(function(section) {
+      if(section.children) {
+        section.children.forEach(function(childSection){
+          if(childSection.pages){
+            childSection.pages.forEach(function(page){
+              matchPage(childSection, page);
+            });
+          }
+        });
+      }
+      else if(section.pages) {
+        section.pages.forEach(function(page) {
+          matchPage(section, page);
+        });
+      }
+      else if (section.type === 'link') {
+        matchPage(section, section);
+      }
+    });
+  }
 }]);
 
 // stub for config

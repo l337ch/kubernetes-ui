@@ -3,8 +3,14 @@
  * Page Controller
  =========================================================*/
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope, $mdSidenav, $timeout){
-
+app.controller('PageCtrl', [
+  '$scope',
+  '$timeout',
+  '$mdSidenav',
+  'menu',
+function($scope, $timeout, $mdSidenav, menu) {
+  console.log("loading page controller.");
+  $scope.menu = menu;
 
   // *********************
   // Internal methods
@@ -22,5 +28,19 @@ app.controller('PageCtrl', ['$scope', '$mdSidenav', '$timeout', function($scope,
       $mdSidenav('left').toggle();
     });
   }
- 
-}]);
+
+  $scope.toggleSidenav = function(menuId) {
+    $mdSidenav(menuId).toggle();
+  };
+
+}]).filter('humanizeDoc', function() {
+  return function(doc) {
+    if (!doc) return;
+    if (doc.type === 'directive') {
+      return doc.name.replace(/([A-Z])/g, function($1) {
+        return '-'+$1.toLowerCase();
+      });
+    }
+    return doc.label || doc.name;
+  };
+});

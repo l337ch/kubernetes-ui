@@ -85,6 +85,7 @@ var source = {
               'app.run.js',
               'js/modules/*.js',
               'js/tabs.js',
+              'js/sections.js',
               'js/config/generated-config.js',
               'js/modules/controllers/*.js',
               'js/modules/directives/*.js',
@@ -174,6 +175,26 @@ gulp.task('bundle-manifest', function(){
                 return stream
                 })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
+    .pipe(gulp.dest("js"))
+  }));
+});
+
+gulp.task('bundle-manifest-sections', function(){
+  var sections = [];
+  var stream = gulp.src('./components/*/manifest.json')
+  .pipe(foreach(function(stream, file) {
+                var manifestFile = require(file.path);
+                sections.push(JSON.stringify(manifestFile.sections));
+                return stream
+                })).pipe(gcallback(function() {
+    var output_sections = '';
+    for (i = 0; i < sections.length; i++) {
+      if (output_sections.indexOf(sections[i].substr(1,sections[i].length - 2)) == -1) {
+        output_sections += sections[i].substr(1,sections[i].length - 2) + ',';
+      }
+    }
+    var output_section = '[' + output_sections.substr(0, output_sections.length -1) + ']';
+    stringSrc("sections.js", 'app.value("sections", ' + output_section +');\n')
     .pipe(gulp.dest("js"))
   }));
 });
