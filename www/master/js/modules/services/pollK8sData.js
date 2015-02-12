@@ -111,7 +111,7 @@
 
       return {
         'k8sdatamodel' : k8sdatamodel,
-	'pollingStarted': pollingStarted,
+        'pollingStarted': pollingStarted,
         'start' : function() {
 	  // If polling has already started, then calling start() again would
 	  // just reset the counters and polling interval, but it will not
