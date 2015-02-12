@@ -8,21 +8,23 @@
 
     var endpointUrl = '';
     // Set URL for data service during development.
-    endpointUrl = 'http://turing-glider-846.appspot.com/graph/';
-
-    var pollMinIntervalSec = 1;
-    var pollMaxIntervalSec = 60;
-    var pollErrorThreshold = 5;
-
+    // TODO: Remove the following line.
+    endpointUrl = 'http://turing-glider-846.appspot.com/graph';
     this.setEndpointUrl = function(value) {
       endpointUrl = value;
     }
+
+    var pollMinIntervalSec = 1;
     this.setPollMinIntervalSec = function(value) {
       pollMinIntervalSec = value;
     }
+
+    var pollMaxIntervalSec = 60;
     this.setPollMaxIntervalSec = function(value) {
       pollMaxIntervalSec = value;
     }
+
+    var pollErrorThreshold = 5;
     this.setPollErrorThreshold = function(value) {
       pollErrorThreshold = value;
     }
@@ -39,14 +41,32 @@
         $http.get(endpointUrl)
         .success(function(data, status, headers, config) {
           if (data) {
-            // TODO: only reassign if the newly fetched data differs from the cached one.
-            k8sdatamodel.data = data;
-            k8sdatamodel.sequenceNumber++;
-            pollingError = 0;
-            resetCounters();
-          } else {
-            bumpCounters();
+            // Extract the data model from the response.
+            var newModel = data["graph"];
+            if (newModel) {
+              // Remove the metadata property, which contains changing timestamps.
+              if (newModel["metadata"]) {
+                delete newModel["metadata"];
+              }
+              
+              var newModelString = JSON.stringify(newModel);
+              var oldModelString = '';
+              if (k8sdatamodel.data) {
+                oldModelString = JSON.stringify(k8sdatamodel.data);
+              }
+
+              if (newModelString != oldModelString) {
+                k8sdatamodel.data = newModel;
+                k8sdatamodel.sequenceNumber++;
+              }
+
+              pollingError = 0;
+              resetCounters();
+              return;
+            }
           }
+
+          bumpCounters();
         })
         .error(function(data, status, headers, config) {
           bumpCounters();
