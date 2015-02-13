@@ -43,7 +43,11 @@ app.config(['$routeProvider', 'manifestProvider',
     });
 
     angular.forEach(_routes, function(r) {
+      if (r.controller) {
         $routeProvider.when(r.url, {templateUrl: r.templateUrl, controller: r.controller});
+      } else {
+        $routeProvider.when(r.url, {templateUrl: r.templateUrl});
+      }
     });
 }]);
 
