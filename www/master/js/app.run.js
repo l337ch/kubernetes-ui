@@ -1,5 +1,4 @@
-app.run(['$route', angular.noop]);
-
-app.run(function($rootScope, globalsFactory) {
+app.run(['$route', angular.noop]
+).run(function($rootScope, globalsFactory) {
   $rootScope._globals = globalsFactory;
 });

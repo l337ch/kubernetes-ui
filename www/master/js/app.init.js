@@ -5,9 +5,9 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services'])
 
-app.factory('menu', [
+.factory('menu', [
   '$location',
   '$rootScope',
   'sections',
@@ -61,45 +61,23 @@ function($location, $rootScope, sections) {
       }
     });
   }
-}]);
-
-// stub for config
-angular.module("krakenApp.config", []);
-
-angular.module('krakenApp.services',[])
-  .factory('globalsFactory', ['ENV', function(ENV){
+}]).factory('globalsFactory', [
+    'ENV',
+    'SidebarService',
+  function(ENV, SidebarService){
     return {
-        getConstant: function(constantName){
+        getConstant: function(constantName) {
           if (ENV[constantName]) {
             return ENV[constantName];
           } else {
             return false;
           }
-        }  
+        },
+        addSidebarItem: function(item) {
+          SidebarService.addSidebarItem(item);
+        },
+        clearSidebarItems: function() {
+          SidebarService.clearSidebarItems();
+        }
     }
 }]);
-
-app.run(function($rootScope, globalsFactory) {
-  $rootScope._globals = globalsFactory;
-});
-
-app.config(function(k8sApiProvider, ENV){
-  if (ENV['k8sApiServer']) {
-    k8sApiProvider.setUrlBase(ENV.k8sApiServer);
-  }
-});
-
-app.config(function(pollK8sDataServiceProvider, ENV){
-  if (ENV['k8sDataServer']) {
-    pollK8sDataServiceProvider.setEndpointUrl(ENV.k8sDataServer);
-  }
-  if (ENV['k8sDataPollIntervalMinSec']) {
-    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalMinSec);
-  }
-  if (ENV['k8sDataPollIntervalMaxSec']) {
-    pollK8sDataServiceProvider.setPollIntervalSec(ENV.k8sDataPollIntervalMaxSec);
-  }
-  if (ENV['k8sDataPollErrorThreshold']) {
-    pollK8sDataServiceProvider.setPollErrorThreshold(ENV.k8sDataPollErrorThreshold);
-  }
-});

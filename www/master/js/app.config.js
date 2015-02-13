@@ -1,14 +1,19 @@
-app.config(['$routeProvider', function ($routeProvider) {
+angular.module("krakenApp.config", []);
+angular.module('krakenApp.services',[]);
+
+app.config([
+  '$routeProvider',
+function ($routeProvider) {
   $routeProvider
-    .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
+    .when("/404", {templateUrl: "/views/partials/404.html"})
     // else 404
     .otherwise({
         redirectTo: "/404"
     });
-}]);
-
-app.config(['$routeProvider', 'manifestProvider',
-  function($routeProvider, manifestProvider) {
+}]).config([
+  '$routeProvider',
+  'manifestProvider',
+function($routeProvider, manifestProvider) {
 
     var _manifestRoutes = JSON.parse(manifestProvider.getRoutes());
 
@@ -49,39 +54,20 @@ app.config(['$routeProvider', 'manifestProvider',
         $routeProvider.when(r.url, {templateUrl: r.templateUrl});
       }
     });
-}]);
-
-app.provider('configurationService', ['ENV', function(ENV) {
-  var env = ENV; // allow ability to override the real ENV
-  this.getConstant = function(constantName) {
-    if (env[constantName]) {
-      return env[constantName];
-    }
-      return false;
-    };
-
-  this.getConstantOrElse = function(constantName, alternateValue) {
-    if (env[constantName]) {
-      return env[constantName];
-    }
-      return alternateValue;
-    };
-
-  this.setEnv = function(value) {
-    env = value;
-  };
-
-  this.$get = function(env){
-    var configMethods = {};
-    var toBeReturnedEnv = this.env || env;
-    configMethods.getConstant = function (constantName) {
-      return toBeReturnedEnv[constantName];
-    };
-
-    return configMethods;
+}]).config(function(k8sApiProvider, pollK8sDataServiceProvider, configurationServiceProvider){
+  if (configurationServiceProvider.getConstant('k8sApiServer')) {
+    k8sApiProvider.setUrlBase(configurationServiceProvider.getConstant('k8sApiServer'));
   }
-}]);
-
-app.config(function(k8sApiProvider,configurationServiceProvider, ENV){
-  k8sApiProvider.setUrlBase(configurationServiceProvider.getConstant('k8sApiServer'));
+  if (configurationServiceProvider.getConstant('k8sDataServer')) {
+    pollK8sDataServiceProvider.setEndpointUrl(configurationServiceProvider.getConstant('k8sDataServer'));
+  }
+  if (configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec')) {
+    pollK8sDataServiceProvider.setPollIntervalSec(configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec'));
+  }
+  if (configurationServiceProvider.getConstant('k8sDataPollIntervalMaxSec')) {
+    pollK8sDataServiceProvider.setPollIntervalSec(configurationServiceProvider.getConstant('k8sDataPollIntervalMaxSec'));
+  }
+  if (configurationServiceProvider.getConstant('k8sDataPollErrorThreshold')) {
+    pollK8sDataServiceProvider.setPollErrorThreshold(configurationServiceProvider.getConstant('k8sDataPollErrorThreshold'));
+  }
 });
