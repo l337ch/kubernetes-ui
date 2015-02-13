@@ -30,18 +30,19 @@
   </md-sidenav>
   <div layout="column" layout-fill tabIndex="-1" role="main">
     <md-toolbar>
-      <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" aria-label="Toggle Menu">
+      <div class="md-toolbar-tools">
+        <button class="menu-icon" aria-label="Toggle Menu" ng-click="openMenu()">
           <md-icon icon="/assets/img/icons/ic_menu_24px.svg"></md-icon>
         </button>
-        <h1 class="md-toolbar-tools" ng-style="{visibility: !shouldLockOpen() && 'visible' || 'hidden'}">
-          <a ng-href="/" layout="row" flex>
-            <span class="kraken-logo"></span>
-            <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
-          </a>
-        </h1>
         <div layout="row" flex class="fill-height">
           <div class="md-toolbar-item md-breadcrumb"></div>
+            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
+              <span hide-sm hide-md><a href="/#{{menu.currentSection.url}}">{{menu.currentSection.name}}</a></span>
+              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
+                <img style="height: 16px;" src="/assets/img/docArrow.png" alt="" aria-hidden="true">
+              </span>
+            </span>
+            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Kraken' }}</span>
           <span flex></span> <!-- use up the empty space -->
           <div class="md-toolbar-item md-tools" layout="row"></div>
         </div>

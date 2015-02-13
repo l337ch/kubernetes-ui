@@ -1,11 +1,49 @@
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
-    .when("/dashboard", {templateUrl: "/components/dashboard/pages/home.html", controller: "DashboardCtrl"})
-    .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
     .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
     // else 404
     .otherwise({
         redirectTo: "/404"
+    });
+}]);
+
+app.config(['$routeProvider', 'manifestProvider',
+  function($routeProvider, manifestProvider) {
+
+    var _manifestRoutes = JSON.parse(manifestProvider.getRoutes());
+
+    var _routes = [];
+
+    var _extractPageValues = function(page) {
+        _routes.push({
+            url: page.url,
+            templateUrl: page.templateUrl,
+            controller: page.controller
+        });
+    };
+
+    _manifestRoutes.forEach(function(section) {
+      if(section.children) {
+        section.children.forEach(function(childSection) {
+          if(childSection.pages){
+            childSection.pages.forEach(function(page) {
+              _extractPageValues(page);
+            });
+          }
+        });
+      }
+      else if(section.pages) {
+        section.pages.forEach(function(page) {
+            _extractPageValues(page);
+        });
+      }
+      else if (section.type === 'link') {
+        _extractPageValues(section);
+      }
+    });
+
+    angular.forEach(_routes, function(r) {
+        $routeProvider.when(r.url, {templateUrl: r.templateUrl, controller: r.controller});
     });
 }]);
 
