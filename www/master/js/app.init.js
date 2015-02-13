@@ -5,7 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.services'])
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph', 'krakenApp.Dashboard', 'krakenApp.services'])
 
 .factory('menu', [
   '$location',
