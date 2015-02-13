@@ -12,6 +12,7 @@ www/master/js/config/generated-config.js
 www/master/js/config/production.json
 www/master/js/tabs.js
 www/master/js/sections.js
+www/master/js/app.preinit.js
 www/master/node_modules/
 www/node_modules/
 www/npm-debug.log

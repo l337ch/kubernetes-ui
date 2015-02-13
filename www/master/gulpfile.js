@@ -79,7 +79,9 @@ var vendor = {
 // SOURCES CONFIG
 var source = {
   scripts: {
-    app:    [ 'js/app.init.js',
+    app:    [
+              'js/app.preinit.js',
+              'js/app.init.js',
               'js/app.config.js',
               'js/app.directive.js',
               'js/app.run.js',
@@ -177,6 +179,10 @@ gulp.task('bundle-manifest', function(){
                 return stream
                 })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
+    .pipe(gulp.dest("js"));
+    var _appNS = 'krakenApp.';
+    var _appSkeleton = require('./js/app.skeleton.json');
+    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', ', "' + _appNS + components.join('", "' + _appNS) + '"' ))
     .pipe(gulp.dest("js"));
   }));
 });

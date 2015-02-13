@@ -1,0 +1,3 @@
+{
+  "appSkeleton": "var app = angular.module(\"krakenApp\", [\"ngRoute\", \"ngMaterial\", \"krakenApp.config\"%s]);"
+}
