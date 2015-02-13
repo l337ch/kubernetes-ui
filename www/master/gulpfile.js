@@ -172,17 +172,19 @@ function stringSrc(filename, string) {
 
 gulp.task('bundle-manifest', function(){
   var components = [];
+  var namespace = [];
   var stream = gulp.src('./components/*/manifest.json')
   .pipe(foreach(function(stream, file) {
                 var manifestFile = require(file.path);
                 components.push(manifestFile.name);
+                namespace.push(manifestFile.namespace);
                 return stream
                 })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
     .pipe(gulp.dest("js"));
     var _appNS = 'krakenApp.';
     var _appSkeleton = require('./js/app.skeleton.json');
-    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', ', "' + _appNS + components.join('", "' + _appNS) + '"' ))
+    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', ', "' + _appNS + namespace.join('", "' + _appNS) + '"' ))
     .pipe(gulp.dest("js"));
   }));
 });
