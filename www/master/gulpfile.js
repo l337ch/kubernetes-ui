@@ -184,7 +184,7 @@ gulp.task('bundle-manifest', function(){
     .pipe(gulp.dest("js"));
     var _appNS = 'krakenApp.';
     var _appSkeleton = require('./js/app.skeleton.json');
-    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', ', "' + _appNS + namespace.join('", "' + _appNS) + '"' ))
+    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"' ))
     .pipe(gulp.dest("js"));
   }));
 });

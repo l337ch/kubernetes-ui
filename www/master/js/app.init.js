@@ -5,7 +5,9 @@
 // ****************************
 // -----------------------------------
 
-app.factory('menu', [
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config'].concat(componentNamespaces))
+
+.factory('menu', [
   '$location',
   '$rootScope',
   'sections',
