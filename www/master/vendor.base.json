@@ -6,8 +6,8 @@
   "bower_components/angular-route/angular-route.js",
   "bower_components/angular-aria/angular-aria.js",
   "bower_components/angular-animate/angular-animate.js",
-  "bower_components/lodash/dist/lodash.js",
-  "bower_components/angular-lodash/angular-lodash.js",
-  "bower_components/angular-material/angular-material.js",
+  "bower_components/angular-filter/dist/angular-filter.js",
+  "bower_components/lodash/lodash.js",
+  "bower_components/ng-lodash/build/ng-lodash.js",
   "bower_components/string-format-js/format.js"
 ]
