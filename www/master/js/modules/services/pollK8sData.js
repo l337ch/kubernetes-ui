@@ -34,32 +34,32 @@
 
       var startPolling = function() {
         $.getJSON(dataServer)
-        .done(function(data, jqxhr, textStatus) {
-          if (data) {
-            // Extract the data model from the response.
-            var newModel = data["graph"];
-            if (newModel) {
-              // Remove the metadata property, which contains changing timestamps.
-              if (newModel["metadata"]) {
-                delete newModel["metadata"];
-              }
+          .done(function(data, jqxhr, textStatus) {
+            if (data) {
+              // Extract the data model from the response.
+              var newModel = data["graph"];
+              if (newModel) {
+                // Remove the metadata property, which contains changing timestamps.
+                if (newModel["metadata"]) {
+                  delete newModel["metadata"];
+                }
 
-              var newModelString = JSON.stringify(newModel);
-              var oldModelString = '';
-              if (k8sdatamodel.data) {
-                oldModelString = JSON.stringify(k8sdatamodel.data);
-              }
+                var newModelString = JSON.stringify(newModel);
+                var oldModelString = '';
+                if (k8sdatamodel.data) {
+                  oldModelString = JSON.stringify(k8sdatamodel.data);
+                }
 
-              if (newModelString != oldModelString) {
-                k8sdatamodel.data = newModel;
-                k8sdatamodel.sequenceNumber++;
-              }
+                if (newModelString != oldModelString) {
+                  k8sdatamodel.data = newModel;
+                  k8sdatamodel.sequenceNumber++;
+                }
 
-              pollingError = 0;
-              resetCounters();
-              return;
+                pollingError = 0;
+                resetCounters();
+                return;
+              }
             }
-          }
 
           bumpCounters();
         })
