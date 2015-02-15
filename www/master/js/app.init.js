@@ -5,7 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config'].concat(componentNamespaces))
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'ngLodash', 'krakenApp.config'].concat(componentNamespaces))
 
 .factory('menu', [
   '$location',
