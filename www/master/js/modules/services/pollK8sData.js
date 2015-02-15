@@ -114,12 +114,13 @@
           // thread.
           resetCounters();
           if (!isPolling()) {
-                  startPolling();
+            startPolling();
           }
         },
         'stop' : function() {
           if (isPolling()) {
             $timeout.cancel(promise);
+            k8sdatamodel.data = undefined;
             promise = null;
           }
         }
