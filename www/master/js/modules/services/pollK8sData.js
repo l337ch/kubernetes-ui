@@ -39,7 +39,11 @@
               // Extract the data model from the response.
               var newModel = data["graph"];
               if (newModel) {
-                // Remove the metadata property, which contains changing timestamps.
+                // Remove label and metadata, which contain changing timestamps.
+                if (newModel["label"]) {
+                  delete newModel["label"];
+                }
+
                 if (newModel["metadata"]) {
                   delete newModel["metadata"];
                 }
@@ -86,8 +90,8 @@
         pollingError++;
 
         // TODO: maybe display an error in the UI to the end user.
-        if (pollingError > pollErrorThreshold) {
-          console.log('Have ' + pollingError + ' consecutive polling errors for ' + dataServer + '.');
+        if (pollingError % pollErrorThreshold == 0) {
+          console.log('Error: ' + pollingError + ' consecutive polling errors for ' + dataServer + '.');
         }
 
         // Bump the polling interval.
