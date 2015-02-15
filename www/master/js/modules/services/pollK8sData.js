@@ -6,12 +6,9 @@
     // Their values should be configured in the application before
     // creating the service instance.
 
-    var endpointUrl = '';
-    // Set URL for data service during development.
-    // TODO: Remove the following line.
-    endpointUrl = 'http://turing-glider-846.appspot.com/graph';
-    this.setEndpointUrl = function(value) {
-      endpointUrl = value;
+    var dataServer = '';
+    this.setDataServer = function(value) {
+      dataServer = value;
     }
 
     var pollMinIntervalSec = 1;
@@ -36,38 +33,37 @@
       var promise = null;
 
       var startPolling = function() {
-        // TODO: Set CORS header to get away with the XMLHttpRequest origin auth issue.
-        $http.get(endpointUrl)
-        .success(function(data, status, headers, config) {
-          if (data) {
-            // Extract the data model from the response.
-            var newModel = data["graph"];
-            if (newModel) {
-              // Remove the metadata property, which contains changing timestamps.
-              if (newModel["metadata"]) {
-                delete newModel["metadata"];
-              }
+        $.getJSON(dataServer)
+          .done(function(data, jqxhr, textStatus) {
+            if (data) {
+              // Extract the data model from the response.
+              var newModel = data["graph"];
+              if (newModel) {
+                // Remove the metadata property, which contains changing timestamps.
+                if (newModel["metadata"]) {
+                  delete newModel["metadata"];
+                }
 
-              var newModelString = JSON.stringify(newModel);
-              var oldModelString = '';
-              if (k8sdatamodel.data) {
-                oldModelString = JSON.stringify(k8sdatamodel.data);
-              }
+                var newModelString = JSON.stringify(newModel);
+                var oldModelString = '';
+                if (k8sdatamodel.data) {
+                  oldModelString = JSON.stringify(k8sdatamodel.data);
+                }
 
-              if (newModelString != oldModelString) {
-                k8sdatamodel.data = newModel;
-                k8sdatamodel.sequenceNumber++;
-              }
+                if (newModelString != oldModelString) {
+                  k8sdatamodel.data = newModel;
+                  k8sdatamodel.sequenceNumber++;
+                }
 
-              pollingError = 0;
-              resetCounters();
-              return;
+                pollingError = 0;
+                resetCounters();
+                return;
+              }
             }
-          }
 
           bumpCounters();
         })
-        .error(function(data, status, headers, config) {
+        .fail(function(jqxhr, textStatus, error) {
           bumpCounters();
         });
 
@@ -91,7 +87,7 @@
 
         // TODO: maybe display an error in the UI to the end user.
         if (pollingError > pollErrorThreshold) {
-          console.log('Have ' + pollingError + ' consecutive polling errors.');
+          console.log('Have ' + pollingError + ' consecutive polling errors for ' + dataServer + '.');
         }
 
         // Bump the polling interval.
@@ -112,19 +108,19 @@
       return {
         'k8sdatamodel' : k8sdatamodel,
         'start' : function() {
-	  // If polling has already started, then calling start() again would
-	  // just reset the counters and polling interval, but it will not
-	  // start a new thread polling in parallel to the existing polling
-	  // thread.
+          // If polling has already started, then calling start() again would
+          // just reset the counters and polling interval, but it will not
+          // start a new thread polling in parallel to the existing polling
+          // thread.
           resetCounters();
-	  if (!isPolling()) {
-            startPolling();
-	  }
+          if (!isPolling()) {
+                  startPolling();
+          }
         },
         'stop' : function() {
           if (isPolling()) {
-	    $timeout.cancel(promise);
-	    promise = null;
+            $timeout.cancel(promise);
+            promise = null;
           }
         }
       };

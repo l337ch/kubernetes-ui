@@ -59,7 +59,7 @@ function($routeProvider, manifestProvider) {
     k8sApiProvider.setUrlBase(configurationServiceProvider.getConstant('k8sApiServer'));
   }
   if (configurationServiceProvider.getConstant('k8sDataServer')) {
-    pollK8sDataServiceProvider.setEndpointUrl(configurationServiceProvider.getConstant('k8sDataServer'));
+    pollK8sDataServiceProvider.setDataServer(configurationServiceProvider.getConstant('k8sDataServer'));
   }
   if (configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec')) {
     pollK8sDataServiceProvider.setPollIntervalSec(configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec'));
