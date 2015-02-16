@@ -1,10 +1,23 @@
-app.service('SidebarService', function () {
+app.service('SidebarService', [
+  '$rootScope',
+function ($rootScope) {
   var service = this;
-  service.sidebarItems= [];
+  service.sidebarItems = [];
 
   service.clearSidebarItems = function() {
     service.sidebarItems= [];
-  }
+  };
+
+  service.renderSidebar = function() {
+    var _entries = '';
+    service.sidebarItems.forEach(function(entry) {
+      _entries += entry.Html;
+    });
+
+    if (_entries) {
+      $rootScope.sidenavLeft = _entries;
+    }
+  };
 
   service.addSidebarItem = function(item) {
 
@@ -14,4 +27,4 @@ app.service('SidebarService', function () {
       return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0); 
     });
   };
-});
+}]);
