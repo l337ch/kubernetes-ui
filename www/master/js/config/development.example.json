@@ -3,8 +3,8 @@
   "ENV": {
     "k8sApiServer" : "http://54.148.19.99:8080/api/v1beta2",
     "k8sDataServer" : "http://turing-glider-846.appspot.com/graph",
-    "k8sDataPollMinIntervalSec" : 3,
-    "k8sDataPollMaxIntervalSec" : 30,
+    "k8sDataPollMinIntervalSec" : 15,
+    "k8sDataPollMaxIntervalSec" : 150,
     "k8sDataPollErrorThreshold" : 5
   }
 }
