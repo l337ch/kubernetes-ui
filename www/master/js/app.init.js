@@ -78,6 +78,9 @@ function($location, $rootScope, sections) {
         },
         clearSidebarItems: function() {
           SidebarService.clearSidebarItems();
+        },
+        renderSidebar: function() {
+          SidebarService.renderSidebar();
         }
     }
 }]);
