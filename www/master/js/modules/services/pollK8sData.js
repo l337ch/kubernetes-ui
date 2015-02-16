@@ -11,12 +11,12 @@
       dataServer = value;
     }
 
-    var pollMinIntervalSec = 1;
+    var pollMinIntervalSec = 3;
     this.setPollMinIntervalSec = function(value) {
       pollMinIntervalSec = value;
     }
 
-    var pollMaxIntervalSec = 60;
+    var pollMaxIntervalSec = 30;
     this.setPollMaxIntervalSec = function(value) {
       pollMaxIntervalSec = value;
     }
@@ -32,44 +32,51 @@
       var pollingError = 0;
       var promise = null;
 
+      var updateModel = function(newModel) {
+        // Remove label and metadata, which contain changing timestamps.
+        if (newModel["label"]) {
+          delete newModel["label"];
+        }
+
+        if (newModel["metadata"]) {
+          delete newModel["metadata"];
+        }
+
+        var newModelString = JSON.stringify(newModel);
+        var oldModelString = '';
+        if (k8sdatamodel.data) {
+          oldModelString = JSON.stringify(k8sdatamodel.data);
+        }
+
+        if (newModelString != oldModelString) {
+          k8sdatamodel.data = newModel;
+          k8sdatamodel.sequenceNumber++;
+        }
+
+        pollingError = 0;
+        resetCounters();
+      };
+
       var startPolling = function() {
         $.getJSON(dataServer)
-          .done(function(data, jqxhr, textStatus) {
-            if (data) {
-              // Extract the data model from the response.
-              var newModel = data["graph"];
+          .done(function(newModel, jqxhr, textStatus) {
+            if (newModel) {
+              if (newModel["graph"]) {
+                // Extract the data model from the response.
+                newModel = newModel["graph"];
+              }
+
               if (newModel) {
-                // Remove label and metadata, which contain changing timestamps.
-                if (newModel["label"]) {
-                  delete newModel["label"];
-                }
-
-                if (newModel["metadata"]) {
-                  delete newModel["metadata"];
-                }
-
-                var newModelString = JSON.stringify(newModel);
-                var oldModelString = '';
-                if (k8sdatamodel.data) {
-                  oldModelString = JSON.stringify(k8sdatamodel.data);
-                }
-
-                if (newModelString != oldModelString) {
-                  k8sdatamodel.data = newModel;
-                  k8sdatamodel.sequenceNumber++;
-                }
-
-                pollingError = 0;
-                resetCounters();
+                updateModel(newModel);
                 return;
               }
             }
 
-          bumpCounters();
-        })
+            bumpCounters();
+          })
         .fail(function(jqxhr, textStatus, error) {
-          bumpCounters();
-        });
+            bumpCounters();
+          });
 
         promise = $timeout(startPolling, pollInterval * 1000);
       };
@@ -133,6 +140,6 @@
   };
 
   angular.module('krakenApp.services')
-  .provider('pollK8sDataService', pollK8sDataServiceProvider);
+    .provider('pollK8sDataService', pollK8sDataServiceProvider);
 
 })();
