@@ -119,13 +119,13 @@ var source = {
       // , 'components/*/less/*.less'
       main: ['less/app.less'],
       dir:  'less',
-      watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less']
+      watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/*/less/*.*'],
+    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
     dest:  'components',
     watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/**/less/*.*']
   },
