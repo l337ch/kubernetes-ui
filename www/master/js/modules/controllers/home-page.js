@@ -8,30 +8,99 @@ app.controller('PageCtrl', [
   '$timeout',
   '$mdSidenav',
   'menu',
-function($scope, $timeout, $mdSidenav, menu) {
-  console.log("loading page controller.");
+  '$rootScope',
+function($scope, $timeout, $mdSidenav, menu, $rootScope) {
   $scope.menu = menu;
+
+  $scope.path = path;
+  $scope.goHome = goHome;
+  $scope.openMenu = openMenu;
+  $scope.closeMenu = closeMenu;
+  $scope.isSectionSelected = isSectionSelected;
+
+  $rootScope.$on('$locationChangeSuccess', openPage);
+
+  // Methods used by menuLink and menuToggle directives
+  this.isOpen = isOpen;
+  this.isSelected = isSelected;
+  this.toggleOpen = toggleOpen;
+  this.shouldLockOpen = shouldLockOpen;
+  $scope.toggleKrakenMenu = toggleKrakenMenu;
+
+  var mainContentArea = document.querySelector("[role='main']");
+  var krakenMenu = document.querySelector("[role='kraken-menu']");
 
   // *********************
   // Internal methods
   // *********************
 
-  var t = false;
+  var _t = false;
 
-  $scope.shouldLockOpen = function() {
-    return t;
+  $scope.showKrakenMenu = false;
+
+  function shouldLockOpen() {
+    return _t;
   }
 
-  $scope.openMenu = function() {
+  function toggleKrakenMenu() {
+    $scope.showKrakenMenu = !$scope.showKrakenMenu;
+  }
+
+  function closeMenu() {
     $timeout(function() {
-      t = !$mdSidenav('left').isOpen();
+      $mdSidenav('left').close();
+    });
+  }
+
+  function openMenu() {
+    $timeout(function() {
+      _t = !$mdSidenav('left').isOpen();
       $mdSidenav('left').toggle();
     });
   }
 
-  $scope.toggleSidenav = function(menuId) {
-    $mdSidenav(menuId).toggle();
-  };
+  function path() {
+    return $location.path();
+  }
+
+  function goHome($event) {
+    menu.selectPage(null, null);
+    $location.path( '/' );
+  }
+
+  function openPage() {
+    $scope.closeMenu();
+    mainContentArea.focus();
+  }
+
+  function isSelected(page) {
+    return menu.isPageSelected(page);
+  }
+
+  function isSectionSelected(section) {
+    var selected = false;
+    var openedSection = menu.openedSection;
+    if(openedSection === section){
+      selected = true;
+    }
+    else if(section.children) {
+      section.children.forEach(function(childSection) {
+        if(childSection === openedSection){
+          selected = true;
+        }
+      });
+    }
+    return selected;
+  }
+
+  function isOpen(section) {
+    return menu.isSectionSelected(section);
+  }
+
+  function toggleOpen(section) {
+    menu.toggleSelectSection(section);
+  }
+
 
 }]).filter('humanizeDoc', function() {
   return function(doc) {
