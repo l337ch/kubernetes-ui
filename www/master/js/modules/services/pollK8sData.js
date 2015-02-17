@@ -57,7 +57,10 @@
         resetCounters();
       };
 
-      var startPolling = function() {
+      var startPolling = function(scope, pollOnce /* if just refresh once */) {
+	// By default, we always poll repeatedly.
+	pollOnce = pollOnce || true;
+
         $.getJSON(dataServer)
           .done(function(newModel, jqxhr, textStatus) {
             if (newModel) {
@@ -68,6 +71,8 @@
 
               if (newModel) {
                 updateModel(newModel);
+		// We have to apply the changes to trigger any noticeable update.
+		scope.$apply();
                 return;
               }
             }
@@ -78,7 +83,10 @@
             bumpCounters();
           });
 
-        promise = $timeout(startPolling, pollInterval * 1000);
+	if (!pollOnce) {
+	  // If not polling once, repeatedly perform polling.
+          promise = $timeout(startPolling, pollInterval * 1000);
+	}
       };
 
       // Implement fibonacci back off when the service is down.
@@ -118,6 +126,18 @@
 
       return {
         'k8sdatamodel' : k8sdatamodel,
+	'refresh' : function(scope) {
+	  if (isPolling()) {
+	    // NO-OP as the data is being refreshed.
+	    // TODO: figure out what is the right UX in this case.
+	    console.log('Polling is in progress, data will be refreshed automatically.');
+	  } else {
+	    // Reset the counters for each refresh, so we do not accumulate the errors
+	    // for multiple manual refreshes (as opposed to automatic polling).
+	    resetCounters();
+	    startPolling(scope, true /* poll just once */);
+	  }
+	},
         'start' : function() {
           // If polling has already started, then calling start() again would
           // just reset the counters and polling interval, but it will not
@@ -125,7 +145,7 @@
           // thread.
           resetCounters();
           if (!isPolling()) {
-            startPolling();
+            startPolling(scope);
           }
         },
         'stop' : function() {
