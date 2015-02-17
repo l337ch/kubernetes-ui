@@ -57,7 +57,7 @@
         resetCounters();
       };
 
-      var startPolling = function(pollOnce /* if just refresh once */) {
+      var startPolling = function(scope, pollOnce /* if just refresh once */) {
 	// By default, we always poll repeatedly.
 	pollOnce = pollOnce || true;
 
@@ -71,6 +71,8 @@
 
               if (newModel) {
                 updateModel(newModel);
+		// We have to apply the changes to trigger any noticeable update.
+		scope.$apply();
                 return;
               }
             }
@@ -124,7 +126,7 @@
 
       return {
         'k8sdatamodel' : k8sdatamodel,
-	'refresh' : function() {
+	'refresh' : function(scope) {
 	  if (isPolling()) {
 	    // NO-OP as the data is being refreshed.
 	    // TODO: figure out what is the right UX in this case.
@@ -133,7 +135,7 @@
 	    // Reset the counters for each refresh, so we do not accumulate the errors
 	    // for multiple manual refreshes (as opposed to automatic polling).
 	    resetCounters();
-	    startPolling(true /* poll just once */);
+	    startPolling(scope, true /* poll just once */);
 	  }
 	},
         'start' : function() {
@@ -143,7 +145,7 @@
           // thread.
           resetCounters();
           if (!isPolling()) {
-            startPolling();
+            startPolling(scope);
           }
         },
         'stop' : function() {
