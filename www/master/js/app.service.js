@@ -15,7 +15,7 @@ function ($rootScope) {
     });
 
     if (_entries) {
-      $rootScope.sidenavLeft = _entries;
+      $rootScope.sidenavLeft = '<div layout="column">' + _entries + '</div>';
     }
   };
 

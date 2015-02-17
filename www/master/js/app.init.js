@@ -83,12 +83,15 @@ function($location, $rootScope, sections) {
         },
         addSidebarItem: function(item) {
           SidebarService.addSidebarItem(item);
+          return this;
         },
         clearSidebarItems: function() {
           SidebarService.clearSidebarItems();
+          return this;
         },
         renderSidebar: function() {
           SidebarService.renderSidebar();
+          return this;
         }
     }
 }]);
