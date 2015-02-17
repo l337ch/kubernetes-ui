@@ -18,8 +18,16 @@ function($location, $rootScope, sections) {
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   return self = {
+    sections: sections,
+
     selectSection: function(section) {
       self.openedSection = section;
+    },
+    toggleSelectSection: function(section) {
+      self.openedSection = (self.openedSection === section ? null : section);
+    },
+    isSectionSelected: function(section) {
+      return self.openedSection === section;
     },
     selectPage: function(section, page) {
       page && page.url && $location.path(page.url);
