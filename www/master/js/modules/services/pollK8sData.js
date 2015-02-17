@@ -11,12 +11,12 @@
       dataServer = value;
     }
 
-    var pollMinIntervalSec = 3;
+    var pollMinIntervalSec = 10;
     this.setPollMinIntervalSec = function(value) {
       pollMinIntervalSec = value;
     }
 
-    var pollMaxIntervalSec = 30;
+    var pollMaxIntervalSec = 120;
     this.setPollMaxIntervalSec = function(value) {
       pollMaxIntervalSec = value;
     }
