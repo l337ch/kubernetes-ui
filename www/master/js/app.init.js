@@ -18,8 +18,9 @@ function($location, $rootScope, sections) {
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   return self = {
-    sections: sections,
-
+    setSections: function(_sections) {
+      this.sections = _sections;
+    },
     selectSection: function(section) {
       self.openedSection = section;
     },
@@ -83,12 +84,15 @@ function($location, $rootScope, sections) {
         },
         addSidebarItem: function(item) {
           SidebarService.addSidebarItem(item);
+          return this;
         },
         clearSidebarItems: function() {
           SidebarService.clearSidebarItems();
+          return this;
         },
         renderSidebar: function() {
           SidebarService.renderSidebar();
+          return this;
         }
     }
 }]);
