@@ -9,22 +9,22 @@
     var dataServer = '';
     this.setDataServer = function(value) {
       dataServer = value;
-    }
+    };
 
     var pollMinIntervalSec = 10;
     this.setPollMinIntervalSec = function(value) {
       pollMinIntervalSec = value;
-    }
+    };
 
     var pollMaxIntervalSec = 120;
     this.setPollMaxIntervalSec = function(value) {
       pollMaxIntervalSec = value;
-    }
+    };
 
     var pollErrorThreshold = 5;
     this.setPollErrorThreshold = function(value) {
       pollErrorThreshold = value;
-    }
+    };
 
     this.$get = function($http, $timeout) {
       // Now the sequenceNumber will be used for debugging and verification purposes.
@@ -58,9 +58,6 @@
       };
 
       var startPolling = function(scope, pollOnce /* if just refresh once */) {
-	// By default, we always poll repeatedly.
-	pollOnce = pollOnce || true;
-
         $.getJSON(dataServer)
           .done(function(newModel, jqxhr, textStatus) {
             if (newModel) {
@@ -71,8 +68,8 @@
 
               if (newModel) {
                 updateModel(newModel);
-		// We have to apply the changes to trigger any noticeable update.
-		scope.$apply();
+            		// We have to apply the changes to trigger any noticeable update.
+            		scope.$apply();
                 return;
               }
             }
@@ -83,10 +80,10 @@
             bumpCounters();
           });
 
-	if (!pollOnce) {
-	  // If not polling once, repeatedly perform polling.
-          promise = $timeout(startPolling, pollInterval * 1000);
-	}
+      	if (!pollOnce) {
+      	  // If not polling once, repeatedly perform polling.
+          promise = $timeout(repeat(scope), pollInterval * 1000);
+      	}
       };
 
       // Implement fibonacci back off when the service is down.
@@ -124,37 +121,47 @@
         return !!promise;
       };
 
+      var repeat = function(scope) {
+        return startPolling(scope, false);
+      };
+
+      var refresh = function(scope) {
+        if (isPolling()) {
+          // NO-OP as the data is being refreshed.
+          // TODO: figure out what is the right UX in this case.
+          // console.log('INFO: Polling is in progress. Data will be refreshed automatically.');
+        } else {
+          // Reset the counters for each refresh, so we do not accumulate the errors
+          // for multiple manual refreshes (as opposed to automatic polling).
+          resetCounters();
+          startPolling(scope, true /* poll just once */);
+        }
+      };
+
+      var start = function(scope) {
+        // If polling has already started, then calling start() again would
+        // just reset the counters and polling interval, but it will not
+        // start a new thread polling in parallel to the existing polling
+        // thread.
+        resetCounters();
+        if (!isPolling()) {
+          k8sdatamodel.data = undefined;
+          startPolling(scope, false /* poll continuously */);
+        }
+      };
+
+      var stop = function(scope) {
+        if (isPolling()) {
+          $timeout.cancel(promise);
+          promise = null;
+        }
+      };
+
       return {
         'k8sdatamodel' : k8sdatamodel,
-	'refresh' : function(scope) {
-	  if (isPolling()) {
-	    // NO-OP as the data is being refreshed.
-	    // TODO: figure out what is the right UX in this case.
-	    console.log('Polling is in progress, data will be refreshed automatically.');
-	  } else {
-	    // Reset the counters for each refresh, so we do not accumulate the errors
-	    // for multiple manual refreshes (as opposed to automatic polling).
-	    resetCounters();
-	    startPolling(scope, true /* poll just once */);
-	  }
-	},
-        'start' : function() {
-          // If polling has already started, then calling start() again would
-          // just reset the counters and polling interval, but it will not
-          // start a new thread polling in parallel to the existing polling
-          // thread.
-          resetCounters();
-          if (!isPolling()) {
-            startPolling(scope);
-          }
-        },
-        'stop' : function() {
-          if (isPolling()) {
-            $timeout.cancel(promise);
-            k8sdatamodel.data = undefined;
-            promise = null;
-          }
-        }
+      	'refresh' : refresh,
+        'start' : start,
+        'stop' : stop
       };
     };
   };
