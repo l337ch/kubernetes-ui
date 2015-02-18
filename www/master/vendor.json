@@ -1,5 +1,3 @@
 [
-  "bower_components/angular-material/angular-material.css",
-  "bower_components/sprintf/dist/sprintf.min.js",
-  "bower_components/jsonpath/lib/JSONPath.js"
+"bower_components/angular-material/angular-material.css"
 ]

@@ -18,7 +18,7 @@
     "modernizr": "2.8.3",
     "ng-lodash": "~0.2.0",
     "string-format-js": "~0.1.2",
-    "JSONPath": "latest",
-    "sprintf": "~1.0.2"
+    "sprintf": "~1.0.2",
+    "jsonpath": "#3f6e79e"
   }
 }
