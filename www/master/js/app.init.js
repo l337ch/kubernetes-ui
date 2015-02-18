@@ -82,6 +82,13 @@ function($location, $rootScope, sections) {
             return false;
           }
         },
+        getConstantOrElse: function(constantName, alternateValue) {
+          if (ENV[constantName]) {
+            return ENV[constantName];
+          }else{
+            return alternateValue;
+          }
+        },
         addSidebarItem: function(item) {
           SidebarService.addSidebarItem(item);
           return this;
