@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var pollK8sDataServiceProvider = function PollK8sDataServiceProvider() {
+  var pollK8sDataServiceProvider = function PollK8sDataServiceProvider(lodash) {
     // A set of configuration controlling the polling behavior.
     // Their values should be configured in the application before
     // creating the service instance.
@@ -32,6 +32,16 @@
       var pollingError = 0;
       var promise = null;
 
+      var dedupe = function (dataModel) {
+        if (dataModel.nodes) {
+          dataModel.nodes = lodash.uniq(dataModel.nodes, function(node) { return node.id; });
+        }
+
+        if (dataModel.edges) {
+          dataModel.edges = lodash.uniq(dataModel.edges, function(edge) { return edge.source + edge.target; });
+        }
+      };
+
       var updateModel = function(newModel) {
         // Remove label and metadata, which contain changing timestamps.
         if (newModel["label"]) {
@@ -41,6 +51,8 @@
         if (newModel["metadata"]) {
           delete newModel["metadata"];
         }
+
+        dedupe(newModel);
 
         var newModelString = JSON.stringify(newModel);
         var oldModelString = '';
@@ -57,7 +69,7 @@
         resetCounters();
       };
 
-      var startPolling = function(scope, pollOnce /* if just refresh once */) {
+      var pollOnce = function(scope, repeat) {
         $.getJSON(dataServer)
           .done(function(newModel, jqxhr, textStatus) {
             if (newModel) {
@@ -70,20 +82,18 @@
                 updateModel(newModel);
             		// We have to apply the changes to trigger any noticeable update.
             		scope.$apply();
+                promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
                 return;
               }
             }
 
             bumpCounters();
+            promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
           })
         .fail(function(jqxhr, textStatus, error) {
             bumpCounters();
+            promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
           });
-
-      	if (!pollOnce) {
-      	  // If not polling once, repeatedly perform polling.
-          promise = $timeout(repeat(scope), pollInterval * 1000);
-      	}
       };
 
       // Implement fibonacci back off when the service is down.
@@ -117,24 +127,10 @@
         }
       };
 
-      var isPolling = function() {
-        return !!promise;
-      };
-
-      var repeat = function(scope) {
-        return startPolling(scope, false);
-      };
-
       var refresh = function(scope) {
-        if (isPolling()) {
-          // NO-OP as the data is being refreshed.
-          // TODO: figure out what is the right UX in this case.
-          // console.log('INFO: Polling is in progress. Data will be refreshed automatically.');
-        } else {
-          // Reset the counters for each refresh, so we do not accumulate the errors
-          // for multiple manual refreshes (as opposed to automatic polling).
+        if (!promise) {
           resetCounters();
-          startPolling(scope, true /* poll just once */);
+          pollOnce(scope, false);
         }
       };
 
@@ -144,16 +140,16 @@
         // start a new thread polling in parallel to the existing polling
         // thread.
         resetCounters();
-        if (!isPolling()) {
+        if (!promise) {
           k8sdatamodel.data = undefined;
-          startPolling(scope, false /* poll continuously */);
+          pollOnce(scope, true);
         }
       };
 
       var stop = function(scope) {
-        if (isPolling()) {
+        if (promise) {
           $timeout.cancel(promise);
-          promise = null;
+          promise = undefined;
         }
       };
 
@@ -167,6 +163,6 @@
   };
 
   angular.module('krakenApp.services')
-    .provider('pollK8sDataService', pollK8sDataServiceProvider);
+    .provider('pollK8sDataService', ['lodash', pollK8sDataServiceProvider]);
 
 })();
