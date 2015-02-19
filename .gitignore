@@ -18,3 +18,4 @@ www/node_modules/
 www/npm-debug.log
 www/app/assets/js/base.js
 www/app/vendor/angular-material/
+www/app/vendor
