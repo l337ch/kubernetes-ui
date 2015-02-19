@@ -1,1 +1,4 @@
-{}
+{
+  "cAdvisorProxy": "http://104.154.38.73/proxy?TARGET=",
+  "cAdvisorPort": "8081"
+}
