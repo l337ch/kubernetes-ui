@@ -56,7 +56,8 @@ function($routeProvider, manifestProvider) {
     });
 }]).config(function(k8sApiProvider, pollK8sDataServiceProvider, configurationServiceProvider){
   if (configurationServiceProvider.getConstant('k8sApiServer')) {
-    k8sApiProvider.setUrlBase(configurationServiceProvider.getConstant('k8sApiServer'));
+    var _proxy = configurationServiceProvider.getConstantOrElse('cAdvisorProxy', '');
+    k8sApiProvider.setUrlBase(_proxy + configurationServiceProvider.getConstant('k8sApiServer'));
   }
   if (configurationServiceProvider.getConstant('k8sDataServer')) {
     pollK8sDataServiceProvider.setDataServer(configurationServiceProvider.getConstant('k8sDataServer'));
