@@ -26,6 +26,7 @@ var gulp        = require('gulp'),
     argv        = require('yargs').argv,
     foreach     = require('gulp-foreach'),
     gcallback   = require('gulp-callback'),
+    tag_version = require('gulp-tag-version'),
     PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
@@ -78,9 +79,17 @@ var vendor = {
 // SOURCES CONFIG
 var source = {
   scripts: {
-    app:    [ 'js/app.init.js',
+    app:    [
+              'js/app.preinit.js',
+              'js/app.init.js',
+              'js/app.config.js',
+              'js/app.directive.js',
+              'js/app.run.js',
+              'js/app.service.js',
+              'js/app.provider.js',
               'js/modules/*.js',
               'js/tabs.js',
+              'js/sections.js',
               'js/config/generated-config.js',
               'js/modules/controllers/*.js',
               'js/modules/directives/*.js',
@@ -107,17 +116,18 @@ var source = {
 
   styles: {
     app: {
-      main: ['less/app.less', '!less/components/*.less'],
+      // , 'components/*/less/*.less'
+      main: ['less/app.less'],
       dir:  'less',
-      watch: ['less/*.less', 'less/**/*.less', '!less/components/*.less']
+      watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js'],
+    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
     dest:  'components',
-    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js']
+    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/**/less/*.*']
   },
 
   config: {
@@ -162,19 +172,61 @@ function stringSrc(filename, string) {
 
 gulp.task('bundle-manifest', function(){
   var components = [];
+  var namespace = [];
   var stream = gulp.src('./components/*/manifest.json')
   .pipe(foreach(function(stream, file) {
                 var manifestFile = require(file.path);
                 components.push(manifestFile.name);
+                namespace.push(manifestFile.namespace);
                 return stream
                 })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
-    .pipe(gulp.dest("js"))
+    .pipe(gulp.dest("js"));
+    var _appNS = 'krakenApp.';
+    var _appSkeleton = require('./js/app.skeleton.json');
+    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"' ))
+    .pipe(gulp.dest("js"));
+  }));
+});
+
+gulp.task('bundle-manifest-sections', function(){
+  var sections = [];
+  var stream = gulp.src('./components/*/manifest.json')
+  .pipe(foreach(function(stream, file) {
+                var manifestFile = require(file.path);
+                sections.push(JSON.stringify(manifestFile.sections));
+                return stream
+                })).pipe(gcallback(function() {
+    var output_sections = '';
+    for (i = 0; i < sections.length; i++) {
+      if (output_sections.indexOf(sections[i].substr(1,sections[i].length - 2)) == -1) {
+        output_sections += sections[i].substr(1,sections[i].length - 2) + ',';
+      }
+    }
+    var output_section = '[' + output_sections.substr(0, output_sections.length -1) + ']';
+    var _provider = "app.provider('manifest', function manifestProvider() { " +
+        "var sections = '%s';" +
+        "this.getRoutes = function() {" +
+        "    return sections;" +
+        "};" +
+        "this.$get = ['sections', function(sections){" +
+        "    var manifest = {};" +
+        "    manifest.getRoutes = function () {" +
+        "      return sections;" +
+        "    };" +
+        "" +
+        "    return manifest;" +
+        "  }];" +
+        "});";
+    var _provider_combined = _provider.replace('%s', output_section);
+    var _file_contents = _provider_combined;
+    _file_contents += '\n' + 'app.value("sections", ' + output_section +');\n';
+    stringSrc("sections.js", _file_contents).pipe(gulp.dest("js"));
   }));
 });
 
 // JS APP
-gulp.task('scripts:app', ['bundle-manifest', 'config', 'scripts:app:base']);
+gulp.task('scripts:app', ['bundle-manifest', 'bundle-manifest-sections', 'config', 'scripts:app:base']);
 
 // JS APP BUILD
 gulp.task('scripts:app:base', function() {
@@ -259,7 +311,14 @@ gulp.task('styles:app', function() {
 // Environment based configuration
 // https://github.com/kraken-people/kubernetes-kraken/issues/21
 
-gulp.task('config', function () {
+gulp.task('config', ['config:base', 'config:copy']);
+
+gulp.task('config:base', function () {
+  return stringSrc('generated-config.js', 'angular.module("krakenApp.config", [])' + '\n' + '.constant("ENV", {})')
+    .pipe(gulp.dest(source.config.dest));
+});
+
+gulp.task('config:copy', function () {
   var enviroment = argv.env || 'development'; // change this to whatever default environment you need.
 
   return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])
@@ -290,6 +349,13 @@ gulp.task('copy:components', function() {
       .pipe(minifyCSS())
       .pipe(cssFilter.restore())
       .pipe( gulp.dest(build.components.dir) );
+});
+
+
+// Assuming there's "version: 1.2.3" in package.json,
+// tag the last commit as "v1.2.3"//
+gulp.task('tag', function() {
+  return gulp.src(['./package.json']).pipe(tag_version());
 });
 
 // // BOOSTRAP

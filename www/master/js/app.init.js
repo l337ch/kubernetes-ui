@@ -5,39 +5,101 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'krakenApp.config', 'krakenApp.Graph']);
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'ngLodash', 'krakenApp.config'].concat(componentNamespaces))
 
-app.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider
-    .when("/dashboard", {templateUrl: "/components/dashboard/pages/home.html", controller: "DashboardCtrl"})
-    .when("/graph", {templateUrl: "/components/graph/pages/home.html", controller: "GraphCtrl"})
-    .when("/404", {templateUrl: "/views/partials/404.html", controller: "PageCtrl"})
-    // else 404
-    .otherwise({
-        redirectTo: "/404"
-    });
-}]);
+.factory('menu', [
+  '$location',
+  '$rootScope',
+  'sections',
+function($location, $rootScope, sections) {
 
-app.controller('PageCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
-  console.log("loading page controller.");
-  $scope.toggleSidenav = function(menuId) {
-    $mdSidenav(menuId).toggle();
+  var self;
+
+  $rootScope.$on('$locationChangeSuccess', onLocationChange);
+
+  return self = {
+    setSections: function(_sections) {
+      this.sections = _sections;
+    },
+    selectSection: function(section) {
+      self.openedSection = section;
+    },
+    toggleSelectSection: function(section) {
+      self.openedSection = (self.openedSection === section ? null : section);
+    },
+    isSectionSelected: function(section) {
+      return self.openedSection === section;
+    },
+    selectPage: function(section, page) {
+      page && page.url && $location.path(page.url);
+      self.currentSection = section;
+      self.currentPage = page;
+    },
+    isPageSelected: function(page) {
+      return self.currentPage === page;
+    }
   };
 
-}]);
+  function onLocationChange() {
+    var path = $location.path();
 
-
-app.run(['$route', angular.noop]);
-
-app.directive('includeReplace', function () {
-    return {
-        require: 'ngInclude',
-        restrict: 'A', /* optional */
-        link: function (scope, el, attrs) {
-            el.replaceWith(el.children());
-        }
+    var matchPage = function(section, page) {
+      if (path === page.url) {
+        self.selectSection(section);
+        self.selectPage(section, page);
+      }
     };
-});
 
-// stub for config
-angular.module("krakenApp.config", []);
+    sections.forEach(function(section) {
+      if(section.children) {
+        section.children.forEach(function(childSection){
+          if(childSection.pages){
+            childSection.pages.forEach(function(page){
+              matchPage(childSection, page);
+            });
+          }
+        });
+      }
+      else if(section.pages) {
+        section.pages.forEach(function(page) {
+          matchPage(section, page);
+        });
+      }
+      else if (section.type === 'link') {
+        matchPage(section, section);
+      }
+    });
+  }
+}]).factory('globalsFactory', [
+    'ENV',
+    'SidebarService',
+  function(ENV, SidebarService){
+    return {
+        getConstant: function(constantName) {
+          if (ENV[constantName]) {
+            return ENV[constantName];
+          } else {
+            return false;
+          }
+        },
+        getConstantOrElse: function(constantName, alternateValue) {
+          if (ENV[constantName]) {
+            return ENV[constantName];
+          }else{
+            return alternateValue;
+          }
+        },
+        addSidebarItem: function(item) {
+          SidebarService.addSidebarItem(item);
+          return this;
+        },
+        clearSidebarItems: function() {
+          SidebarService.clearSidebarItems();
+          return this;
+        },
+        renderSidebar: function() {
+          SidebarService.renderSidebar();
+          return this;
+        }
+    }
+}]);

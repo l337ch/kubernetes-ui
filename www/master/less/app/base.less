@@ -1,3 +1,94 @@
+/* Begin Kraken Menu */
+.kraken-menu,
+.kraken-menu ul {
+  list-style: none;
+  padding: 0;
+}
+.kraken-menu li {
+  margin: 0;
+}
+.kraken-menu > li {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.kraken-menu .md-button {
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 0px 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+}
+.kraken-menu a.md-button {
+  display: block;
+}
+.kraken-menu button.md-button::-moz-focus-inner {
+  padding: 0;
+}
+.kraken-menu .md-button.active {
+  color: #03a9f4;
+}
+.menu-heading {
+  color: #888;
+  display: block;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 40px;
+  margin: 0;
+  padding: 0px 16px;
+  text-align: left;
+  width: 100%;
+}
+.kraken-menu li.parentActive,
+.kraken-menu li.parentActive .menu-toggle-list {
+  background-color: #f6f6f6;
+}
+.menu-toggle-list {
+  background: #fff;
+  max-height: 999px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -webkit-transition-property: max-height;
+  -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -moz-transition-property: max-height;
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: max-height;
+}
+.menu-toggle-list.ng-hide {
+  max-height: 0;
+}
+.kraken-menu .menu-toggle-list a.md-button {
+  display: block;
+  padding: 0 16px 0 32px;
+  text-transform: none;
+}
+.md-button-toggle .md-toggle-icon {
+  background: transparent url(/assets/img/icons/list_control_down.png) no-repeat center center;
+  background-size: 100% auto;
+  display: inline-block;
+  height: 24px;
+  margin: auto 0 auto auto;
+  speak: none;
+  width: 24px;
+  transition: transform 0.3s ease-in-out;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+}
+.md-button-toggle .md-toggle-icon.toggled {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+/* End Kraken Menu */
+
+
+
 .menu-icon {
   background: none;
   border: none;
@@ -34,7 +125,7 @@
     position: relative;
     background: white;
     border: 0px solid black;
-    min-height: 640px;
+    min-height: 0px;
     width: 100%;
   }
 

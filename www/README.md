@@ -6,24 +6,6 @@ us manage and test the application.
 * We get the tools we depend upon via `npm`, the [node package manager](https://www.npmjs.com/).
 * We get the angular code via `bower`, a [client-side code package manager](http://bower.io/).
 
-We have preconfigured `npm` to automatically run `bower` so we can simply do (in `www/master`):
-
-```
-npm install
-```
-
-Behind the scenes this will also call `bower install`.  You should find that you have two new
-folders in your project.
-
-* `node_modules` - contains the npm packages for the tools we need
-* `app/bower_components` - contains the angular framework files
-
-*Note that the `bower_components` folder would normally be installed in the root folder but
-kraken changes this location through the `.bowerrc` file.  Putting it in the app folder makes
-it easier to serve the files by a webserver.*
-
-
-
 `npm` is configured to automatically run `bower install` and `gulp`. From the `www/master` directory, simply run:
 
 ```
@@ -33,14 +15,12 @@ npm start
 The `gulp` command will start a file watcher which will update the generated `app` code after any changes are saved. Note: gulp file watcher does not currently support adding or deleting files, this will require a restart of gulp). Two new directories will also be created in the project.
 
 * `master/node_modules` - contains npm dependencies
-* `master/bower_components` - contains the angular framework files
+* `master/bower_components` - contains the angular framework files and any custom dependencies
 
 Bower components should be refernced in one of the `vendor.json` files below:
 
 * `master/vendor.base.json` - 3rd party vendor javascript required to start the app. JS is compiled to `base.js` and loaded before `app.js`
 * `master/vendor.json` - 3rd party vendor scripts to make the app work, usually lazy loaded. Can be js or css. Copied to `vendor/*`.
-
-*Note that the `bower_components` directory would normally be created in the project root. This has been changed in the `.bowerrc` file. Putting it in the app directory makes it easier to serve files from a web server.*
 
 ### Serving the App during Development
 
@@ -67,7 +47,17 @@ A json file can be used by `gulp` to automatically create angular constants. Thi
 * Production config can be generated using ```gulp config --env production``` or ```gulp --env production```
 
 #### Kubernetes Server Configuration
-By default the k8s api server does not support CORS, so the `kube-apiserver.service` must be started with `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your host here>`
+
+**RECOMMENDED**: By default the k8s api server does not support CORS,
+  so the `kube-apiserver.service` must be started with
+  `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your
+  host here>`
+
+**HACKS**: If you don't want to/cannot restart the k8s api server:
+* You can set up [a node proxy](https://github.com/bcbroussard/kraken-proxy) for the k8s api server which adds
+ ```Access-Control-Allow-Origin: *``` for you.
+* Or you can start your browser with web security disabled. For
+  Chrome, you can [launch](http://www.chromium.org/developers/how-tos/run-chromium-with-flags) it with flag ```--disable-web-security```.
 
 ### Building a New Visualizer or Component
 
