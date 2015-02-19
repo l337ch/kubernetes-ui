@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var pollK8sDataServiceProvider = function PollK8sDataServiceProvider() {
+  var pollK8sDataServiceProvider = function PollK8sDataServiceProvider(lodash) {
     // A set of configuration controlling the polling behavior.
     // Their values should be configured in the application before
     // creating the service instance.
@@ -32,6 +32,16 @@
       var pollingError = 0;
       var promise = null;
 
+      var dedupe = function (dataModel) {
+        if (dataModel.nodes) {
+          dataModel.nodes = lodash.uniq(dataModel.nodes, function(node) { return node.id; });
+        }
+
+        if (dataModel.edges) {
+          dataModel.edges = lodash.uniq(dataModel.edges, function(edge) { return edge.source + edge.target; });
+        }
+      }
+
       var updateModel = function(newModel) {
         // Remove label and metadata, which contain changing timestamps.
         if (newModel["label"]) {
@@ -41,6 +51,8 @@
         if (newModel["metadata"]) {
           delete newModel["metadata"];
         }
+
+        dedupe(newModel);
 
         var newModelString = JSON.stringify(newModel);
         var oldModelString = '';
@@ -167,6 +179,6 @@
   };
 
   angular.module('krakenApp.services')
-    .provider('pollK8sDataService', pollK8sDataServiceProvider);
+    .provider('pollK8sDataService', ['lodash', pollK8sDataServiceProvider]);
 
 })();
