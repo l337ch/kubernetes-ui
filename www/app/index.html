@@ -17,14 +17,7 @@
               class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
               md-closed>
-    <md-toolbar>
-      <h1 class="md-toolbar-tools">
-        <a ng-href="/" layout="row" flex>
-          <span class="kraken-logo"></span>
-          <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
-        </a>
-      </h1>
-    </md-toolbar>
+    <md-toolbar></md-toolbar>
     <md-content flex>
         <button class="menu-icon" aria-label="Toggle Menu" ng-click="toggleKrakenMenu()">
           <md-icon md-svg-src="assets/img/icons/ic_menu.svg"></md-icon>
@@ -39,18 +32,13 @@
         <button class="menu-icon" aria-label="Toggle Menu" ng-click="openMenu()">
           <md-icon md-svg-src="/assets/img/icons/ic_menu_24px.svg"></md-icon>
         </button>
-        <div layout="row" flex class="fill-height">
-          <div class="md-toolbar-item md-breadcrumb"></div>
-            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
-              <span hide-sm hide-md><a href="/#{{menu.currentSection.url}}">{{menu.currentSection.name}}</a></span>
-              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
-                <img style="height: 16px;" src="/assets/img/docArrow.png" alt="" aria-hidden="true">
-              </span>
-            </span>
-            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Kraken' }}</span>
-          <span flex></span> <!-- use up the empty space -->
-          <div class="md-toolbar-item md-tools" layout="row"></div>
-        </div>
+
+      <h1 class="md-toolbar-tools">
+        <a ng-href="/" layout="row" flex>
+          <span class="kraken-logo"></span>
+          <div style="line-height:40px; text-indent: 15px;">Kubernetes</div>
+        </a>
+      </h1>
       </div>
     </md-toolbar>
     <md-content md-scroll-y flex>
