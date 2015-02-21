@@ -30,7 +30,7 @@
       // Now the sequenceNumber will be used for debugging and verification purposes.
       var k8sdatamodel = { 'data' : undefined, 'sequenceNumber' : 0 };
       var pollingError = 0;
-      var promise = null;
+      var promise = undefined;
 
       var dedupe = function (dataModel) {
         if (dataModel.nodes) {
@@ -81,7 +81,7 @@
               if (newModel) {
                 updateModel(newModel);
             		// We have to apply the changes to trigger any noticeable update.
-            		scope.$apply();
+                scope.$apply();
                 promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
                 return;
               }
@@ -127,11 +127,15 @@
         }
       };
 
+      var isPolling = function() {
+        return promise ? true : false;
+      };
+
       var refresh = function(scope) {
-        if (!promise) {
-          resetCounters();
-          pollOnce(scope, false);
-        }
+        stop(scope);
+        resetCounters();
+        k8sdatamodel.data = undefined;
+        pollOnce(scope, false);
       };
 
       var start = function(scope) {
@@ -155,6 +159,7 @@
 
       return {
         'k8sdatamodel' : k8sdatamodel,
+        'isPolling' : isPolling,
       	'refresh' : refresh,
         'start' : start,
         'stop' : stop
