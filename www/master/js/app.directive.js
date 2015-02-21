@@ -59,6 +59,47 @@ app.directive('includeReplace', function () {
       }
     }
   };
+}).directive('dashboardHeader', function () {
+    return {
+        restrict: 'A',
+        replace: true,
+        scope: {user: '='},
+        templateUrl: "/components/dashboard/pages/header.html",
+        controller: [
+          '$scope',
+          '$filter',
+          '$location',
+          'menu',
+          '$rootScope',
+        function ($scope, $filter, $location, menu, $rootScope) {
+          $scope.menu = menu;
+          $scope.$watch('page', function(newValue, oldValue) {
+            if (typeof newValue !== 'undefined') {
+              $location.path(newValue);
+            }
+          });
+
+          $scope.openMenu = $rootScope.openMenu;
+
+          $scope.subpages = [
+            { category: 'dashboard', name: 'Groups', value: '/dashboard/groups//selector/' },
+            { category: 'dashboard', name: 'Pods', value: '/dashboard/pods' },
+            { category: 'dashboard', name: 'Minions', value: '/dashboard/minions' },
+            { category: 'dashboard', name: 'Replication Controllers', value: '/dashboard/replicationcontrollers' },
+            { category: 'dashboard', name: 'Services', value: '/dashboard/services' },
+            { category: 'dashboard', name: 'Events', value: '/dashboard/events' },
+            { category: 'dashboard', name: 'cAdvisor', value: '/dashboard/cadvisor' }
+          ];
+        }]
+    }
+}).directive('dashboardFooter', function () {
+    return {
+        restrict: 'A',
+        replace: true,
+        templateUrl: "/components/dashboard/pages/footer.html",
+        controller: ['$scope', '$filter', function ($scope, $filter) {
+        }]
+    }
 });
 
 app.filter('nospace', function () {
