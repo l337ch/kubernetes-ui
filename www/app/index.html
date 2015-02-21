@@ -19,9 +19,6 @@
               md-closed>
     <md-toolbar></md-toolbar>
     <md-content flex>
-        <button class="menu-icon" aria-label="Toggle Menu" ng-click="toggleKrakenMenu()">
-          <md-icon md-svg-src="assets/img/icons/ic_menu.svg"></md-icon>
-        </button>
     <div kraken-menu role="kraken-menu" ng-show="showKrakenMenu"></div>
       <div compile="sidenavLeft"></div>
     </md-content>
@@ -29,10 +26,6 @@
   <div layout="column" layout-fill tabIndex="-1" role="main" flex>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <button class="menu-icon" aria-label="Toggle Menu" ng-click="openMenu()">
-          <md-icon md-svg-src="/assets/img/icons/ic_menu_24px.svg"></md-icon>
-        </button>
-
       <h1 class="md-toolbar-tools">
         <a ng-href="/" layout="row" flex>
           <span class="kraken-logo"></span>

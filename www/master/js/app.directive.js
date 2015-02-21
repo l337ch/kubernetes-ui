@@ -70,15 +70,18 @@ app.directive('includeReplace', function () {
           '$filter',
           '$location',
           'menu',
-        function ($scope, $filter, $location, menu) {
+          '$rootScope',
+        function ($scope, $filter, $location, menu, $rootScope) {
           $scope.menu = menu;
-          $scope.$watch('Pages', function(newValue, oldValue) {
+          $scope.$watch('page', function(newValue, oldValue) {
             if (typeof newValue !== 'undefined') {
               $location.path(newValue);
             }
           });
 
-          $scope.subPages = [
+          $scope.openMenu = $rootScope.openMenu;
+
+          $scope.subpages = [
             { category: 'dashboard', name: 'Groups', value: '/dashboard/groups//selector/' },
             { category: 'dashboard', name: 'Pods', value: '/dashboard/pods' },
             { category: 'dashboard', name: 'Minions', value: '/dashboard/minions' },
