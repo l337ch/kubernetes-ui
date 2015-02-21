@@ -81,7 +81,7 @@
               if (newModel) {
                 updateModel(newModel);
             		// We have to apply the changes to trigger any noticeable update.
-                scope.$apply();                  
+                scope.$apply();
                 promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
                 return;
               }
@@ -133,7 +133,9 @@
 
       var refresh = function(scope) {
         stop(scope);
-        start(scope);
+        resetCounters();
+        k8sdatamodel.data = undefined;
+        pollOnce(scope, false);
       };
 
       var start = function(scope) {
