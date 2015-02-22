@@ -11,7 +11,6 @@
     "gulp": "^3.8.10",
     "gulp-callback": "^0.0.3",
     "gulp-angular-htmlify": "^0.4.0",
-    "gulp-callback": "^0.0.3",
     "gulp-changed": "^1.1.0",
     "gulp-concat": "^2.4.1",
     "gulp-expect-file": "0.0.7",
@@ -44,5 +43,8 @@
     "prestart": "bower install",
     "start": "npm install",
     "poststart": "gulp"
+  },
+  "dependencies": {
+    "lodash": "^3.3.0"
   }
 }
