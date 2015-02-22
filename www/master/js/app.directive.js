@@ -79,8 +79,6 @@ app.directive('includeReplace', function () {
             }
           });
 
-          $scope.openMenu = $rootScope.openMenu;
-
           $scope.subpages = [
             { category: 'dashboard', name: 'Groups', value: '/dashboard/groups//selector/' },
             { category: 'dashboard', name: 'Pods', value: '/dashboard/pods' },

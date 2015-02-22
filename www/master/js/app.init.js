@@ -18,6 +18,9 @@ function($location, $rootScope, sections) {
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   return self = {
+
+    sections: sections,
+
     setSections: function(_sections) {
       this.sections = _sections;
     },
