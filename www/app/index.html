@@ -20,13 +20,16 @@
               md-closed>
     <md-toolbar></md-toolbar>
     <md-content flex>
-    <div kraken-menu role="kraken-menu" ng-show="showKrakenMenu"></div>
+    <div kraken-menu role="kraken-menu"></div>
       <div compile="sidenavLeft"></div>
     </md-content>
   </md-sidenav>
   <div layout="column" layout-fill tabIndex="-1" role="main" flex>
     <md-toolbar>
       <div class="md-toolbar-tools">
+        <button class="menu-icon" aria-label="Toggle Menu" ng-click="openMenu()">
+          <md-icon md-svg-src="/assets/img/icons/ic_menu_24px.svg"></md-icon>
+        </button>
       <h1 class="md-toolbar-tools">
         <a ng-href="/" layout="row" flex>
           <span class="kraken-logo"></span>
