@@ -6,6 +6,6 @@
     "k8sDataPollMaxIntervalSec" : 120,
     "k8sDataPollErrorThreshold" : 5,
     "cAdvisorProxy": "http://104.154.38.73/proxy?TARGET=",
-    "cAdvisorPort": "8081"
+    "cAdvisorPort": "4194"
   }
 }
