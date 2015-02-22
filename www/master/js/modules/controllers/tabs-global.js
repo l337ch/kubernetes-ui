@@ -3,8 +3,6 @@
  * Page Controller
  =========================================================*/
 
-angular.module('whiteframeBasicUsage', ['ngMaterial']);
-
 app.controller('TabCtrl', [
   '$scope',
   '$location',
