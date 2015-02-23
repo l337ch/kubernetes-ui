@@ -118,7 +118,7 @@ app.directive('includeReplace', function () {
       thumbs:'=',
       count: '='
     },
-    controller: function ($scope, $filter, $window) {
+    controller: function ($scope, $filter, $window, $location) {
       var orderBy = $filter('orderBy');
       $scope.currentPage = 0;
       $scope.nbOfPages = function () {
@@ -130,6 +130,9 @@ app.directive('includeReplace', function () {
         } else {
           return false;
         }
+      };
+      $scope.go = function(d) {
+        $location.path('/dashboard/pods/' + d.pod);
       };
       $scope.order = function(predicate, reverse) {
           $scope.content = orderBy($scope.content, predicate, reverse);
