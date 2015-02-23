@@ -1,4 +1,5 @@
 app.directive('includeReplace', function () {
+  'use strict';
     return {
         require: 'ngInclude',
         restrict: 'A', /* optional */
@@ -7,6 +8,7 @@ app.directive('includeReplace', function () {
         }
     };
 }).directive('compile', function($compile) {
+  'use strict';
   return function(scope, element, attrs) {
     scope.$watch(
       function(scope) {
@@ -19,6 +21,7 @@ app.directive('includeReplace', function () {
     );
   };
 }).directive('menuLink', function() {
+  'use strict';
   return {
     scope: {
       section: '='
@@ -33,10 +36,12 @@ app.directive('includeReplace', function () {
     }
   };
 }).directive("krakenMenu", function() {
+  'use strict';
   return {
     templateUrl: "/views/partials/kraken-menu.tmpl.html"
   };
 }).directive('menuToggle', function() {
+  'use strict';
   return {
     scope: {
       section: '='
@@ -60,6 +65,7 @@ app.directive('includeReplace', function () {
     }
   };
 }).directive('dashboardHeader', function () {
+  'use strict';
     return {
         restrict: 'A',
         replace: true,
@@ -89,18 +95,65 @@ app.directive('includeReplace', function () {
             { category: 'dashboard', name: 'cAdvisor', value: '/dashboard/cadvisor' }
           ];
         }]
-    }
+    };
 }).directive('dashboardFooter', function () {
+  'use strict';
     return {
         restrict: 'A',
         replace: true,
         templateUrl: "/components/dashboard/pages/footer.html",
         controller: ['$scope', '$filter', function ($scope, $filter) {
         }]
-    }
+    };
+}).directive('mdTable', function () {
+  'use strict';
+  return {
+    restrict: 'E',
+    scope: {
+      headers: '=',
+      content: '=',
+      sortable: '=',
+      filters: '=',
+      customClass: '=customClass',
+      thumbs:'=',
+      count: '='
+    },
+    controller: function ($scope, $filter, $window) {
+      var orderBy = $filter('orderBy');
+      $scope.currentPage = 0;
+      $scope.nbOfPages = function () {
+        return Math.ceil($scope.content.length / $scope.count);
+      };
+      $scope.handleSort = function (field) {
+        if ($scope.sortable.indexOf(field) > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+      $scope.order = function(predicate, reverse) {
+          $scope.content = orderBy($scope.content, predicate, reverse);
+          $scope.predicate = predicate;
+      };
+      $scope.order($scope.sortable[0], false);
+      $scope.getNumber = function (num) {
+        return new Array(num);
+      };
+      $scope.goToPage = function (page) {
+        $scope.currentPage = page;
+      };
+    },
+    templateUrl: '/views/partials/md-table.tmpl.html'
+  };
 });
 
-app.filter('nospace', function () {
+app.filter('startFrom', function () {
+  'use strict';
+  return function (input, start) {
+    return input.slice(start);
+  };
+}).filter('nospace', function () {
+  'use strict';
   return function (value) {
     return (!value) ? '' : value.replace(/ /g, '');
   };
