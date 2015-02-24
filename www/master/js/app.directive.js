@@ -86,7 +86,7 @@ app.directive('includeReplace', function () {
           });
 
           $scope.subpages = [
-            { category: 'dashboard', name: 'Groups', value: '/dashboard/groups//selector/' },
+            { category: 'dashboard', name: 'Groups', value: '/dashboard/groups/type/selector/' },
             { category: 'dashboard', name: 'Pods', value: '/dashboard/pods' },
             { category: 'dashboard', name: 'Minions', value: '/dashboard/minions' },
             { category: 'dashboard', name: 'Replication Controllers', value: '/dashboard/replicationcontrollers' },
