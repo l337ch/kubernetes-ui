@@ -132,7 +132,11 @@ app.directive('includeReplace', function () {
         }
       };
       $scope.go = function(d) {
-        $location.path('/dashboard/pods/' + d.pod);
+        if (d.pod) {
+          $location.path('/dashboard/pods/' + d.pod);
+        } else if (d.name) {
+          $location.path('/dashboard/services/' + d.name);
+        }
       };
       $scope.order = function(predicate, reverse) {
           $scope.content = orderBy($scope.content, predicate, reverse);
