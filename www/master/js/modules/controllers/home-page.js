@@ -15,6 +15,7 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
   $scope.path = path;
   $scope.goHome = goHome;
   $scope.openMenu = openMenu;
+  $rootScope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
 

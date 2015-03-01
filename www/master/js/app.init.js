@@ -5,7 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'ngLodash', 'krakenApp.config'].concat(componentNamespaces))
+var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'ngLodash', 'krakenApp.config', 'angular.filter'].concat(componentNamespaces))
 
 .factory('menu', [
   '$location',
@@ -18,6 +18,9 @@ function($location, $rootScope, sections) {
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   return self = {
+
+    sections: sections,
+
     setSections: function(_sections) {
       this.sections = _sections;
     },

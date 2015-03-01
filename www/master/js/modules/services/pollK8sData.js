@@ -1,12 +1,26 @@
 (function() {
-  'use strict';
+  "use strict";
 
   var pollK8sDataServiceProvider = function PollK8sDataServiceProvider(lodash) {
     // A set of configuration controlling the polling behavior.
     // Their values should be configured in the application before
     // creating the service instance.
 
-    var dataServer = '';
+    var useSampleData = false;
+    this.setUseSampleData = function(value) {
+      useSampleData = value;
+    };
+
+    var sampleDataFiles = [
+      "components/graph/assets/sampleData1.json",
+      "components/graph/assets/sampleData2.json",
+      "components/graph/assets/sampleData3.json"
+    ];
+    this.setSampleDataFiles = function(value) {
+      sampleDataFiles = value;
+    };
+
+    var dataServer = "http://localhost:8001/graph";
     this.setDataServer = function(value) {
       dataServer = value;
     };
@@ -28,9 +42,13 @@
 
     this.$get = function($http, $timeout) {
       // Now the sequenceNumber will be used for debugging and verification purposes.
-      var k8sdatamodel = { 'data' : undefined, 'sequenceNumber' : 0 };
+      var k8sdatamodel = { 
+        "data" : undefined, 
+        "sequenceNumber" : 0,
+        "useSampleData" : useSampleData
+      };
       var pollingError = 0;
-      var promise = null;
+      var promise = undefined;
 
       var dedupe = function (dataModel) {
         if (dataModel.nodes) {
@@ -43,19 +61,23 @@
       };
 
       var updateModel = function(newModel) {
-        // Remove label and metadata, which contain changing timestamps.
-        if (newModel["label"]) {
-          delete newModel["label"];
+        if (newModel.graph) {
+          newModel = newModel.graph;
         }
 
-        if (newModel["metadata"]) {
-          delete newModel["metadata"];
+        // Remove label and metadata, which contain changing timestamps.
+        if (newModel.label) {
+          delete newModel.label;
+        }
+
+        if (newModel.metadata) {
+          delete newModel.metadata;
         }
 
         dedupe(newModel);
 
         var newModelString = JSON.stringify(newModel);
-        var oldModelString = '';
+        var oldModelString = "";
         if (k8sdatamodel.data) {
           oldModelString = JSON.stringify(k8sdatamodel.data);
         }
@@ -69,22 +91,26 @@
         resetCounters();
       };
 
+      var nextSampleDataFile = 0;
+      var getSampleDataFile = function() {
+        var result = "";
+        if (sampleDataFiles.length > 0) {
+          result = sampleDataFiles[nextSampleDataFile % sampleDataFiles.length];
+          ++nextSampleDataFile;
+        }
+
+        return result;
+      };
+
       var pollOnce = function(scope, repeat) {
-        $.getJSON(dataServer)
+        var dataSource = (k8sdatamodel.useSampleData) ? getSampleDataFile() : dataServer;
+        $.getJSON(dataSource)
           .done(function(newModel, jqxhr, textStatus) {
             if (newModel) {
-              if (newModel["graph"]) {
-                // Extract the data model from the response.
-                newModel = newModel["graph"];
-              }
-
-              if (newModel) {
-                updateModel(newModel);
-            		// We have to apply the changes to trigger any noticeable update.
-            		scope.$apply();
-                promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
-                return;
-              }
+              updateModel(newModel);
+              scope.$apply();
+              promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
+              return;
             }
 
             bumpCounters();
@@ -112,8 +138,8 @@
         pollingError++;
 
         // TODO: maybe display an error in the UI to the end user.
-        if (pollingError % pollErrorThreshold == 0) {
-          console.log('Error: ' + pollingError + ' consecutive polling errors for ' + dataServer + '.');
+        if (pollingError % pollErrorThreshold === 0) {
+          console.log("Error: " + pollingError + " consecutive polling errors for " + dataServer + ".");
         }
 
         // Bump the polling interval.
@@ -127,11 +153,15 @@
         }
       };
 
+      var isPolling = function() {
+        return promise ? true : false;
+      };
+
       var refresh = function(scope) {
-        if (!promise) {
-          resetCounters();
-          pollOnce(scope, false);
-        }
+        stop(scope);
+        resetCounters();
+        k8sdatamodel.data = undefined;
+        pollOnce(scope, false);
       };
 
       var start = function(scope) {
@@ -154,15 +184,16 @@
       };
 
       return {
-        'k8sdatamodel' : k8sdatamodel,
-      	'refresh' : refresh,
-        'start' : start,
-        'stop' : stop
+        "k8sdatamodel" : k8sdatamodel,
+        "isPolling" : isPolling,
+      	"refresh" : refresh,
+        "start" : start,
+        "stop" : stop
       };
     };
   };
 
-  angular.module('krakenApp.services')
-    .provider('pollK8sDataService', ['lodash', pollK8sDataServiceProvider]);
+  angular.module("krakenApp.services")
+    .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider]);
 
 })();

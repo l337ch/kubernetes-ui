@@ -3,18 +3,22 @@
  * Page Controller
  =========================================================*/
 
-angular.module('whiteframeBasicUsage', ['ngMaterial']);
+app.controller('TabCtrl', [
+  '$scope',
+  '$location',
+  'tabs',
+function($scope, $location, tabs) {
+  $scope.tabs = tabs;
 
-app.controller('TabCtrl', ['$scope', '$location', 'tabs', function($scope, $location, tabs){
-	// Define the titles of your tabs
-	$scope.tabs = tabs;
+  $scope.switchTab = function(index) {
+      var location_path = $location.path();
+      var tab = tabs[index];
 
-	// Change the tab
-	$scope.switchTab = function(index) {
-	    var tab = tabs[index];
-	    if (tab) {
-	      var path = '/%s'.format(tab.toLowerCase());
-	      $location.path(path);
-	    }
-	}
+      if (tab) {
+        var path = '/%s'.format(tab.toLowerCase());
+        if (location_path.indexOf(path) == -1) {
+          $location.path(path);
+        }
+      }
+  }
 }]);

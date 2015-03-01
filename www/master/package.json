@@ -1,7 +1,7 @@
 {
   "name": "kubernetes-kraken",
   "description": "Kraken - UI for Kubernetes",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "repository": "https://github.com/kraken-people/kubernetes-kraken",
   "license": "Apache",
   "private": true,
@@ -44,5 +44,8 @@
     "prestart": "bower install",
     "start": "npm install",
     "poststart": "gulp"
+  },
+  "dependencies": {
+    "lodash": "^3.3.0"
   }
 }
