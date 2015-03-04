@@ -22,6 +22,7 @@ var gulp        = require('gulp'),
     ngAnnotate  = require('gulp-ng-annotate'),
     sourcemaps  = require('gulp-sourcemaps'),
     del         = require('del'),
+    jsoncombine = require('gulp-jsoncombine'),
     ngConstant  = require('gulp-ng-constant'),
     argv        = require('yargs').argv,
     foreach     = require('gulp-foreach'),
@@ -319,10 +320,19 @@ gulp.task('config:base', function () {
 });
 
 gulp.task('config:copy', function () {
-  var enviroment = argv.env || 'development'; // change this to whatever default environment you need.
+  var environment = argv.env || 'development'; // change this to whatever default environment you need.
 
-  return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])
-    .pipe(concat('generated-config.js'))
+  return gulp.src(['js/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
+    .pipe(jsoncombine('generated-config.js', function(data) {
+      var env = Object.keys(data).reduce(function(result, key) {
+        // Map the key "environment" to "/" and the keys "component/config/environment" to "component".
+        var newKey = key.replace(environment, '/').replace(/\/config\/\/$/, '');
+        result[newKey] = data[key];
+        return result;
+      }, {});
+
+      return new Buffer(JSON.stringify({'ENV': env}));
+    }))
     .pipe(ngConstant({
       name: 'krakenApp.config',
       deps: [],
