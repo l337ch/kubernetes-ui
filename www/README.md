@@ -77,3 +77,37 @@ graph-visualizer
 └── views
     └── partials
 ```
+
+### Testing
+Currently kuberntes-ui includes both unit-testing (run via [Karma](http://karma-runner.github.io/0.12/index.html)) and
+end-to-end testing (run via
+[Protractor](http://angular.github.io/protractor/#/)).
+
+#### Unittests via Karma
+To run the existing Karma tests:
+* Install the Karma CLI: `sudo npm install -g karma-cli` (it needs to
+  be installed globally, hence the `sudo` may be needed). Note that
+  the other Karma packages (such as `karma`, `karma-jasmine`, and
+  `karma-chrome-launcher` should be automatically installed when
+  running `npm start`).
+* Go to the `www/master` directory, and run `karma start
+karma.conf.js`. The Karma configuration is defined in `karma.config.js`. The console should show the test results.
+
+To write new Karma tests:
+* For testing each components, write test files (`*.spec.js`) under the
+corresponding `www/master/components/**/test/modules/` directory.
+* For testing the chrome and the framework, write test files
+  (*.spec.js) under the `www/master/test/modules/*` directory.
+
+#### End-to-End testing via Protractor
+To run the existing Protractor tests:
+* Install the CLIs: `sudo npm install -g protractor`.
+* Start the webdriver server: `sudo webdriver-manager start`
+* Start the kubernetes-ui app (see instructions above), assuming
+running at port 8000.
+* Go to the `www/master/protractor` directory and run `protractor
+  conf.js`. The protractor configuration is in `conf.js`. The console
+  should show the test results.
+
+To write new protractor tests, put the test files (`*.spec.js`) in the
+corresponding `www/master/protractor/` directory.
