@@ -14,7 +14,6 @@ function ($routeProvider) {
   '$routeProvider',
   'manifestProvider',
 function($routeProvider, manifestProvider) {
-
     var _manifestRoutes = JSON.parse(manifestProvider.getRoutes());
 
     var _routes = [];
@@ -54,21 +53,4 @@ function($routeProvider, manifestProvider) {
         $routeProvider.when(r.url, {templateUrl: r.templateUrl});
       }
     });
-}]).config(function(k8sApiProvider, pollK8sDataServiceProvider, configurationServiceProvider){
-  if (configurationServiceProvider.getConstant('k8sApiServer')) {
-    var _proxy = configurationServiceProvider.getConstantOrElse('cAdvisorProxy', '');
-    k8sApiProvider.setUrlBase(_proxy + configurationServiceProvider.getConstant('k8sApiServer'));
-  }
-  if (configurationServiceProvider.getConstant('k8sDataServer')) {
-    pollK8sDataServiceProvider.setDataServer(configurationServiceProvider.getConstant('k8sDataServer'));
-  }
-  if (configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec')) {
-    pollK8sDataServiceProvider.setPollIntervalSec(configurationServiceProvider.getConstant('k8sDataPollIntervalMinSec'));
-  }
-  if (configurationServiceProvider.getConstant('k8sDataPollIntervalMaxSec')) {
-    pollK8sDataServiceProvider.setPollIntervalSec(configurationServiceProvider.getConstant('k8sDataPollIntervalMaxSec'));
-  }
-  if (configurationServiceProvider.getConstant('k8sDataPollErrorThreshold')) {
-    pollK8sDataServiceProvider.setPollErrorThreshold(configurationServiceProvider.getConstant('k8sDataPollErrorThreshold'));
-  }
-});
+}]);
