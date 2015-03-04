@@ -12,9 +12,9 @@
     };
 
     var sampleDataFiles = [
-      "components/graph/assets/sampleData1.json",
-      "components/graph/assets/sampleData2.json",
-      "components/graph/assets/sampleData3.json"
+      "shared/assets/sampleData1.json",
+      "shared/assets/sampleData2.json",
+      "shared/assets/sampleData3.json"
     ];
     this.setSampleDataFiles = function(value) {
       sampleDataFiles = value;
@@ -42,8 +42,8 @@
 
     this.$get = function($http, $timeout) {
       // Now the sequenceNumber will be used for debugging and verification purposes.
-      var k8sdatamodel = { 
-        "data" : undefined, 
+      var k8sdatamodel = {
+        "data" : undefined,
         "sequenceNumber" : 0,
         "useSampleData" : useSampleData
       };

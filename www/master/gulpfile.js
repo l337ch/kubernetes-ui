@@ -88,17 +88,16 @@ var source = {
               'js/app.run.js',
               'js/app.service.js',
               'js/app.provider.js',
-              'js/modules/*.js',
               'js/tabs.js',
               'js/sections.js',
-              'js/config/generated-config.js',
-              'js/modules/controllers/*.js',
-              'js/modules/directives/*.js',
-              'js/modules/services/*.js',
-              'js/modules/filters/*.js',
+              'shared/config/generated-config.js',
+              'shared/js/modules/*.js',
+              'shared/js/modules/controllers/*.js',
+              'shared/js/modules/directives/*.js',
+              'shared/js/modules/services/*.js',
               'components/*/js/**/*.js'
             ],
-    watch: ['js/**/*.js', 'components/*/js/**/*.js']
+    watch: ['js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
   },
   // templates: {
   //   app: {
@@ -126,14 +125,14 @@ var source = {
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
+    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
     dest:  'components',
-    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/**/less/*.*']
+    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/**/less/*.*']
   },
 
   config: {
-    watch: ['js/config/development.json', 'js/config/production.json', 'js/config/development.json', 'js/config/production.json'],
-    dest: 'js/config'
+    watch: ['shared/config/development.json', 'shared/config/production.json', 'shared/config/development.json', 'shared/config/production.json'],
+    dest: 'shared/config'
   }
 
   //,
@@ -322,7 +321,7 @@ gulp.task('config:base', function () {
 gulp.task('config:copy', function () {
   var environment = argv.env || 'development'; // change this to whatever default environment you need.
 
-  return gulp.src(['js/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
+  return gulp.src(['shared/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
     .pipe(jsoncombine('generated-config.js', function(data) {
       var env = Object.keys(data).reduce(function(result, key) {
         // Map the key "environment" to "/" and the keys "component/config/environment" to "component".
