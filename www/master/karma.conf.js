@@ -1,17 +1,19 @@
 module.exports = function(config){
   config.set({
 
-    basePath : './',
+    basePath : '../',
 
     files : [
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/angular-aria/angular-aria.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/hammerjs/hammer.js',
-      'app/bower_components/angular-material/angular-material.js',
-      'app/components/**/*.js',
-      'app/view*/**/*.js'
+      'master/bower_components/angular/angular.js',
+      'master/bower_components/angular-aria/angular-aria.js',
+      'master/bower_components/angular-material/angular-material.js',
+      'master/bower_components/angular-mocks/angular-mocks.js',
+      'master/bower_components/angular-route/angular-route.js',
+      'master/bower_components/hammerjs/hammer.js',
+      'app/assets/js/app.js',
+      'app/assets/vendor/**/*.js',
+      'master/test/**/*.js',
+      'master/components/**/test/**/*.js'
     ],
 
     autoWatch : true,
