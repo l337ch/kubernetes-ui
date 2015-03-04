@@ -94,8 +94,8 @@ To run the existing Karma tests:
 karma.conf.js`. The Karma configuration is defined in `karma.config.js`. The console should show the test results.
 
 To write new Karma tests:
-* For testing each components, write test files (*.spec.js) under the
-corresponding `www/master/components/**/test/modules/*` directory.
+* For testing each components, write test files (`*.spec.js`) under the
+corresponding `www/master/components/**/test/modules/` directory.
 * For testing the chrome and the framework, write test files
   (*.spec.js) under the `www/master/test/modules/*` directory.
 
@@ -109,5 +109,5 @@ running at port 8000.
   conf.js`. The protractor configuration is in `conf.js`. The console
   should show the test results.
 
-To write new protractor tests, put the test files (*.spec.js) in the
-corresponding `www/master/protractor/*` directory.
+To write new protractor tests, put the test files (`*.spec.js`) in the
+corresponding `www/master/protractor/` directory.
