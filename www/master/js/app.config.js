@@ -22,7 +22,8 @@ function($routeProvider, manifestProvider) {
         _routes.push({
             url: page.url,
             templateUrl: page.templateUrl,
-            controller: page.controller
+            controller: page.controller,
+            css: page.css
         });
     };
 
@@ -35,22 +36,23 @@ function($routeProvider, manifestProvider) {
             });
           }
         });
-      }
-      else if(section.pages) {
+      } else if(section.pages) {
         section.pages.forEach(function(page) {
             _extractPageValues(page);
         });
-      }
-      else if (section.type === 'link') {
+      } else if (section.type === 'link') {
         _extractPageValues(section);
       }
     });
 
     angular.forEach(_routes, function(r) {
+      var route = {templateUrl: r.templateUrl};
       if (r.controller) {
-        $routeProvider.when(r.url, {templateUrl: r.templateUrl, controller: r.controller});
-      } else {
-        $routeProvider.when(r.url, {templateUrl: r.templateUrl});
+        route.controller = r.controller;
       }
+      if (r.css) {
+        route.css = r.css;
+      }
+      $routeProvider.when(r.url, route);
     });
 }]);
