@@ -117,8 +117,8 @@ var source = {
   styles: {
     app: {
       // , 'components/*/less/*.less'
-      main: ['less/app.less'],
-      dir:  'less',
+      source: ['less/app/base.less', 'components/*/less/*.less'],
+      dir:  ['less/app', 'components'],
       watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
@@ -175,11 +175,11 @@ gulp.task('bundle-manifest', function(){
   var namespace = [];
   var stream = gulp.src('./components/*/manifest.json')
   .pipe(foreach(function(stream, file) {
-                var manifestFile = require(file.path);
-                components.push(manifestFile.name);
-                namespace.push(manifestFile.namespace);
-                return stream
-                })).pipe(gcallback(function() {
+    var manifestFile = require(file.path);
+    components.push(manifestFile.name);
+    namespace.push(manifestFile.namespace);
+    return stream;
+  })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
     .pipe(gulp.dest("js"));
     var _appNS = 'krakenApp.';
@@ -278,15 +278,19 @@ gulp.task('scripts:vendor:app', function() {
 
 // APP LESS
 gulp.task('styles:app', function() {
-    return gulp.src(source.styles.app.main)
-        .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
-        .pipe(less({
-            paths: [source.styles.app.dir]
-        }))
-        .on("error", handleError)
-        .pipe( isProduction ? minifyCSS() : gutil.noop() )
-        .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop())
-        .pipe(gulp.dest(build.styles));
+  return gulp.src(source.styles.app.source)
+      .pipe(foreach(function(stream, file) {
+        return stringSrc('import.less', '@import "' + file.relative + '";\n');
+      }))
+      .pipe(concat('app.less'))
+      .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
+      .pipe(less({
+          paths: source.styles.app.dir
+      }))
+      .on("error", handleError)
+      .pipe( isProduction ? minifyCSS() : gutil.noop() )
+      .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop())
+      .pipe(gulp.dest(build.styles));
 });
 
 // // APP RTL
