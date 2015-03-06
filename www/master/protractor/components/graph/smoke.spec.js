@@ -3,7 +3,7 @@ describe('Kubernetes UI Graph', function() {
     browser.get('http://localhost:8000');
     expect(browser.getTitle()).toEqual('Kubernetes UI');
 
-    // Navigate to the graph page
+    // Navigate to the graph page.
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
@@ -11,8 +11,8 @@ describe('Kubernetes UI Graph', function() {
         .toBe('/graph');
 
     // Verify if the control action icons have been loaded.
-    var expandCollapose = element(by.id('ExpandCollapse'));
-    expect(expandCollapose).toBeDefined();
+    var expandCollapse = element(by.id('ExpandCollapse'));
+    expect(expandCollapse).toBeDefined();
     var toggleSelect = element(by.id('ToggleSelect'));
     expect(toggleSelect).toBeDefined();
     var toggleSource = element(by.id('ToggleSource'));
