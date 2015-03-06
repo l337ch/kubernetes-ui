@@ -11,6 +11,7 @@ module.exports = function(config){
       'master/bower_components/angular-route/angular-route.js',
       'master/bower_components/hammerjs/hammer.js',
       'app/assets/js/app.js',
+      'app/assets/js/base.js',
       'app/assets/vendor/**/*.js',
       'master/test/**/*.js',
       'master/components/**/test/**/*.js'
