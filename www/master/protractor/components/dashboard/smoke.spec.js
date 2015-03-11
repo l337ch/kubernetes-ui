@@ -1,5 +1,5 @@
-describe('Kubernetes UI Chome', function() {
-  it('should have all the expected tabs loaded', function() {
+describe('Kubernetes UI Dashboard', function() {
+  it('should have all the expected components loaded', function() {
     browser.get('http://localhost:8000');
     expect(browser.getTitle()).toEqual('Kubernetes UI');
 
@@ -10,10 +10,8 @@ describe('Kubernetes UI Chome', function() {
     expect(browser.getLocationAbsUrl())
         .toBe('/dashboard');
 
-    var graphTab = element(by.id('tab_002'));
-    expect(graphTab).toBeDefined();
-    graphTab.click();
-    expect(browser.getLocationAbsUrl())
-        .toBe('/graph');
+    // Verify if the views dropdown list has been loaded.
+    var views = element(by.model('page'));
+    expect(views).toBeDefined();
   });
 });
