@@ -22,6 +22,7 @@ var gulp        = require('gulp'),
     ngAnnotate  = require('gulp-ng-annotate'),
     sourcemaps  = require('gulp-sourcemaps'),
     del         = require('del'),
+    jsoncombine = require('gulp-jsoncombine'),
     ngConstant  = require('gulp-ng-constant'),
     argv        = require('yargs').argv,
     foreach     = require('gulp-foreach'),
@@ -87,17 +88,16 @@ var source = {
               'js/app.run.js',
               'js/app.service.js',
               'js/app.provider.js',
-              'js/modules/*.js',
               'js/tabs.js',
               'js/sections.js',
-              'js/config/generated-config.js',
-              'js/modules/controllers/*.js',
-              'js/modules/directives/*.js',
-              'js/modules/services/*.js',
-              'js/modules/filters/*.js',
+              'shared/config/generated-config.js',
+              'shared/js/modules/*.js',
+              'shared/js/modules/controllers/*.js',
+              'shared/js/modules/directives/*.js',
+              'shared/js/modules/services/*.js',
               'components/*/js/**/*.js'
             ],
-    watch: ['js/**/*.js', 'components/*/js/**/*.js']
+    watch: ['js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
   },
   // templates: {
   //   app: {
@@ -117,22 +117,22 @@ var source = {
   styles: {
     app: {
       // , 'components/*/less/*.less'
-      main: ['less/app.less'],
-      dir:  'less',
+      source: ['less/app/base.less', 'components/*/less/*.less'],
+      dir:  ['less/app', 'components'],
       watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
+    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
     dest:  'components',
-    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/js/modules/config.js', '!components/**/less/*.*']
+    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/**/less/*.*']
   },
 
   config: {
-    watch: ['js/config/development.json', 'js/config/production.json', 'js/config/development.json', 'js/config/production.json'],
-    dest: 'js/config'
+    watch: ['shared/config/development.json', 'shared/config/production.json', 'shared/config/development.json', 'shared/config/production.json'],
+    dest: 'shared/config'
   }
 
   //,
@@ -175,11 +175,11 @@ gulp.task('bundle-manifest', function(){
   var namespace = [];
   var stream = gulp.src('./components/*/manifest.json')
   .pipe(foreach(function(stream, file) {
-                var manifestFile = require(file.path);
-                components.push(manifestFile.name);
-                namespace.push(manifestFile.namespace);
-                return stream
-                })).pipe(gcallback(function() {
+    var manifestFile = require(file.path);
+    components.push(manifestFile.name);
+    namespace.push(manifestFile.namespace);
+    return stream;
+  })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
     .pipe(gulp.dest("js"));
     var _appNS = 'krakenApp.';
@@ -278,15 +278,19 @@ gulp.task('scripts:vendor:app', function() {
 
 // APP LESS
 gulp.task('styles:app', function() {
-    return gulp.src(source.styles.app.main)
-        .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
-        .pipe(less({
-            paths: [source.styles.app.dir]
-        }))
-        .on("error", handleError)
-        .pipe( isProduction ? minifyCSS() : gutil.noop() )
-        .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop())
-        .pipe(gulp.dest(build.styles));
+  return gulp.src(source.styles.app.source)
+      .pipe(foreach(function(stream, file) {
+        return stringSrc('import.less', '@import "' + file.relative + '";\n');
+      }))
+      .pipe(concat('app.less'))
+      .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
+      .pipe(less({
+          paths: source.styles.app.dir
+      }))
+      .on("error", handleError)
+      .pipe( isProduction ? minifyCSS() : gutil.noop() )
+      .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop())
+      .pipe(gulp.dest(build.styles));
 });
 
 // // APP RTL
@@ -319,10 +323,19 @@ gulp.task('config:base', function () {
 });
 
 gulp.task('config:copy', function () {
-  var enviroment = argv.env || 'development'; // change this to whatever default environment you need.
+  var environment = argv.env || 'development'; // change this to whatever default environment you need.
 
-  return gulp.src(['js/config/' + enviroment + '.json', 'components/**/config/' + enviroment + '.json'])
-    .pipe(concat('generated-config.js'))
+  return gulp.src(['shared/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
+    .pipe(jsoncombine('generated-config.js', function(data) {
+      var env = Object.keys(data).reduce(function(result, key) {
+        // Map the key "environment" to "/" and the keys "component/config/environment" to "component".
+        var newKey = key.replace(environment, '/').replace(/\/config\/\/$/, '');
+        result[newKey] = data[key];
+        return result;
+      }, {});
+
+      return new Buffer(JSON.stringify({'ENV': env}));
+    }))
     .pipe(ngConstant({
       name: 'krakenApp.config',
       deps: [],

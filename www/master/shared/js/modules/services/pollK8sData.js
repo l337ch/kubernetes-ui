@@ -12,9 +12,9 @@
     };
 
     var sampleDataFiles = [
-      "components/graph/assets/sampleData1.json",
-      "components/graph/assets/sampleData2.json",
-      "components/graph/assets/sampleData3.json"
+      "shared/assets/sampleData1.json",
+      "shared/assets/sampleData2.json",
+      "shared/assets/sampleData3.json"
     ];
     this.setSampleDataFiles = function(value) {
       sampleDataFiles = value;
@@ -42,8 +42,8 @@
 
     this.$get = function($http, $timeout) {
       // Now the sequenceNumber will be used for debugging and verification purposes.
-      var k8sdatamodel = { 
-        "data" : undefined, 
+      var k8sdatamodel = {
+        "data" : undefined,
         "sequenceNumber" : 0,
         "useSampleData" : useSampleData
       };
@@ -186,7 +186,7 @@
       return {
         "k8sdatamodel" : k8sdatamodel,
         "isPolling" : isPolling,
-      	"refresh" : refresh,
+        "refresh" : refresh,
         "start" : start,
         "stop" : stop
       };
@@ -194,6 +194,22 @@
   };
 
   angular.module("krakenApp.services")
-    .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider]);
+    .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider])
+    .config(function(pollK8sDataServiceProvider, ENV) {
+      if (ENV && ENV['/']) {
+        if (ENV['/']['k8sDataServer']) {
+          pollK8sDataServiceProvider.setDataServer(ENV['/']['k8sDataServer']);
+        }
+        if (ENV['/']['k8sDataPollIntervalMinSec']) {
+          pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMinSec']);
+        }
+        if (ENV['/']['k8sDataPollIntervalMaxSec']) {
+          pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMaxSec']);
+        }
+        if (ENV['/']['k8sDataPollErrorThreshold']) {
+          pollK8sDataServiceProvider.setPollErrorThreshold(ENV['/']['k8sDataPollErrorThreshold']);
+        }
+      }
+    });
 
 })();

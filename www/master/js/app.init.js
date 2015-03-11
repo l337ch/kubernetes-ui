@@ -5,7 +5,7 @@
 // ****************************
 // -----------------------------------
 
-var app = angular.module('krakenApp', ['ngRoute','ngMaterial', 'ngLodash', 'krakenApp.config', 'angular.filter'].concat(componentNamespaces))
+var app = angular.module('krakenApp', ['ngRoute', 'ngMaterial', 'ngLodash', 'door3.css', 'krakenApp.config', 'krakenApp.services', 'angular.filter'].concat(componentNamespaces))
 
 .factory('menu', [
   '$location',
@@ -74,24 +74,9 @@ function($location, $rootScope, sections) {
     });
   }
 }]).factory('globalsFactory', [
-    'ENV',
     'SidebarService',
-  function(ENV, SidebarService){
+  function(SidebarService){
     return {
-        getConstant: function(constantName) {
-          if (ENV[constantName]) {
-            return ENV[constantName];
-          } else {
-            return false;
-          }
-        },
-        getConstantOrElse: function(constantName, alternateValue) {
-          if (ENV[constantName]) {
-            return ENV[constantName];
-          }else{
-            return alternateValue;
-          }
-        },
         addSidebarItem: function(item) {
           SidebarService.addSidebarItem(item);
           return this;
