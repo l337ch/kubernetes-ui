@@ -133,6 +133,12 @@ var source = {
   config: {
     watch: ['shared/config/development.json', 'shared/config/production.json', 'shared/config/development.json', 'shared/config/production.json'],
     dest: 'shared/config'
+  },
+
+  assets: {
+    source: ['shared/assets/**/*.*'],
+    dest: 'shared/assets',
+    watch: ['shared/assets/**/*.*']
   }
 
   //,
@@ -151,6 +157,7 @@ var build = {
       dir: '../app/assets/js'
     }
   },
+  assets: '../app/shared/assets',
   styles: '../app/assets/css',
   components: {
     dir: '../app/components'
@@ -344,8 +351,6 @@ gulp.task('config:copy', function () {
     .pipe(gulp.dest(source.config.dest));
 });
 
-
-
 gulp.task('copy:components', function() {
 
   var jsFilter = gulpFilter('**/*.js');
@@ -362,6 +367,14 @@ gulp.task('copy:components', function() {
       .pipe(minifyCSS())
       .pipe(cssFilter.restore())
       .pipe( gulp.dest(build.components.dir) );
+});
+
+gulp.task('copy:shared-assets', function() {
+  del.sync([build.assets], {force: true});
+
+  return gulp.src(source.assets.source, {base: 'shared/assets'})
+    .pipe(expect(source.assets.source))
+    .pipe(gulp.dest(build.assets));
 });
 
 
@@ -449,6 +462,7 @@ gulp.task('watch', function() {
   gulp.watch(source.scripts.watch,           ['scripts:app']);
   gulp.watch(source.styles.app.watch,        ['styles:app']);
   gulp.watch(source.components.watch,     ['copy:components']);
+  gulp.watch(source.assets.watch,     ['copy:shared-assets']);
   // gulp.watch(source.templates.pages.watch,   ['templates:pages']);
   // gulp.watch(source.templates.views.watch,   ['templates:views']);
   // gulp.watch(source.templates.app.watch,     ['templates:app']);
@@ -496,6 +510,7 @@ gulp.task('default', gulpsync.sync([
 gulp.task('start',[
           'styles:app',
           'copy:components',
+          'copy:shared-assets',
           // 'templates:app',
           // 'templates:pages',
           // 'templates:views',
