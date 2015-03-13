@@ -1,4 +1,4 @@
-app.directive('includeReplace', function () {
+app.directive('includeReplace', function() {
   'use strict';
     return {
         require: 'ngInclude',
@@ -19,8 +19,7 @@ app.directive('includeReplace', function () {
         $compile(element.contents())(scope);
       }
     );
-  };
-}).directive('menuLink', function() {
+  }; }).directive('menuLink', function() {
   'use strict';
   return {
     scope: {
@@ -34,13 +33,11 @@ app.directive('includeReplace', function () {
         return controller.isSelected($scope.section);
       };
     }
-  };
-}).directive("kubernetesUiMenu", function() {
+  }; }).directive("kubernetesUiMenu", function() {
   'use strict';
   return {
     templateUrl: "/views/partials/kubernetes-ui-menu.tmpl.html"
-  };
-}).directive('menuToggle', function() {
+  }; }).directive('menuToggle', function() {
   'use strict';
   return {
     scope: {
@@ -63,17 +60,15 @@ app.directive('includeReplace', function () {
         $element[0].firstChild.setAttribute('aria-describedby', heading.id);
       }
     }
-  };
-});
+  }; });
 
-app.filter('startFrom', function () {
+app.filter('startFrom', function() {
   'use strict';
   return function (input, start) {
     return input.slice(start);
   };
-}).filter('nospace', function () {
+}).filter('nospace', function() {
   'use strict';
   return function (value) {
     return (!value) ? '' : value.replace(/ /g, '');
-  };
-});
+  }; });

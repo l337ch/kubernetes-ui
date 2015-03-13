@@ -1,4 +1,4 @@
-app.provider('k8sApi', function(){
+app.provider('k8sApi', function() {
 
   var urlBase = '';
 
@@ -45,10 +45,8 @@ app.provider('k8sApi', function(){
 
     return api;
   }
-})
-.config(function(k8sApiProvider, ENV) {
+}).config(function(k8sApiProvider, ENV) {
   if (ENV && ENV['/'] && ENV['/']['k8sApiServer']) {
     var proxy = ENV['/']['cAdvisorProxy'] || '';
     k8sApiProvider.setUrlBase(proxy + ENV['/']['k8sApiServer']);
-  }
-});
+  } });

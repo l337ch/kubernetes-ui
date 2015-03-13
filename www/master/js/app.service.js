@@ -1,6 +1,6 @@
 app.service('SidebarService', [
   '$rootScope',
-function ($rootScope) {
+  function($rootScope) {
   var service = this;
   service.sidebarItems = [];
 
@@ -27,4 +27,5 @@ function ($rootScope) {
       return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0); 
     });
   };
-}]);
+  }
+]);

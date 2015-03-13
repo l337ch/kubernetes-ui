@@ -9,7 +9,7 @@ app.controller('PageCtrl', [
   '$mdSidenav',
   'menu',
   '$rootScope',
-function($scope, $timeout, $mdSidenav, menu, $rootScope) {
+  function($scope, $timeout, $mdSidenav, menu, $rootScope) {
   $scope.menu = menu;
 
   $scope.path = path;
@@ -102,8 +102,8 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
     menu.toggleSelectSection(section);
   }
 
-
-}]).filter('humanizeDoc', function() {
+  }
+]).filter('humanizeDoc', function() {
   return function(doc) {
     if (!doc) return;
     if (doc.type === 'directive') {
@@ -112,5 +112,4 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
       });
     }
     return doc.label || doc.name;
-  };
-});
+  }; });

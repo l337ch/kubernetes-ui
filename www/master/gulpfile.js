@@ -1,32 +1,32 @@
-var gulp        = require('gulp'),
-    concat      = require('gulp-concat'),
-    uglify      = require('gulp-uglify'),
+var gulp = require('gulp'),
+    concat = require('gulp-concat'),
+    uglify = require('gulp-uglify'),
     // jade        = require('gulp-jade'),
-    less        = require('gulp-less'),
-    path        = require('path'),
-    livereload  = require('gulp-livereload'), // Livereload plugin needed: https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
+    less = require('gulp-less'),
+    path = require('path'),
+    livereload = require('gulp-livereload'),  // Livereload plugin needed: https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
     // marked      = require('marked'), // For :markdown filter in jade
-    path        = require('path'),
-    changed     = require('gulp-changed'),
-    prettify    = require('gulp-html-prettify'),
-    w3cjs       = require('gulp-w3cjs'),
-    rename      = require('gulp-rename'),
+    path = require('path'),
+    changed = require('gulp-changed'),
+    prettify = require('gulp-html-prettify'),
+    w3cjs = require('gulp-w3cjs'),
+    rename = require('gulp-rename'),
     // flip        = require('css-flip'),
-    through     = require('through2'),
-    gutil       = require('gulp-util'),
-    htmlify     = require('gulp-angular-htmlify'),
-    minifyCSS   = require('gulp-minify-css'),
-    gulpFilter  = require('gulp-filter'),
-    expect      = require('gulp-expect-file'),
-    gulpsync    = require('gulp-sync')(gulp),
-    ngAnnotate  = require('gulp-ng-annotate'),
-    sourcemaps  = require('gulp-sourcemaps'),
-    del         = require('del'),
+    through = require('through2'),
+    gutil = require('gulp-util'),
+    htmlify = require('gulp-angular-htmlify'),
+    minifyCSS = require('gulp-minify-css'),
+    gulpFilter = require('gulp-filter'),
+    expect = require('gulp-expect-file'),
+    gulpsync = require('gulp-sync')(gulp),
+    ngAnnotate = require('gulp-ng-annotate'),
+    sourcemaps = require('gulp-sourcemaps'),
+    del = require('del'),
     jsoncombine = require('gulp-jsoncombine'),
-    ngConstant  = require('gulp-ng-constant'),
-    argv        = require('yargs').argv,
-    foreach     = require('gulp-foreach'),
-    gcallback   = require('gulp-callback'),
+    ngConstant = require('gulp-ng-constant'),
+    argv = require('yargs').argv,
+    foreach = require('gulp-foreach'),
+    gcallback = require('gulp-callback'),
     tag_version = require('gulp-tag-version'),
     PluginError = gutil.PluginError;
 
@@ -57,10 +57,10 @@ var useSourceMaps = false;
 
 // ignore everything that begins with underscore
 var hidden_files = '**/_*.*';
-var ignored_files = '!'+hidden_files;
+var ignored_files = '!' + hidden_files;
 
 var component_hidden_files = '**/js/**/*.*';
-var component_ignored_files = '!'+component_hidden_files;
+var component_ignored_files = '!' + component_hidden_files;
 
 // VENDOR CONFIG
 var vendor = {
@@ -80,23 +80,23 @@ var vendor = {
 // SOURCES CONFIG
 var source = {
   scripts: {
-    app:    [
-              'js/app.preinit.js',
-              'js/app.init.js',
-              'js/app.config.js',
-              'js/app.directive.js',
-              'js/app.run.js',
-              'js/app.service.js',
-              'js/app.provider.js',
-              'js/tabs.js',
-              'js/sections.js',
-              'shared/config/generated-config.js',
-              'shared/js/modules/*.js',
-              'shared/js/modules/controllers/*.js',
-              'shared/js/modules/directives/*.js',
-              'shared/js/modules/services/*.js',
-              'components/*/js/**/*.js'
-            ],
+    app: [
+      'js/app.preinit.js',
+      'js/app.init.js',
+      'js/app.config.js',
+      'js/app.directive.js',
+      'js/app.run.js',
+      'js/app.service.js',
+      'js/app.provider.js',
+      'js/tabs.js',
+      'js/sections.js',
+      'shared/config/generated-config.js',
+      'shared/js/modules/*.js',
+      'shared/js/modules/controllers/*.js',
+      'shared/js/modules/directives/*.js',
+      'shared/js/modules/services/*.js',
+      'components/*/js/**/*.js'
+    ],
     watch: ['js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
   },
   // templates: {
@@ -118,7 +118,7 @@ var source = {
     app: {
       // , 'components/*/less/*.less'
       source: ['less/app/base.less', 'components/*/less/*.less'],
-      dir:  ['less/app', 'components'],
+      dir: ['less/app', 'components'],
       watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
@@ -126,7 +126,7 @@ var source = {
 
   components: {
     source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
-    dest:  'components',
+    dest: 'components',
     watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/**/less/*.*']
   },
 
@@ -165,19 +165,18 @@ var build = {
 };
 
 function stringSrc(filename, string) {
-  var src = require('stream').Readable({ objectMode: true });
-  src._read = function () {
+  var src = require('stream').Readable({objectMode: true});
+  src._read = function() {
     this.push(new gutil.File({ cwd: "", base: "", path: filename, contents: new Buffer(string) }));
     this.push(null);
-  }
-  return src;
+  } return src;
 }
 
 //---------------
 // TASKS
 //---------------
 
-gulp.task('bundle-manifest', function(){
+gulp.task('bundle-manifest', function() {
   var components = [];
   var namespace = [];
   var stream = gulp.src('./components/*/manifest.json')
@@ -196,7 +195,7 @@ gulp.task('bundle-manifest', function(){
   }));
 });
 
-gulp.task('bundle-manifest-sections', function(){
+gulp.task('bundle-manifest-sections', function() {
   var sections = [];
   var stream = gulp.src('./components/*/manifest.json')
   .pipe(foreach(function(stream, file) {
@@ -248,7 +247,6 @@ gulp.task('scripts:app:base', function() {
         .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop() )
         .pipe(gulp.dest(build.scripts.app.dir));
 });
-
 
 // VENDOR BUILD
 gulp.task('scripts:vendor', ['scripts:vendor:base', 'scripts:vendor:app']);
@@ -318,18 +316,17 @@ gulp.task('styles:app', function() {
 //         .pipe(gulp.dest(build.styles));
 // });
 
-
 // Environment based configuration
 // https://github.com/kubernetes-ui/kubernetes-ui/issues/21
 
 gulp.task('config', ['config:base', 'config:copy']);
 
-gulp.task('config:base', function () {
+gulp.task('config:base', function() {
   return stringSrc('generated-config.js', 'angular.module("kubernetesApp.config", [])' + '\n' + '.constant("ENV", {})')
     .pipe(gulp.dest(source.config.dest));
 });
 
-gulp.task('config:copy', function () {
+gulp.task('config:copy', function() {
   var environment = argv.env || 'development'; // change this to whatever default environment you need.
 
   return gulp.src(['shared/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
@@ -376,7 +373,6 @@ gulp.task('copy:shared-assets', function() {
     .pipe(expect(source.assets.source))
     .pipe(gulp.dest(build.assets));
 });
-
 
 // Assuming there's "version: 1.2.3" in package.json,
 // tag the last commit as "v1.2.3"//
@@ -479,11 +475,9 @@ gulp.task('watch', function() {
 
 });
 
-
 //---------------
 // DEFAULT TASK
 //---------------
-
 
 // build for production (minify)
 gulp.task('build', ['prod', 'default']);
@@ -491,33 +485,34 @@ gulp.task('prod', function() { isProduction = true; });
 
 // build with sourcemaps (no minify)
 gulp.task('sourcemaps', ['usesources', 'default']);
-gulp.task('usesources', function(){ useSourceMaps = true; });
+gulp.task('usesources', function() { useSourceMaps = true; });
 
 // default (no minify)
 gulp.task('default', gulpsync.sync([
-          'scripts:vendor',
-          'copy:components',
-          'scripts:app',
-          'start'
-        ]), function(){
+  'scripts:vendor',
+  'copy:components',
+  'scripts:app',
+  'start'
+]),
+          function() {
 
   gutil.log(gutil.colors.cyan('************'));
   gutil.log(gutil.colors.cyan('* All Done *'), 'You can start editing your code, LiveReload will update your browser after any change..');
   gutil.log(gutil.colors.cyan('************'));
 
-});
+          });
 
-gulp.task('start',[
-          'styles:app',
-          'copy:components',
-          'copy:shared-assets',
-          // 'templates:app',
-          // 'templates:pages',
-          // 'templates:views',
-          'watch'
-        ]);
+gulp.task('start', [
+  'styles:app',
+  'copy:components',
+  'copy:shared-assets',
+  // 'templates:app',
+  // 'templates:pages',
+  // 'templates:views',
+  'watch'
+]);
 
-gulp.task('done', function(){
+gulp.task('done', function() {
   console.log('All Done!! You can start editing your code, LiveReload will update your browser after any change..');
 });
 

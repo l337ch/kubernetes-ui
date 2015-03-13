@@ -7,11 +7,11 @@
 
 var app = angular.module('kubernetesApp', ['ngRoute', 'ngMaterial', 'ngLodash', 'door3.css', 'kubernetesApp.config', 'kubernetesApp.services', 'angular.filter'].concat(componentNamespaces))
 
-.factory('menu', [
-  '$location',
-  '$rootScope',
-  'sections',
-function($location, $rootScope, sections) {
+              .factory('menu', [
+                '$location',
+                '$rootScope',
+                'sections',
+                function($location, $rootScope, sections) {
 
   var self;
 
@@ -73,9 +73,11 @@ function($location, $rootScope, sections) {
       }
     });
   }
-}]).factory('globalsFactory', [
-    'SidebarService',
-  function(SidebarService){
+                }
+              ])
+              .factory('globalsFactory', [
+                'SidebarService',
+                function(SidebarService) {
     return {
         addSidebarItem: function(item) {
           SidebarService.addSidebarItem(item);
@@ -90,4 +92,5 @@ function($location, $rootScope, sections) {
           return this;
         }
     }
-}]);
+                }
+              ]);

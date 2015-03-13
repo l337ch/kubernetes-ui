@@ -1,19 +1,17 @@
 angular.module('kubernetesApp.config', []);
-angular.module('kubernetesApp.services',['kubernetesApp.config']);
+angular.module('kubernetesApp.services', ['kubernetesApp.config']);
 
 app.config([
   '$routeProvider',
-function ($routeProvider) {
+  function($routeProvider) {
   $routeProvider
     .when("/404", {templateUrl: "/views/partials/404.html"})
     // else 404
     .otherwise({
         redirectTo: "/404"
     });
-}]).config([
-  '$routeProvider',
-  'manifestProvider',
-function($routeProvider, manifestProvider) {
+  }
+]).config(['$routeProvider', 'manifestProvider', function($routeProvider, manifestProvider) {
     var _manifestRoutes = JSON.parse(manifestProvider.getRoutes());
 
     var _routes = [];
@@ -54,5 +52,4 @@ function($routeProvider, manifestProvider) {
         route.css = r.css;
       }
       $routeProvider.when(r.url, route);
-    });
-}]);
+    }); }]);

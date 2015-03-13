@@ -1,0 +1,9 @@
+---
+BasedOnStyle: Google
+---
+Language: JavaScript
+# Do not limit the line length.
+ColumnLimit: 0
+# At most one empty line between code blocks.
+MaxEmptyLinesToKeep: 1
+...
