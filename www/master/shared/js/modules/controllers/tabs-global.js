@@ -20,6 +20,6 @@ app.controller('TabCtrl', [
           $location.path(path);
         }
       }
-    }
+    };
   }
 ]);

@@ -3,7 +3,7 @@ app.provider('k8sApi',
 
                var urlBase = '';
 
-               this.setUrlBase = function(value) { urlBase = value; }
+               this.setUrlBase = function(value) { urlBase = value; };
 
                var _get = function($http, baseUrl, query) {
                  var _fullUrl = baseUrl;
@@ -17,9 +17,9 @@ app.provider('k8sApi',
                this.$get = function($http, $q) {
                  var api = {};
 
-                 api.getUrlBase = function() { return urlBase; }
+                 api.getUrlBase = function() { return urlBase; };
 
-                                  api.getPods = function(query) { return _get($http, urlBase + '/pods', query); };
+                 api.getPods = function(query) { return _get($http, urlBase + '/pods', query); };
 
                  api.getMinions = function(query) { return _get($http, urlBase + '/minions', query); };
 
@@ -32,7 +32,7 @@ app.provider('k8sApi',
                  api.getEvents = function(query) { return _get($http, urlBase + '/events', query); };
 
                  return api;
-               }
+               };
              })
     .config(function(k8sApiProvider, ENV) {
       if (ENV && ENV['/'] && ENV['/']['k8sApiServer']) {

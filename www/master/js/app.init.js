@@ -13,80 +13,78 @@ var app = angular.module('kubernetesApp', [
   'kubernetesApp.config',
   'kubernetesApp.services',
   'angular.filter'
-].concat(componentNamespaces))
+].concat(componentNamespaces));
 
-              .factory('menu', [
-                '$location',
-                '$rootScope',
-                'sections',
-                function($location, $rootScope, sections) {
+app.factory('menu', [
+  '$location',
+  '$rootScope',
+  'sections',
+  function($location, $rootScope, sections) {
 
-                  var self;
+    var self;
 
-                  $rootScope.$on('$locationChangeSuccess', onLocationChange);
+    $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
-                  return self = {
+    return self = {
 
-                    sections: sections,
+      sections: sections,
 
-                    setSections: function(_sections) { this.sections = _sections; },
-                    selectSection: function(section) { self.openedSection = section; },
-                    toggleSelectSection: function(section) {
-                      self.openedSection = (self.openedSection === section ? null : section);
-                    },
-                    isSectionSelected: function(section) { return self.openedSection === section; },
-                    selectPage: function(section, page) {
-                      page && page.url && $location.path(page.url);
-                      self.currentSection = section;
-                      self.currentPage = page;
-                    },
-                    isPageSelected: function(page) { return self.currentPage === page; }
-                  };
+      setSections: function(_sections) { this.sections = _sections; },
+      selectSection: function(section) { self.openedSection = section; },
+      toggleSelectSection: function(section) {
+        self.openedSection = (self.openedSection === section ? null : section);
+      },
+      isSectionSelected: function(section) { return self.openedSection === section; },
+      selectPage: function(section, page) {
+        page && page.url && $location.path(page.url);
+        self.currentSection = section;
+        self.currentPage = page;
+      },
+      isPageSelected: function(page) { return self.currentPage === page; }
+    };
 
-                  function onLocationChange() {
-                    var path = $location.path();
+    function onLocationChange() {
+      var path = $location.path();
 
-                    var matchPage = function(section, page) {
-                      if (path === page.url) {
-                        self.selectSection(section);
-                        self.selectPage(section, page);
-                      }
-                    };
-
-                    sections.forEach(function(section) {
-                      if (section.children) {
-                        section.children.forEach(function(childSection) {
-                          if (childSection.pages) {
-                            childSection.pages.forEach(function(page) { matchPage(childSection, page); });
-                          }
-                        });
-                      } else if (section.pages) {
-                        section.pages.forEach(function(page) { matchPage(section, page); });
-                      } else if (section.type === 'link') {
-                        matchPage(section, section);
-                      }
-                    });
-                  }
-                }
-              ])
-              .factory('globalsFactory', [
-                'SidebarService',
-                function(SidebarService) {
-                  return {
-                  addSidebarItem:
-                    function(item) {
-                      SidebarService.addSidebarItem(item);
-                      return this;
-                    }
-                    ,
-        clearSidebarItems: function() {
-          SidebarService.clearSidebarItems();
-          return this;
-        },
-        renderSidebar: function() {
-          SidebarService.renderSidebar();
-          return this;
+      var matchPage = function(section, page) {
+        if (path === page.url) {
+          self.selectSection(section);
+          self.selectPage(section, page);
         }
-                  }
-                }
-              ]);
+      };
+
+      sections.forEach(function(section) {
+        if (section.children) {
+          section.children.forEach(function(childSection) {
+            if (childSection.pages) {
+              childSection.pages.forEach(function(page) { matchPage(childSection, page); });
+            }
+          });
+        } else if (section.pages) {
+          section.pages.forEach(function(page) { matchPage(section, page); });
+        } else if (section.type === 'link') {
+          matchPage(section, section);
+        }
+      });
+    }
+  }
+])
+    .factory('globalsFactory', [
+      'SidebarService',
+      function(SidebarService) {
+        return {
+          addSidebarItem: function(item) {
+            SidebarService.addSidebarItem(item);
+            return this;
+          },
+          clearSidebarItems: function() {
+            SidebarService.clearSidebarItems();
+            return this;
+          },
+          renderSidebar: function() {
+            SidebarService.renderSidebar();
+            return this;
+          }
+        };
+      }
+    ]);

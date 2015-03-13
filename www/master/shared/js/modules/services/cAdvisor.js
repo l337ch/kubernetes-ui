@@ -3,15 +3,14 @@
 
   angular.module('kubernetesApp.services')
       .service('cAdvisorService', function($http, $q, ENV) {
-        var _baseUrl =
-            function(minionIp) {
-              var minionPort = ENV['/']['cAdvisorPort'] || "8081";
-              var proxy = ENV['/']['cAdvisorProxy'] || "";
+        var _baseUrl = function(minionIp) {
+          var minionPort = ENV['/']['cAdvisorPort'] || "8081";
+          var proxy = ENV['/']['cAdvisorProxy'] || "";
 
-              return proxy + 'http://' + minionIp + ':' + minionPort + '/api/v1.0/';
-            }
+          return proxy + 'http://' + minionIp + ':' + minionPort + '/api/v1.0/';
+        };
 
-            this.getMachineInfo = getMachineInfo;
+        this.getMachineInfo = getMachineInfo;
 
         function getMachineInfo(minionIp) {
           var fullUrl = _baseUrl(minionIp) + 'machine';
@@ -41,33 +40,32 @@
               .error(function() { deferred.reject('There was an error') }) return deferred.promise;
         }
 
-        this.getDataForMinion =
-            function(minionIp) {
-              var machineData, containerData;
-              var deferred = $q.defer();
+        this.getDataForMinion = function(minionIp) {
+          var machineData, containerData;
+          var deferred = $q.defer();
 
-              var p = $q.all([getMachineInfo(minionIp), getContainerInfo(minionIp)])
-                          .then(
-                              function(dataArray) {
-                                machineData = dataArray[0];
-                                containerData = dataArray[1];
+          var p = $q.all([getMachineInfo(minionIp), getContainerInfo(minionIp)])
+                      .then(
+                          function(dataArray) {
+                            machineData = dataArray[0];
+                            containerData = dataArray[1];
 
-                                var memoryData = parseMemory(machineData, containerData);
-                                var cpuData = parseCpu(machineData, containerData);
-                                var fsData = parseFilesystems(machineData, containerData);
-                                deferred.resolve({
-                                  memoryData: memoryData,
-                                  cpuData: cpuData,
-                                  filesystemData: fsData,
-                                  machineData: machineData,
-                                  containerData: containerData
-                                });
+                            var memoryData = parseMemory(machineData, containerData);
+                            var cpuData = parseCpu(machineData, containerData);
+                            var fsData = parseFilesystems(machineData, containerData);
+                            deferred.resolve({
+                              memoryData: memoryData,
+                              cpuData: cpuData,
+                              filesystemData: fsData,
+                              machineData: machineData,
+                              containerData: containerData
+                            });
 
-                              },
-                              function(errorData) { deferred.reject(errorData); });
+                          },
+                          function(errorData) { deferred.reject(errorData); });
 
-              return deferred.promise;
-            }
+          return deferred.promise;
+        };
 
         // Utils to process cadvisor data
         function humanize(num, size, units) {
@@ -124,7 +122,6 @@
         }
 
         function parseFilesystems(machineInfo, containerInfo) {
-
           var cur = containerInfo.stats[containerInfo.stats.length - 1];
           if (!cur.filesystem) {
             return;
