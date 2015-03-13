@@ -47,10 +47,10 @@ describe('Kubernetes UI Dashboard', function() {
     expect(element.all(by.css('.dashboard')).count()).toBeGreaterThan(0);
     expect(element.all(by.css('.server-overview')).count()).toEqual(1);
 
-    // Also we should render the view based on the minions data
+    // Also we should render the view based on the minions data.
     expect(element(by.repeater("minion in minions.items"))).toBeDefined();
 
-    // Make sure the svg is drawn
+    // Make sure the svg is drawn.
     var svg = element(by.css('svg'));
     expect(svg).toBeDefined();
   });
@@ -63,14 +63,14 @@ describe('Kubernetes UI Dashboard', function() {
     for (var i = 0; i < subviews.length; i++) {
       var subview = subviews[i];
 
-      // Navigate to the subview
+      // Navigate to the subview.
       var select = element(by.model('page'));
       select.click();
       var podsView = element(by.id(subview));
       expect(podsView).toBeDefined();
       podsView.click();
 
-      // Make sure the pods view still have the right title and subnav
+      // Make sure the pods view still has the right title and subnav.
       expect(browser.getTitle()).toEqual('Kubernetes UI');
       expect(by.css('.dashboard-subnav')).toBeDefined();
       expect(element(by.css('.selectSubPages'))).toBeDefined();
@@ -88,14 +88,14 @@ describe('Kubernetes UI Dashboard', function() {
   it('should have the correct groups view', function() {
     browser.get('http://localhost:8000/');
 
-    // Navigate to the group view
+    // Navigate to the group view.
     var select = element(by.model('page'));
     select.click();
     var groupsView = element(by.id('groupsView'));
     expect(groupsView).toBeDefined();
     groupsView.click();
 
-    // Make sure the pods view still have the right title and subnav
+    // Make sure the pods view still have the right title and subnav.
     expect(browser.getTitle()).toEqual('Kubernetes UI');
     expect(by.css('.dashboard-subnav')).toBeDefined();
     expect(element(by.css('.selectSubPages'))).toBeDefined();
@@ -104,7 +104,7 @@ describe('Kubernetes UI Dashboard', function() {
     var views = element(by.model('page'));
     expect(views).toBeDefined();
 
-    // Make sure necessary components are loaded correctly
+    // Make sure necessary components are loaded correctly.
     var select = element(by.model('selectedGroupBy'));
     expect(select).toBeDefined();
 
