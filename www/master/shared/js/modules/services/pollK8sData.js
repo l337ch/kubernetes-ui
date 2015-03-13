@@ -7,45 +7,30 @@
     // creating the service instance.
 
     var useSampleData = false;
-    this.setUseSampleData = function(value) {
-      useSampleData = value;
-    };
+    this.setUseSampleData = function(value) { useSampleData = value; };
 
-    var sampleDataFiles = [
-      "shared/assets/sampleData1.json",
-      "shared/assets/sampleData2.json",
-      "shared/assets/sampleData3.json"
-    ];
-    this.setSampleDataFiles = function(value) {
-      sampleDataFiles = value;
-    };
+    var sampleDataFiles =
+        ["shared/assets/sampleData1.json", "shared/assets/sampleData2.json", "shared/assets/sampleData3.json"];
+    this.setSampleDataFiles = function(value) { sampleDataFiles = value; };
 
     var dataServer = "http://localhost:8001/graph";
-    this.setDataServer = function(value) {
-      dataServer = value;
-    };
+    this.setDataServer = function(value) { dataServer = value; };
 
     var pollMinIntervalSec = 10;
-    this.setPollMinIntervalSec = function(value) {
-      pollMinIntervalSec = value;
-    };
+    this.setPollMinIntervalSec = function(value) { pollMinIntervalSec = value; };
 
     var pollMaxIntervalSec = 120;
-    this.setPollMaxIntervalSec = function(value) {
-      pollMaxIntervalSec = value;
-    };
+    this.setPollMaxIntervalSec = function(value) { pollMaxIntervalSec = value; };
 
     var pollErrorThreshold = 5;
-    this.setPollErrorThreshold = function(value) {
-      pollErrorThreshold = value;
-    };
+    this.setPollErrorThreshold = function(value) { pollErrorThreshold = value; };
 
     this.$get = function($http, $timeout) {
       // Now the sequenceNumber will be used for debugging and verification purposes.
       var k8sdatamodel = {
-        "data" : undefined,
-        "sequenceNumber" : 0,
-        "useSampleData" : useSampleData
+        "data": undefined,
+        "sequenceNumber": 0,
+        "useSampleData": useSampleData
       };
       var pollingError = 0;
       var promise = undefined;
@@ -82,17 +67,14 @@
       };
 
       var updateModel = function(newModel) {
-        var dedupe = function (dataModel) {
+        var dedupe = function(dataModel) {
           if (dataModel.resources) {
-            dataModel.resources = _.uniq(dataModel.resources, function(resource) {
-              return resource.id;
-            });
+            dataModel.resources = _.uniq(dataModel.resources, function(resource) { return resource.id; });
           }
 
           if (dataModel.relations) {
-            dataModel.relations = _.uniq(dataModel.relations, function(relation) {
-              return relation.source + relation.target;
-            });
+            dataModel.relations =
+                _.uniq(dataModel.relations, function(relation) { return relation.source + relation.target; });
           }
         };
 
@@ -127,28 +109,26 @@
       var pollOnce = function(scope, repeat) {
         var dataSource = (k8sdatamodel.useSampleData) ? getSampleDataFile() : dataServer;
         $.getJSON(dataSource)
-          .done(function(newModel, jqxhr, textStatus) {
-            if (newModel && newModel.success) {
-              delete newModel.success; // Remove success indicator.
-              delete newModel.timestamp; // Remove changing timestamp.
-              updateModel(newModel);
-              scope.$apply();
+            .done(function(newModel, jqxhr, textStatus) {
+              if (newModel && newModel.success) {
+                delete newModel.success;    // Remove success indicator.
+                delete newModel.timestamp;  // Remove changing timestamp.
+                updateModel(newModel);
+                scope.$apply();
+                promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
+                return;
+              }
+
+              bumpCounters();
               promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
-              return;
-            }
-
-            bumpCounters();
-            promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
-          })
-        .fail(function(jqxhr, textStatus, error) {
-            bumpCounters();
-            promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
-          });
+            })
+            .fail(function(jqxhr, textStatus, error) {
+              bumpCounters();
+              promise = repeat ? $timeout(function() { pollOnce(scope, true); }, pollInterval * 1000) : undefined;
+            });
       };
 
-      var isPolling = function() {
-        return promise ? true : false;
-      };
+      var isPolling = function() { return promise ? true : false; };
 
       var start = function(scope) {
         // If polling has already started, then calling start() again would
@@ -177,32 +157,32 @@
       };
 
       return {
-        "k8sdatamodel" : k8sdatamodel,
-        "isPolling" : isPolling,
-        "refresh" : refresh,
-        "start" : start,
-        "stop" : stop
+        "k8sdatamodel": k8sdatamodel,
+        "isPolling": isPolling,
+        "refresh": refresh,
+        "start": start,
+        "stop": stop
       };
     };
   };
 
   angular.module("kubernetesApp.services")
-    .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider])
-    .config(function(pollK8sDataServiceProvider, ENV) {
-      if (ENV && ENV['/']) {
-        if (ENV['/']['k8sDataServer']) {
-          pollK8sDataServiceProvider.setDataServer(ENV['/']['k8sDataServer']);
+      .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider])
+      .config(function(pollK8sDataServiceProvider, ENV) {
+        if (ENV && ENV['/']) {
+          if (ENV['/']['k8sDataServer']) {
+            pollK8sDataServiceProvider.setDataServer(ENV['/']['k8sDataServer']);
+          }
+          if (ENV['/']['k8sDataPollIntervalMinSec']) {
+            pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMinSec']);
+          }
+          if (ENV['/']['k8sDataPollIntervalMaxSec']) {
+            pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMaxSec']);
+          }
+          if (ENV['/']['k8sDataPollErrorThreshold']) {
+            pollK8sDataServiceProvider.setPollErrorThreshold(ENV['/']['k8sDataPollErrorThreshold']);
+          }
         }
-        if (ENV['/']['k8sDataPollIntervalMinSec']) {
-          pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMinSec']);
-        }
-        if (ENV['/']['k8sDataPollIntervalMaxSec']) {
-          pollK8sDataServiceProvider.setPollIntervalSec(ENV['/']['k8sDataPollIntervalMaxSec']);
-        }
-        if (ENV['/']['k8sDataPollErrorThreshold']) {
-          pollK8sDataServiceProvider.setPollErrorThreshold(ENV['/']['k8sDataPollErrorThreshold']);
-        }
-      }
-    });
+      });
 
 }());

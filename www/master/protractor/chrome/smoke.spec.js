@@ -7,13 +7,11 @@ describe('Kubernetes UI Chome', function() {
     var dashboardTab = element(by.id('tab_001'));
     expect(dashboardTab).toBeDefined();
     dashboardTab.click();
-    expect(browser.getLocationAbsUrl())
-        .toBe('/dashboard');
+    expect(browser.getLocationAbsUrl()).toBe('/dashboard');
 
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl())
-        .toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph');
   });
 });
