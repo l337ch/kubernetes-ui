@@ -40,11 +40,30 @@ http-server -a localhost -p 8000
 ### Configuration
 #### Configuration Settings
 A json file can be used by `gulp` to automatically create angular constants. This is useful for setting per environment variables such as api endpoints.
-*  ```www/master/js/config/development.json``` or ```www/master/js/config/production.json``` can be created from the ```www/master/js/config/development.example.json``` file.
+*  ```www/master/shared/config/development.json``` or ```www/master/shared/config/production.json``` can be created from the ```www/master/shared/config/development.example.json``` file.
 * ```development.example.json``` should be kept up to date with default values, since ```development.json``` is not under source control.
-* Component configuration can be added to ```www/master/components/<component name>/config/development.json``` and it will be combined with the main app config files and compiled into the intermediary ```www/master/js/config/generated-config.js``` file.
+* Component configuration can be added to ```www/master/components/<component name>/config/development.json``` and it will be combined with the main app config files and compiled into the intermediary ```www/master/shared/config/generated-config.js``` file.
 * All ```generated-config.js``` is compiled into ```app.js```
 * Production config can be generated using ```gulp config --env production``` or ```gulp --env production```
+* The generated angular constant is named ```ENV``` with the shared root and each component having their own child configuration. For example,
+```
+www/master
+├── shared/config/development.json
+└── components
+    ├── dashboard/config/development.json
+    ├── graph/config/development.json
+    └── my_component/config/development.json
+```
+produces ```www/master/shared/config/generated-config.js```:
+```
+angular.module('kubernetesApp.config', [])
+.constant('ENV', {
+  '/': <www/master/shared/config/development.json>,
+  'dashboard': <www/master/components/dashboard/config/development.json>,
+  'graph': <www/master/components/graph/config/development.json>,
+  'my_component': <www/master/components/my_component/config/development.json>
+});
+```
 
 #### Kubernetes Server Configuration
 
