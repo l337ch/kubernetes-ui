@@ -80,8 +80,24 @@ describe('Kubernetes UI Graph', function() {
     toggleSource.click();
     // Just pull once to get a stable graph.
     pollOnce.click();
-    var firstNode = element(by.id('d3Node0'));
-    expect(firstNode).toBeDefined(firstNode);
+
+    // Add a custom locator to match on the d3 data backing the circle element.
+    by.addLocator('datumIdMatches',
+        function(datumId, opt_parentElement, opt_rootSelector) {
+            var matchingCircles = [];
+
+            window.d3.selectAll('circle').each(function (d) {
+                if (d && d.id === datumId) {
+                    matchingCircles.push(this);
+                }
+            });
+
+            return matchingCircles;
+        });
+
+    // This id matches a node defined in /www/master/shared/assets/sampleData1.json.
+    var firstNode = element(by.datumIdMatches('Process:k8s_POD.3099/24572'));
+    expect(firstNode).toBeDefined();
 
     // Now click to select this node.
     firstNode.click();
