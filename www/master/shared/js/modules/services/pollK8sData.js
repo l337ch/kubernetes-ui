@@ -84,14 +84,14 @@
       var updateModel = function(newModel) {
         var dedupe = function (dataModel) {
           if (dataModel.resources) {
-            dataModel.resources = _.uniq(dataModel.resources, function(resource) { 
-              return resource.id; 
+            dataModel.resources = _.uniq(dataModel.resources, function(resource) {
+              return resource.id;
             });
           }
 
           if (dataModel.relations) {
-            dataModel.relations = _.uniq(dataModel.relations, function(relation) { 
-              return relation.source + relation.target; 
+            dataModel.relations = _.uniq(dataModel.relations, function(relation) {
+              return relation.source + relation.target;
             });
           }
         };
@@ -186,7 +186,7 @@
     };
   };
 
-  angular.module("krakenApp.services")
+  angular.module("kubernetesApp.services")
     .provider("pollK8sDataService", ["lodash", pollK8sDataServiceProvider])
     .config(function(pollK8sDataServiceProvider, ENV) {
       if (ENV && ENV['/']) {

@@ -20,11 +20,11 @@ Kubernetes builds upon a decade and a half of experience at Google running produ
 
 ## Documentation
   - **Developer Documentation**
-    - for people who want to run kraken locally
+    - for people who want to run kubernetes-ui locally
     - in [www](www)
   - **Collaboration Documentation**
     - in [docs/devel](docs/devel/collab.md)
-    - for people who want to contribute code to kraken
+    - for people who want to contribute code to kubernetes-ui
     - covers development conventions
 
 ## Community, discussion and support

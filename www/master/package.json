@@ -2,7 +2,7 @@
   "name": "kubernetes-ui",
   "description": "UI for Kubernetes",
   "version": "0.3.0",
-  "repository": "https://github.com/kraken-people/kubernetes-ui",
+  "repository": "https://github.com/kubernetes-ui/kubernetes-ui",
   "license": "Apache",
   "private": true,
   "devDependencies": {
