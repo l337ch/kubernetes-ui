@@ -67,12 +67,12 @@ angular.module('kubernetesApp.config', [])
 
 #### Kubernetes server configuration
 
-**RECOMMENDED**: By default the k8s api server does not support CORS,
+**RECOMMENDED**: By default the Kubernetes api server does not support CORS,
   so the `kube-apiserver.service` must be started with
   `--cors_allowed_origins=.*` or `--cors_allowed_origins=http://<your
   host here>`
 
-**HACKS**: If you don't want to/cannot restart the k8s api server:
+**HACKS**: If you don't want to/cannot restart the Kubernetes api server:
 * Or you can start your browser with web security disabled. For
   Chrome, you can [launch](http://www.chromium.org/developers/how-tos/run-chromium-with-flags) it with flag ```--disable-web-security```.
 
