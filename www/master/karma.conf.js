@@ -13,6 +13,8 @@ module.exports = function(config){
       'app/assets/js/app.js',
       'app/assets/js/base.js',
       'app/assets/vendor/**/*.js',
+      'app/shared/**/*.js',
+      'master/shared/**/*.js',
       'master/test/**/*.js',
       'master/components/**/test/**/*.js'
     ],
