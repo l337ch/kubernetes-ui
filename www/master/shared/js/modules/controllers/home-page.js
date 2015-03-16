@@ -26,7 +26,7 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
   this.isSelected = isSelected;
   this.toggleOpen = toggleOpen;
   this.shouldLockOpen = shouldLockOpen;
-  $scope.toggleKrakenMenu = toggleKrakenMenu;
+  $scope.toggleKubernetesUiMenu = toggleKubernetesUiMenu;
 
   var mainContentArea = document.querySelector("[role='main']");
   var kubernetesUiMenu = document.querySelector("[role='kubernetes-ui-menu']");
