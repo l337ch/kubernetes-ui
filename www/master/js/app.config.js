@@ -1,5 +1,5 @@
-angular.module("krakenApp.config", []);
-angular.module('krakenApp.services',[]);
+angular.module('krakenApp.config', []);
+angular.module('krakenApp.services',['krakenApp.config']);
 
 app.config([
   '$routeProvider',
