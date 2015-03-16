@@ -1,4 +1,4 @@
-### Install Dependencies
+### Install dependencies
 
 We have two kinds of dependencies in this project: tools and angular framework code.  The tools help
 us manage and test the application.
@@ -22,7 +22,7 @@ Bower components should be refernced in one of the `vendor.json` files below:
 * `master/vendor.base.json` - 3rd party vendor javascript required to start the app. JS is compiled to `base.js` and loaded before `app.js`
 * `master/vendor.json` - 3rd party vendor scripts to make the app work, usually lazy loaded. Can be js or css. Copied to `vendor/*`.
 
-### Serving the App during Development
+### Serving the app during development
 
 The app can be served through `kubectl`, but for some types of review a local web server is convenient. One can be installed as follows:
 
@@ -38,7 +38,7 @@ http-server -a localhost -p 8000
 ```
 
 ### Configuration
-#### Configuration Settings
+#### Configuration settings
 A json file can be used by `gulp` to automatically create angular constants. This is useful for setting per environment variables such as api endpoints.
 *  ```www/master/shared/config/development.json``` or ```www/master/shared/config/production.json``` can be created from the ```www/master/shared/config/development.example.json``` file.
 * ```development.example.json``` should be kept up to date with default values, since ```development.json``` is not under source control.
@@ -65,7 +65,7 @@ angular.module('kubernetesApp.config', [])
 });
 ```
 
-#### Kubernetes Server Configuration
+#### Kubernetes server configuration
 
 **RECOMMENDED**: By default the k8s api server does not support CORS,
   so the `kube-apiserver.service` must be started with
@@ -76,7 +76,7 @@ angular.module('kubernetesApp.config', [])
 * Or you can start your browser with web security disabled. For
   Chrome, you can [launch](http://www.chromium.org/developers/how-tos/run-chromium-with-flags) it with flag ```--disable-web-security```.
 
-### Building a New Visualizer or Component
+### Building a new visualizer or component
 
 A custom visualizer can be created by adding files in the structure below
 * Angular js files can be placed in `master/components/<visualizer name>/js`. All js files will be minified and concatenated into `app/assets/app.js`
@@ -116,7 +116,7 @@ corresponding `www/master/components/**/test/modules/` directory.
 * For testing the chrome and the framework, write test files
   (*.spec.js) under the `www/master/test/modules/*` directory.
 
-#### End-to-End testing via Protractor
+#### End-to-end testing via Protractor
 To run the existing Protractor tests:
 * Install the CLIs: `sudo npm install -g protractor`.
 * Start the webdriver server: `sudo webdriver-manager start`
