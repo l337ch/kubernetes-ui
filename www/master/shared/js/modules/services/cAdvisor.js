@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  angular.module('krakenApp.services')
+  angular.module('kubernetesApp.services')
     .service('cAdvisorService', function($http, $q, ENV){
       var _baseUrl = function(minionIp){
         var minionPort = ENV['/']['cAdvisorPort'] || "8081";

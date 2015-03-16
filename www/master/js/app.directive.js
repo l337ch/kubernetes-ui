@@ -35,10 +35,10 @@ app.directive('includeReplace', function () {
       };
     }
   };
-}).directive("krakenMenu", function() {
+}).directive("kubernetesUiMenu", function() {
   'use strict';
   return {
-    templateUrl: "/views/partials/kraken-menu.tmpl.html"
+    templateUrl: "/views/partials/kubernetes-ui-menu.tmpl.html"
   };
 }).directive('menuToggle', function() {
   'use strict';

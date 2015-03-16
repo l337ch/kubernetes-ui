@@ -189,7 +189,7 @@ gulp.task('bundle-manifest', function(){
   })).pipe(gcallback(function() {
     stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
     .pipe(gulp.dest("js"));
-    var _appNS = 'krakenApp.';
+    var _appNS = 'kubernetesApp.';
     var _appSkeleton = require('./js/app.skeleton.json');
     stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"' ))
     .pipe(gulp.dest("js"));
@@ -320,12 +320,12 @@ gulp.task('styles:app', function() {
 
 
 // Environment based configuration
-// https://github.com/kraken-people/kubernetes-kraken/issues/21
+// https://github.com/kubernetes-ui/kubernetes-ui/issues/21
 
 gulp.task('config', ['config:base', 'config:copy']);
 
 gulp.task('config:base', function () {
-  return stringSrc('generated-config.js', 'angular.module("krakenApp.config", [])' + '\n' + '.constant("ENV", {})')
+  return stringSrc('generated-config.js', 'angular.module("kubernetesApp.config", [])' + '\n' + '.constant("ENV", {})')
     .pipe(gulp.dest(source.config.dest));
 });
 
@@ -344,7 +344,7 @@ gulp.task('config:copy', function () {
       return new Buffer(JSON.stringify({'ENV': env}));
     }))
     .pipe(ngConstant({
-      name: 'krakenApp.config',
+      name: 'kubernetesApp.config',
       deps: [],
       constants: { ngConstant: true }
     }))

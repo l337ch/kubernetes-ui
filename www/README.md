@@ -54,8 +54,6 @@ A json file can be used by `gulp` to automatically create angular constants. Thi
   host here>`
 
 **HACKS**: If you don't want to/cannot restart the k8s api server:
-* You can set up [a node proxy](https://github.com/bcbroussard/kraken-proxy) for the k8s api server which adds
- ```Access-Control-Allow-Origin: *``` for you.
 * Or you can start your browser with web security disabled. For
   Chrome, you can [launch](http://www.chromium.org/developers/how-tos/run-chromium-with-flags) it with flag ```--disable-web-security```.
 

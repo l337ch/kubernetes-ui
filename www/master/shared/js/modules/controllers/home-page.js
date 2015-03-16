@@ -29,7 +29,7 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
   $scope.toggleKrakenMenu = toggleKrakenMenu;
 
   var mainContentArea = document.querySelector("[role='main']");
-  var krakenMenu = document.querySelector("[role='kraken-menu']");
+  var kubernetesUiMenu = document.querySelector("[role='kubernetes-ui-menu']");
 
   // *********************
   // Internal methods
@@ -37,14 +37,14 @@ function($scope, $timeout, $mdSidenav, menu, $rootScope) {
 
   var _t = false;
 
-  $scope.showKrakenMenu = false;
+  $scope.showKubernetesUiMenu = false;
 
   function shouldLockOpen() {
     return _t;
   }
 
-  function toggleKrakenMenu() {
-    $scope.showKrakenMenu = !$scope.showKrakenMenu;
+  function toggleKubernetesUiMenu() {
+    $scope.showKubernetesUiMenu = !$scope.showKubernetesUiMenu;
   }
 
   function closeMenu() {
