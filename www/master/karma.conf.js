@@ -1,9 +1,9 @@
-module.exports = function(config){
+module.exports = function(config) {
   config.set({
 
-    basePath : '../',
+    basePath: '../',
 
-    files : [
+    files: [
       'master/bower_components/angular/angular.js',
       'master/bower_components/angular-aria/angular-aria.js',
       'master/bower_components/angular-material/angular-material.js',
@@ -19,23 +19,15 @@ module.exports = function(config){
       'master/components/**/test/**/*.js'
     ],
 
-    autoWatch : true,
+    autoWatch: true,
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    browsers: ['Chrome'],
 
-    plugins : [
-            'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-jasmine',
-            'karma-junit-reporter'
-            ],
+    plugins: ['karma-chrome-launcher', 'karma-firefox-launcher', 'karma-jasmine', 'karma-junit-reporter'],
 
-    junitReporter : {
-      outputFile: 'test_out/unit.xml',
-      suite: 'unit'
-    }
+    junitReporter: {outputFile: 'test_out/unit.xml', suite: 'unit'}
 
   });
 };

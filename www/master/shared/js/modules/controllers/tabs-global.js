@@ -7,10 +7,10 @@ app.controller('TabCtrl', [
   '$scope',
   '$location',
   'tabs',
-function($scope, $location, tabs) {
-  $scope.tabs = tabs;
+  function($scope, $location, tabs) {
+    $scope.tabs = tabs;
 
-  $scope.switchTab = function(index) {
+    $scope.switchTab = function(index) {
       var location_path = $location.path();
       var tab = tabs[index];
 
@@ -20,5 +20,6 @@ function($scope, $location, tabs) {
           $location.path(path);
         }
       }
+    };
   }
-}]);
+]);

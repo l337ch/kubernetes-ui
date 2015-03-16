@@ -1,53 +1,35 @@
-var gulp        = require('gulp'),
-    concat      = require('gulp-concat'),
-    uglify      = require('gulp-uglify'),
+var gulp = require('gulp'), concat = require('gulp-concat'), uglify = require('gulp-uglify'),
     // jade        = require('gulp-jade'),
-    less        = require('gulp-less'),
-    path        = require('path'),
-    livereload  = require('gulp-livereload'), // Livereload plugin needed: https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
+    less = require('gulp-less'), path = require('path'),
+    livereload = require(
+        'gulp-livereload'),  // Livereload plugin needed:
+                             // https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
     // marked      = require('marked'), // For :markdown filter in jade
-    path        = require('path'),
-    changed     = require('gulp-changed'),
-    prettify    = require('gulp-html-prettify'),
-    w3cjs       = require('gulp-w3cjs'),
-    rename      = require('gulp-rename'),
+    path = require('path'),
+    changed = require('gulp-changed'), prettify = require('gulp-html-prettify'), w3cjs = require('gulp-w3cjs'),
+    rename = require('gulp-rename'),
     // flip        = require('css-flip'),
-    through     = require('through2'),
-    gutil       = require('gulp-util'),
-    htmlify     = require('gulp-angular-htmlify'),
-    minifyCSS   = require('gulp-minify-css'),
-    gulpFilter  = require('gulp-filter'),
-    expect      = require('gulp-expect-file'),
-    gulpsync    = require('gulp-sync')(gulp),
-    ngAnnotate  = require('gulp-ng-annotate'),
-    sourcemaps  = require('gulp-sourcemaps'),
-    del         = require('del'),
-    jsoncombine = require('gulp-jsoncombine'),
-    ngConstant  = require('gulp-ng-constant'),
-    argv        = require('yargs').argv,
-    foreach     = require('gulp-foreach'),
-    gcallback   = require('gulp-callback'),
-    tag_version = require('gulp-tag-version'),
-    PluginError = gutil.PluginError;
+    through = require('through2'), gutil = require('gulp-util'), htmlify = require('gulp-angular-htmlify'),
+    minifyCSS = require('gulp-minify-css'), gulpFilter = require('gulp-filter'), expect = require('gulp-expect-file'),
+    gulpsync = require('gulp-sync')(gulp), ngAnnotate = require('gulp-ng-annotate'),
+    sourcemaps = require('gulp-sourcemaps'), del = require('del'), jsoncombine = require('gulp-jsoncombine'),
+    ngConstant = require('gulp-ng-constant'), argv = require('yargs').argv, foreach = require('gulp-foreach'),
+    gcallback = require('gulp-callback'), tag_version = require('gulp-tag-version'), PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
 var lvr_port = 35729;
 
 var W3C_OPTIONS = {
   // Set here your local validator if your using one. leave it empty if not
-  //uri: 'http://validator/check',
+  // uri: 'http://validator/check',
   doctype: 'HTML5',
   output: 'json',
   // Remove some messages that angular will always display.
   filter: function(message) {
-    if( /Element head is missing a required instance of child element title/.test(message) )
-      return false;
-    if( /Attribute .+ not allowed on element .+ at this point/.test(message) )
-      return false;
-    if( /Element .+ not allowed as child of element .+ in this context/.test(message) )
-      return false;
-    if(/Comments seen before doctype./.test(message))
-      return false;
+    if (/Element head is missing a required instance of child element title/.test(message)) return false;
+    if (/Attribute .+ not allowed on element .+ at this point/.test(message)) return false;
+    if (/Element .+ not allowed as child of element .+ in this context/.test(message)) return false;
+    if (/Comments seen before doctype./.test(message)) return false;
   }
 };
 
@@ -57,46 +39,39 @@ var useSourceMaps = false;
 
 // ignore everything that begins with underscore
 var hidden_files = '**/_*.*';
-var ignored_files = '!'+hidden_files;
+var ignored_files = '!' + hidden_files;
 
 var component_hidden_files = '**/js/**/*.*';
-var component_ignored_files = '!'+component_hidden_files;
+var component_ignored_files = '!' + component_hidden_files;
 
 // VENDOR CONFIG
 var vendor = {
   // vendor scripts required to start the app
-  base: {
-    source: require('./vendor.base.json'),
-    dest: '../app/assets/js',
-    name: 'base.js'
-  },
+  base: {source: require('./vendor.base.json'), dest: '../app/assets/js', name: 'base.js'},
   // vendor scripts to make to app work. Usually via lazy loading
-  app: {
-    source: require('./vendor.json'),
-    dest: '../app/vendor'
-  }
+  app: {source: require('./vendor.json'), dest: '../app/vendor'}
 };
 
 // SOURCES CONFIG
 var source = {
   scripts: {
-    app:    [
-              'js/app.preinit.js',
-              'js/app.init.js',
-              'js/app.config.js',
-              'js/app.directive.js',
-              'js/app.run.js',
-              'js/app.service.js',
-              'js/app.provider.js',
-              'js/tabs.js',
-              'js/sections.js',
-              'shared/config/generated-config.js',
-              'shared/js/modules/*.js',
-              'shared/js/modules/controllers/*.js',
-              'shared/js/modules/directives/*.js',
-              'shared/js/modules/services/*.js',
-              'components/*/js/**/*.js'
-            ],
+    app: [
+      'js/app.preinit.js',
+      'js/app.init.js',
+      'js/app.config.js',
+      'js/app.directive.js',
+      'js/app.run.js',
+      'js/app.service.js',
+      'js/app.provider.js',
+      'js/tabs.js',
+      'js/sections.js',
+      'shared/config/generated-config.js',
+      'shared/js/modules/*.js',
+      'shared/js/modules/controllers/*.js',
+      'shared/js/modules/directives/*.js',
+      'shared/js/modules/services/*.js',
+      'components/*/js/**/*.js'
+    ],
     watch: ['js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
   },
   // templates: {
@@ -118,28 +93,42 @@ var source = {
     app: {
       // , 'components/*/less/*.less'
       source: ['less/app/base.less', 'components/*/less/*.less'],
-      dir:  ['less/app', 'components'],
+      dir: ['less/app', 'components'],
       watch: ['less/*.less', 'less/**/*.less', 'components/**/less/*.less', 'components/**/less/**/*.less']
 
     }
   },
 
   components: {
-    source: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/*/less/*.*', '!components/**/less/**/*.*'],
-    dest:  'components',
-    watch: ['components/**/*.*', component_ignored_files, '!components/**/config/*.*', '!master/shared/js/modules/config.js', '!components/**/less/*.*']
+    source: [
+      'components/**/*.*',
+      component_ignored_files,
+      '!components/**/config/*.*',
+      '!master/shared/js/modules/config.js',
+      '!components/*/less/*.*',
+      '!components/**/less/**/*.*'
+    ],
+    dest: 'components',
+    watch: [
+      'components/**/*.*',
+      component_ignored_files,
+      '!components/**/config/*.*',
+      '!master/shared/js/modules/config.js',
+      '!components/**/less/*.*'
+    ]
   },
 
   config: {
-    watch: ['shared/config/development.json', 'shared/config/production.json', 'shared/config/development.json', 'shared/config/production.json'],
+    watch: [
+      'shared/config/development.json',
+      'shared/config/production.json',
+      'shared/config/development.json',
+      'shared/config/production.json'
+    ],
     dest: 'shared/config'
   },
 
-  assets: {
-    source: ['shared/assets/**/*.*'],
-    dest: 'shared/assets',
-    watch: ['shared/assets/**/*.*']
-  }
+  assets: {source: ['shared/assets/**/*.*'], dest: 'shared/assets', watch: ['shared/assets/**/*.*']}
 
   //,
   // bootstrap: {
@@ -151,85 +140,71 @@ var source = {
 
 // BUILD TARGET CONFIG
 var build = {
-  scripts: {
-    app: {
-      main: 'app.js',
-      dir: '../app/assets/js'
-    }
-  },
+  scripts: {app: {main: 'app.js', dir: '../app/assets/js'}},
   assets: '../app/shared/assets',
   styles: '../app/assets/css',
-  components: {
-    dir: '../app/components'
-  }
+  components: {dir: '../app/components'}
 };
 
 function stringSrc(filename, string) {
-  var src = require('stream').Readable({ objectMode: true });
-  src._read = function () {
-    this.push(new gutil.File({ cwd: "", base: "", path: filename, contents: new Buffer(string) }));
+  var src = require('stream').Readable({objectMode: true});
+  src._read = function() {
+    this.push(new gutil.File({cwd: "", base: "", path: filename, contents: new Buffer(string)}));
     this.push(null);
-  }
-  return src;
+  } return src;
 }
 
 //---------------
 // TASKS
 //---------------
 
-gulp.task('bundle-manifest', function(){
+gulp.task('bundle-manifest', function() {
   var components = [];
   var namespace = [];
-  var stream = gulp.src('./components/*/manifest.json')
-  .pipe(foreach(function(stream, file) {
-    var manifestFile = require(file.path);
-    components.push(manifestFile.name);
-    namespace.push(manifestFile.namespace);
-    return stream;
-  })).pipe(gcallback(function() {
-    stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);')
-    .pipe(gulp.dest("js"));
-    var _appNS = 'kubernetesApp.';
-    var _appSkeleton = require('./js/app.skeleton.json');
-    stringSrc("app.preinit.js", _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"' ))
-    .pipe(gulp.dest("js"));
-  }));
+  gulp.src('./components/*/manifest.json')
+      .pipe(foreach (function(stream, file) {
+        var manifestFile = require(file.path);
+        components.push(manifestFile.name);
+        namespace.push(manifestFile.namespace);
+        return stream;
+      }))
+      .pipe(gcallback(function() {
+        stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);').pipe(gulp.dest("js"));
+        var _appNS = 'kubernetesApp.';
+        var _appSkeleton = require('./js/app.skeleton.json');
+        stringSrc("app.preinit.js",
+                  _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"'))
+            .pipe(gulp.dest("js"));
+      }));
 });
 
-gulp.task('bundle-manifest-sections', function(){
+gulp.task('bundle-manifest-sections', function() {
   var sections = [];
-  var stream = gulp.src('./components/*/manifest.json')
-  .pipe(foreach(function(stream, file) {
-                var manifestFile = require(file.path);
-                sections.push(JSON.stringify(manifestFile.sections));
-                return stream
-                })).pipe(gcallback(function() {
-    var output_sections = '';
-    for (i = 0; i < sections.length; i++) {
-      if (output_sections.indexOf(sections[i].substr(1,sections[i].length - 2)) == -1) {
-        output_sections += sections[i].substr(1,sections[i].length - 2) + ',';
-      }
-    }
-    var output_section = '[' + output_sections.substr(0, output_sections.length -1) + ']';
-    var _provider = "app.provider('manifest', function manifestProvider() { " +
-        "var sections = '%s';" +
-        "this.getRoutes = function() {" +
-        "    return sections;" +
-        "};" +
-        "this.$get = ['sections', function(sections){" +
-        "    var manifest = {};" +
-        "    manifest.getRoutes = function () {" +
-        "      return sections;" +
-        "    };" +
-        "" +
-        "    return manifest;" +
-        "  }];" +
-        "});";
-    var _provider_combined = _provider.replace('%s', output_section);
-    var _file_contents = _provider_combined;
-    _file_contents += '\n' + 'app.value("sections", ' + output_section +');\n';
-    stringSrc("sections.js", _file_contents).pipe(gulp.dest("js"));
-  }));
+  gulp.src('./components/*/manifest.json')
+      .pipe(foreach (function(stream, file) {
+        var manifestFile = require(file.path);
+        sections.push(JSON.stringify(manifestFile.sections));
+        return stream
+      }))
+      .pipe(gcallback(function() {
+        var output_sections = '';
+        for (i = 0; i < sections.length; i++) {
+          if (output_sections.indexOf(sections[i].substr(1, sections[i].length - 2)) == -1) {
+            output_sections += sections[i].substr(1, sections[i].length - 2) + ',';
+          }
+        }
+        var output_section = '[' + output_sections.substr(0, output_sections.length - 1) + ']';
+        var _provider = "app.provider('manifest', function manifestProvider() { " + "var sections = '%s';" +
+                        "this.getRoutes = function() {" + "    return sections;" + "};" +
+                        "this.$get = ['sections', function(sections){" + "    var manifest = {};" +
+                        "    manifest.getRoutes = function () {" + "      return sections;" + "    };" + "" +
+                        "    return manifest;" + "  }];" + "});";
+        var _provider_combined = _provider.replace('%s', output_section);
+        var _file_contents = _provider_combined;
+        _file_contents += '\n' +
+                          'app.value("sections", ' + output_section + ');\n';
+        stringSrc("sections.js", _file_contents).pipe(gulp.dest("js"));
+      }));
 });
 
 // JS APP
@@ -237,18 +212,17 @@ gulp.task('scripts:app', ['bundle-manifest', 'bundle-manifest-sections', 'config
 
 // JS APP BUILD
 gulp.task('scripts:app:base', function() {
-    // Minify and copy all JavaScript (except vendor scripts)
-    return gulp.src(source.scripts.app)
-        .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
-        .pipe(concat(build.scripts.app.main))
-        .pipe(ngAnnotate())
-        .on("error", handleError)
-        .pipe( isProduction ? uglify({preserveComments:'some'}) : gutil.noop() )
-        .on("error", handleError)
-        .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop() )
-        .pipe(gulp.dest(build.scripts.app.dir));
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(source.scripts.app)
+      .pipe(useSourceMaps ? sourcemaps.init() : gutil.noop())
+      .pipe(concat(build.scripts.app.main))
+      .pipe(ngAnnotate())
+      .on("error", handleError)
+      .pipe(isProduction ? uglify({preserveComments: 'some'}) : gutil.noop())
+      .on("error", handleError)
+      .pipe(useSourceMaps ? sourcemaps.write() : gutil.noop())
+      .pipe(gulp.dest(build.scripts.app.dir));
 });
-
 
 // VENDOR BUILD
 gulp.task('scripts:vendor', ['scripts:vendor:base', 'scripts:vendor:app']);
@@ -256,13 +230,12 @@ gulp.task('scripts:vendor', ['scripts:vendor:base', 'scripts:vendor:app']);
 //  This will be included vendor files statically
 gulp.task('scripts:vendor:base', function() {
 
-    // Minify and copy all JavaScript (except vendor scripts)
-    return gulp.src(vendor.base.source)
-        .pipe(expect(vendor.base.source))
-        .pipe(uglify())
-        .pipe(concat(vendor.base.name))
-        .pipe(gulp.dest(vendor.base.dest))
-        ;
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(vendor.base.source)
+      .pipe(expect(vendor.base.source))
+      .pipe(uglify())
+      .pipe(concat(vendor.base.name))
+      .pipe(gulp.dest(vendor.base.dest));
 });
 
 // copy file from bower folder into the app vendor folder
@@ -279,24 +252,20 @@ gulp.task('scripts:vendor:app', function() {
       .pipe(cssFilter)
       .pipe(minifyCSS())
       .pipe(cssFilter.restore())
-      .pipe( gulp.dest(vendor.app.dest) );
+      .pipe(gulp.dest(vendor.app.dest));
 
 });
 
 // APP LESS
 gulp.task('styles:app', function() {
   return gulp.src(source.styles.app.source)
-      .pipe(foreach(function(stream, file) {
-        return stringSrc('import.less', '@import "' + file.relative + '";\n');
-      }))
+      .pipe(foreach (function(stream, file) { return stringSrc('import.less', '@import "' + file.relative + '";\n'); }))
       .pipe(concat('app.less'))
-      .pipe( useSourceMaps ? sourcemaps.init() : gutil.noop())
-      .pipe(less({
-          paths: source.styles.app.dir
-      }))
+      .pipe(useSourceMaps ? sourcemaps.init() : gutil.noop())
+      .pipe(less({paths: source.styles.app.dir}))
       .on("error", handleError)
-      .pipe( isProduction ? minifyCSS() : gutil.noop() )
-      .pipe( useSourceMaps ? sourcemaps.write() : gutil.noop())
+      .pipe(isProduction ? minifyCSS() : gutil.noop())
+      .pipe(useSourceMaps ? sourcemaps.write() : gutil.noop())
       .pipe(gulp.dest(build.styles));
 });
 
@@ -318,37 +287,35 @@ gulp.task('styles:app', function() {
 //         .pipe(gulp.dest(build.styles));
 // });
 
-
 // Environment based configuration
 // https://github.com/kubernetes-ui/kubernetes-ui/issues/21
 
 gulp.task('config', ['config:base', 'config:copy']);
 
-gulp.task('config:base', function () {
-  return stringSrc('generated-config.js', 'angular.module("kubernetesApp.config", [])' + '\n' + '.constant("ENV", {})')
-    .pipe(gulp.dest(source.config.dest));
+gulp.task('config:base', function() {
+  return stringSrc('generated-config.js', 'angular.module("kubernetesApp.config", [])' +
+                                              '\n' +
+                                              '.constant("ENV", {})').pipe(gulp.dest(source.config.dest));
 });
 
-gulp.task('config:copy', function () {
-  var environment = argv.env || 'development'; // change this to whatever default environment you need.
+gulp.task('config:copy', function() {
+  var environment = argv.env || 'development';  // change this to whatever default environment you need.
 
   return gulp.src(['shared/config/' + environment + '.json', 'components/**/config/' + environment + '.json'])
-    .pipe(jsoncombine('generated-config.js', function(data) {
-      var env = Object.keys(data).reduce(function(result, key) {
-        // Map the key "environment" to "/" and the keys "component/config/environment" to "component".
-        var newKey = key.replace(environment, '/').replace(/\/config\/\/$/, '');
-        result[newKey] = data[key];
-        return result;
-      }, {});
+      .pipe(jsoncombine('generated-config.js',
+                        function(data) {
+                          var env = Object.keys(data).reduce(function(result, key) {
+                            // Map the key "environment" to "/" and the keys "component/config/environment" to
+                            // "component".
+                            var newKey = key.replace(environment, '/').replace(/\/config\/\/$/, '');
+                            result[newKey] = data[key];
+                            return result;
+                          }, {});
 
-      return new Buffer(JSON.stringify({'ENV': env}));
-    }))
-    .pipe(ngConstant({
-      name: 'kubernetesApp.config',
-      deps: [],
-      constants: { ngConstant: true }
-    }))
-    .pipe(gulp.dest(source.config.dest));
+                          return new Buffer(JSON.stringify({'ENV': env}));
+                        }))
+      .pipe(ngConstant({name: 'kubernetesApp.config', deps: [], constants: {ngConstant: true}}))
+      .pipe(gulp.dest(source.config.dest));
 });
 
 gulp.task('copy:components', function() {
@@ -358,7 +325,7 @@ gulp.task('copy:components', function() {
 
   del.sync([build.components.dir], {force: true});
 
-    return gulp.src(source.components.source, {base: 'components'})
+  return gulp.src(source.components.source, {base: 'components'})
       .pipe(expect(source.components.source))
       .pipe(jsFilter)
       .pipe(uglify())
@@ -366,23 +333,20 @@ gulp.task('copy:components', function() {
       .pipe(cssFilter)
       .pipe(minifyCSS())
       .pipe(cssFilter.restore())
-      .pipe( gulp.dest(build.components.dir) );
+      .pipe(gulp.dest(build.components.dir));
 });
 
 gulp.task('copy:shared-assets', function() {
   del.sync([build.assets], {force: true});
 
   return gulp.src(source.assets.source, {base: 'shared/assets'})
-    .pipe(expect(source.assets.source))
-    .pipe(gulp.dest(build.assets));
+      .pipe(expect(source.assets.source))
+      .pipe(gulp.dest(build.assets));
 });
-
 
 // Assuming there's "version: 1.2.3" in package.json,
 // tag the last commit as "v1.2.3"//
-gulp.task('tag', function() {
-  return gulp.src(['./package.json']).pipe(tag_version());
-});
+gulp.task('tag', function() { return gulp.src(['./package.json']).pipe(tag_version()); });
 
 // // BOOSTRAP
 // gulp.task('bootstrap', function() {
@@ -459,31 +423,30 @@ gulp.task('tag', function() {
 gulp.task('watch', function() {
   livereload.listen();
 
-  gulp.watch(source.scripts.watch,           ['scripts:app']);
-  gulp.watch(source.styles.app.watch,        ['styles:app']);
-  gulp.watch(source.components.watch,     ['copy:components']);
-  gulp.watch(source.assets.watch,     ['copy:shared-assets']);
+  gulp.watch(source.scripts.watch, ['scripts:app']);
+  gulp.watch(source.styles.app.watch, ['styles:app']);
+  gulp.watch(source.components.watch, ['copy:components']);
+  gulp.watch(source.assets.watch, ['copy:shared-assets']);
   // gulp.watch(source.templates.pages.watch,   ['templates:pages']);
   // gulp.watch(source.templates.views.watch,   ['templates:views']);
   // gulp.watch(source.templates.app.watch,     ['templates:app']);
 
   gulp.watch([
 
-      '../app/**'
+                 '../app/**'
 
-  ]).on('change', function(event) {
+  ])
+      .on('change', function(event) {
 
-      livereload.changed( event.path );
+        livereload.changed(event.path);
 
-  });
+      });
 
 });
-
 
 //---------------
 // DEFAULT TASK
 //---------------
-
 
 // build for production (minify)
 gulp.task('build', ['prod', 'default']);
@@ -491,33 +454,29 @@ gulp.task('prod', function() { isProduction = true; });
 
 // build with sourcemaps (no minify)
 gulp.task('sourcemaps', ['usesources', 'default']);
-gulp.task('usesources', function(){ useSourceMaps = true; });
+gulp.task('usesources', function() { useSourceMaps = true; });
 
 // default (no minify)
-gulp.task('default', gulpsync.sync([
-          'scripts:vendor',
-          'copy:components',
-          'scripts:app',
-          'start'
-        ]), function(){
+gulp.task('default', gulpsync.sync(['scripts:vendor', 'copy:components', 'scripts:app', 'start']), function() {
 
   gutil.log(gutil.colors.cyan('************'));
-  gutil.log(gutil.colors.cyan('* All Done *'), 'You can start editing your code, LiveReload will update your browser after any change..');
+  gutil.log(gutil.colors.cyan('* All Done *'),
+            'You can start editing your code, LiveReload will update your browser after any change..');
   gutil.log(gutil.colors.cyan('************'));
 
 });
 
-gulp.task('start',[
-          'styles:app',
-          'copy:components',
-          'copy:shared-assets',
-          // 'templates:app',
-          // 'templates:pages',
-          // 'templates:views',
-          'watch'
-        ]);
+gulp.task('start', [
+  'styles:app',
+  'copy:components',
+  'copy:shared-assets',
+  // 'templates:app',
+  // 'templates:pages',
+  // 'templates:views',
+  'watch'
+]);
 
-gulp.task('done', function(){
+gulp.task('done', function() {
   console.log('All Done!! You can start editing your code, LiveReload will update your browser after any change..');
 });
 
