@@ -10,10 +10,11 @@ module.exports = function(config) {
       'master/bower_components/angular-mocks/angular-mocks.js',
       'master/bower_components/angular-route/angular-route.js',
       'master/bower_components/hammerjs/hammer.js',
+      'master/bower_components/lodash/dist/lodash.js',
       'app/assets/js/app.js',
       'app/assets/js/base.js',
-      'app/assets/vendor/**/*.js',
       'app/shared/**/*.js',
+      'app/vendor/**/*.js',
       'master/shared/**/*.js',
       'master/test/**/*.js',
       'master/components/**/test/**/*.js'
