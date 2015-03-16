@@ -19,7 +19,8 @@
           // hack
           $http.get(fullUrl).success(function(data) {
             deferred.resolve(data);
-          }).error(function(data, status) { deferred.reject('There was an error') }) return deferred.promise;
+          }).error(function(data, status) { deferred.reject('There was an error') });
+          return deferred.promise;
         }
 
         this.getContainerInfo = getContainerInfo;
@@ -37,7 +38,8 @@
 
           $http.post(fullUrl, request)
               .success(function(data) { deferred.resolve(data); })
-              .error(function() { deferred.reject('There was an error') }) return deferred.promise;
+              .error(function() { deferred.reject('There was an error') });
+          return deferred.promise;
         }
 
         this.getDataForMinion = function(minionIp) {

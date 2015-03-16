@@ -1,13 +1,11 @@
 var gulp = require('gulp'), concat = require('gulp-concat'), uglify = require('gulp-uglify'),
     // jade        = require('gulp-jade'),
     less = require('gulp-less'), path = require('path'),
-    livereload = require(
-        'gulp-livereload'),  // Livereload plugin needed:
-                             // https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
+    livereload = require('gulp-livereload'),  // Livereload plugin needed:
+    // https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
     // marked      = require('marked'), // For :markdown filter in jade
-    path = require('path'),
-    changed = require('gulp-changed'), prettify = require('gulp-html-prettify'), w3cjs = require('gulp-w3cjs'),
-    rename = require('gulp-rename'),
+    path = require('path'), changed = require('gulp-changed'), prettify = require('gulp-html-prettify'),
+    w3cjs = require('gulp-w3cjs'), rename = require('gulp-rename'),
     // flip        = require('css-flip'),
     through = require('through2'), gutil = require('gulp-util'), htmlify = require('gulp-angular-htmlify'),
     minifyCSS = require('gulp-minify-css'), gulpFilter = require('gulp-filter'), expect = require('gulp-expect-file'),
