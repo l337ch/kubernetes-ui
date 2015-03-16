@@ -151,7 +151,8 @@ function stringSrc(filename, string) {
   src._read = function() {
     this.push(new gutil.File({cwd: "", base: "", path: filename, contents: new Buffer(string)}));
     this.push(null);
-  } return src;
+  };
+  return src;
 }
 
 //---------------
