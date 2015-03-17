@@ -78,22 +78,7 @@ angular.module('kubernetesApp.config', [])
 
 ### Building a new visualizer or component
 
-A custom visualizer can be created by adding files in the structure below
-* Angular js files can be placed in `master/components/<visualizer name>/js`. All js files will be minified and concatenated into `app/assets/app.js`
-* CSS, images, and html files can be placed in `master/components/<component name>`. All files (except .js) will be copied to `app/components/<component name>` in the same folder structure. The directory will be regenerated on each new gulp build. An example directory structure for a _graph-visualizer_ is below:
-```
-graph-visualizer
-├── css
-├── img
-├── js
-│   └── modules
-│       ├── controllers
-│       ├── directives
-│       └── services
-├── pages
-└── views
-    └── partials
-```
+See [master/components/README.md](master/components/README.md).
 
 ### Testing
 Currently kuberntes-ui includes both unit-testing (run via [Karma](http://karma-runner.github.io/0.12/index.html)) and
