@@ -9,7 +9,7 @@
     var useSampleData = false;
     this.setUseSampleData = function(value) { useSampleData = value; };
 
-    var sampleDataFiles = [ "shared/assets/sampleData1.json" ];
+    var sampleDataFiles = ["shared/assets/sampleData1.json"];
     this.setSampleDataFiles = function(value) { sampleDataFiles = value; };
 
     var dataServer = "http://localhost:5555/cluster";
