@@ -45,7 +45,7 @@ describe('Kubernetes UI Graph', function() {
 
     var details = element(by.id('details'));
     expect(details).toBeDefined();
-    expect(details.isDisplayed()).toBe(true);
+    expect(details.isDisplayed()).toBe(false);
   });
 
   it('should have all the graph working correctly', function() {
