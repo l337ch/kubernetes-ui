@@ -9,11 +9,10 @@
     var useSampleData = false;
     this.setUseSampleData = function(value) { useSampleData = value; };
 
-    var sampleDataFiles =
-        ["shared/assets/sampleData1.json", "shared/assets/sampleData2.json", "shared/assets/sampleData3.json"];
+    var sampleDataFiles = [ "shared/assets/sampleData1.json" ];
     this.setSampleDataFiles = function(value) { sampleDataFiles = value; };
 
-    var dataServer = "http://localhost:8001/graph";
+    var dataServer = "http://localhost:5555/cluster";
     this.setDataServer = function(value) { dataServer = value; };
 
     var pollMinIntervalSec = 10;
