@@ -7,71 +7,72 @@ Each component has its own directory, manifest file, HTML views, Angular provide
 
 ###Manifest file
 
-The JSON-formatted manifested file, named ```manifest.json```, is located at the root of a component and provides the core information about it.
+The JSON-formatted manifest file, named ```manifest.json```, is located at the root of a component. Based on the component directory name and the contents of the manifest, the Kubernetes UI automatically adds a tab to the chrome, a dependency on the component's AngularJS module to main AngularJS app and Angular routes for the component.
 
-*The following code shows the supported manifest fields for Components, with
-links to the page that discusses each field.*
-
+For example, consider a manifest file at ```www/master/components/foo_component/manifest.json```:
 ```
 {
-  "manifest_version": 1,
-  "name": "Graph",
-  "version": "1",
-  "namespace": "Graph",
-  "default_locale": "en",
-  "description": "Force Directed Graph",
-  "icons": {},
-  "sections": [
+  "routes": [
     {
-      "name": "Graph",
-      "url": "/graph",
-      "type": "link",
-      "templateUrl": "/components/graph/pages/home.html"
+      "url": "/",
+      "templateUrl": "/components/foo_component/pages/home.html"
     },
     {
-      "name": "Graph",
-      "url": "/graph/inspect",
-      "type": "link",
-      "templateUrl": "/components/graph/pages/inspect.html",
-      "css": "/components/graph/css/show-details-table.css"
-    },
-    {
-      "name": "Graph",
-      "type": "heading",
-      "children": [
-        {
-          "name": "Graph",
-          "type": "toggle",
-          "url": "/graph",
-          "templateUrl": "/components/graph/pages/home.html",
-          "pages": [
-            {
-              "name": "Test",
-              "url": "/graph/test",
-              "type": "link",
-              "templateUrl": "/components/graph/pages/home.html"
-            }
-          ]
-        }
-      ]
+      "url": "/kittens",
+      "templateUrl": "/components/foo_component/pages/kittens.html",
+      "css": "/components/foo_component/css/kittens.css"
     }
   ]
 }
 ```
 
-####Field reference
-#####manifest_version
-Required. String. Monotonically increasing.
-#####name
-Required. String. Name to be displayed on the tab.
-#####version
-Required. Version string.
-#####default_locale
-String. Default locale for the component.
-#####description
-String. A plain-text description of the component.
-#####icons
-Object. No clue?! Remove?!
+From the name of the component directory, the Kubernetes UI
+* creates a tab called "Foo Component",
+* adds Angular module ```kubernetesApp.components.fooComponent``` to the dependencies of ```kubernetesApp```, and
+* defines Angular routes ```/foo_component/``` and ```/foo_component/kittens```.
+
+####Manifest schema
+
+```
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Very brief summary of the component. Use a README.md file for detailed descriptions."
+    },
+    "routes": {
+      "type": "array",
+      "description": "Angular routes for the component.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Short description of the route."
+          },
+          "url": {
+            "type": "string",
+            "description": "Route location relative to '/<component>'."
+          },
+          "templateUrl": {
+            "type": "string",
+            "description": "Absolute location of the HTML template."
+          },
+          "css": {
+            "type": "string",
+            "description": "Absolute location of CSS to use with this route."
+          }
+        },
+        "required": ["url", "templateUrl"]
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["routes"]
+}
+```
 
 Content available under the [CC-By 3.0
 license](http://creativecommons.org/licenses/by/3.0/)
