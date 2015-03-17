@@ -168,12 +168,16 @@ gulp.task('bundle-manifest', function() {
   gulp.src('./components/*/manifest.json')
       .pipe(foreach (function(stream, file) {
         var component = manifestDirectory(file);
-        components.push(changeCase.sentenceCase(component));
+        components.push(component);
         namespace.push(changeCase.camelCase(component));
         return stream;
       }))
       .pipe(gcallback(function() {
-        stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);').pipe(gulp.dest("js"));
+        var tabs = [];
+        components.forEach(function(component) {
+          tabs.push({component: component, title: changeCase.titleCase(component)});
+        });
+        stringSrc("tabs.js", 'app.value("tabs", ' + JSON.stringify(tabs) + ');').pipe(gulp.dest("js"));
         var _appNS = 'kubernetesApp.components.';
         var _appSkeleton = require('./js/app.skeleton.json');
         stringSrc("app.preinit.js",

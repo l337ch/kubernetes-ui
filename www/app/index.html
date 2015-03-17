@@ -45,7 +45,7 @@
     <md-whiteframe class="md-whiteframe-z2" layout layout-align="center center">
       <div ng-controller="TabCtrl" class="tabsDefaultTabs">
         <md-tabs md-selected="0">
-          <md-tab ng-repeat="tab in tabs" md-on-select="switchTab($index)" label="{{tab}}">
+          <md-tab ng-repeat="tab in tabs" md-on-select="switchTab($index)" label="{{tab.title}}">
             <div class="demo-tab tab{{$index%4}}" layout="column" layout-fill></div>
           </md-tab>
         </md-tabs>
