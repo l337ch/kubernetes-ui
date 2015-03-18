@@ -96,7 +96,7 @@ describe('Kubernetes UI Graph', function() {
         });
 
     // This id matches a node defined in /www/master/shared/assets/sampleData1.json.
-    var firstNode = element(by.datumIdMatches('Process:k8s_POD.3099/24572'));
+    var firstNode = element(by.datumIdMatches('Node:kubernetes-minion-63vc.c.shared-kraken.internal'));
     expect(firstNode).toBeDefined();
 
     // Now click to select this node.
