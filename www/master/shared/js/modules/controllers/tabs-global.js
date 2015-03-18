@@ -15,7 +15,7 @@ app.controller('TabCtrl', [
       var tab = tabs[index];
 
       if (tab) {
-        var path = '/%s'.format(tab.toLowerCase());
+        var path = '/%s'.format(tab.component);
         if (location_path.indexOf(path) == -1) {
           $location.path(path);
         }

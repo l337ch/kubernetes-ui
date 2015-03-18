@@ -1,18 +1,19 @@
 var gulp = require('gulp'), concat = require('gulp-concat'), uglify = require('gulp-uglify'),
-    // jade        = require('gulp-jade'),
+    // jade = require('gulp-jade'),
     less = require('gulp-less'), path = require('path'),
     livereload = require('gulp-livereload'),  // Livereload plugin needed:
     // https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
-    // marked      = require('marked'), // For :markdown filter in jade
+    // marked = require('marked'), // For :markdown filter in jade
     path = require('path'), changed = require('gulp-changed'), prettify = require('gulp-html-prettify'),
     w3cjs = require('gulp-w3cjs'), rename = require('gulp-rename'),
-    // flip        = require('css-flip'),
+    // flip = require('css-flip'),
     through = require('through2'), gutil = require('gulp-util'), htmlify = require('gulp-angular-htmlify'),
     minifyCSS = require('gulp-minify-css'), gulpFilter = require('gulp-filter'), expect = require('gulp-expect-file'),
     gulpsync = require('gulp-sync')(gulp), ngAnnotate = require('gulp-ng-annotate'),
     sourcemaps = require('gulp-sourcemaps'), del = require('del'), jsoncombine = require('gulp-jsoncombine'),
     ngConstant = require('gulp-ng-constant'), argv = require('yargs').argv, foreach = require('gulp-foreach'),
-    gcallback = require('gulp-callback'), tag_version = require('gulp-tag-version'), PluginError = gutil.PluginError;
+    gcallback = require('gulp-callback'), changeCase = require('change-case'),
+    tag_version = require('gulp-tag-version'), PluginError = gutil.PluginError;
 
 // LiveReload port. Change it only if there's a conflict
 var lvr_port = 35729;
@@ -70,7 +71,7 @@ var source = {
       'shared/js/modules/services/*.js',
       'components/*/js/**/*.js'
     ],
-    watch: ['js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
+    watch: ['manifest.json', 'js/**/*.js', 'shared/**/*.js', 'components/*/js/**/*.js']
   },
   // templates: {
   //   app: {
@@ -157,19 +158,27 @@ function stringSrc(filename, string) {
 // TASKS
 //---------------
 
+var manifestDirectory = function(manifestFile) {
+  return manifestFile.relative.slice(0, '/manifest.json'.length * -1);
+};
+
 gulp.task('bundle-manifest', function() {
   var components = [];
   var namespace = [];
   gulp.src('./components/*/manifest.json')
       .pipe(foreach (function(stream, file) {
-        var manifestFile = require(file.path);
-        components.push(manifestFile.name);
-        namespace.push(manifestFile.namespace);
+        var component = manifestDirectory(file);
+        components.push(component);
+        namespace.push(changeCase.camelCase(component));
         return stream;
       }))
       .pipe(gcallback(function() {
-        stringSrc("tabs.js", 'app.value("tabs", ["' + components.join('","') + '"]);').pipe(gulp.dest("js"));
-        var _appNS = 'kubernetesApp.';
+        var tabs = [];
+        components.forEach(function(component) {
+          tabs.push({component: component, title: changeCase.titleCase(component)});
+        });
+        stringSrc("tabs.js", 'app.value("tabs", ' + JSON.stringify(tabs) + ');').pipe(gulp.dest("js"));
+        var _appNS = 'kubernetesApp.components.';
         var _appSkeleton = require('./js/app.skeleton.json');
         stringSrc("app.preinit.js",
                   _appSkeleton.appSkeleton.replace('%s', '"' + _appNS + namespace.join('", "' + _appNS) + '"'))
@@ -177,37 +186,37 @@ gulp.task('bundle-manifest', function() {
       }));
 });
 
-gulp.task('bundle-manifest-sections', function() {
+gulp.task('bundle-manifest-routes', function() {
   var sections = [];
   gulp.src('./components/*/manifest.json')
       .pipe(foreach (function(stream, file) {
+        var component = manifestDirectory(file);
         var manifestFile = require(file.path);
-        sections.push(JSON.stringify(manifestFile.sections));
-        return stream
+        var routes = [];
+        if (manifestFile.routes) {
+          manifestFile.routes.forEach(function(r) {
+            // Hacky deep copy. Modifying manifestFile here will be repeated
+            // each time the task is called (consider watch/reload) due to
+            // cached file reads.
+            var route = JSON.parse(JSON.stringify(r));
+            if (route.url) {
+              route.url = '/' + component + route.url;
+            }
+            routes.push(route);
+          });
+        }
+        sections = sections.concat(routes);
+        return stream;
       }))
       .pipe(gcallback(function() {
-        var output_sections = '';
-        for (i = 0; i < sections.length; i++) {
-          if (output_sections.indexOf(sections[i].substr(1, sections[i].length - 2)) == -1) {
-            output_sections += sections[i].substr(1, sections[i].length - 2) + ',';
-          }
-        }
-        var output_section = '[' + output_sections.substr(0, output_sections.length - 1) + ']';
-        var _provider = "app.provider('manifest', function manifestProvider() { " + "var sections = '%s';" +
-                        "this.getRoutes = function() {" + "    return sections;" + "};" +
-                        "this.$get = ['sections', function(sections){" + "    var manifest = {};" +
-                        "    manifest.getRoutes = function () {" + "      return sections;" + "    };" + "" +
-                        "    return manifest;" + "  }];" + "});";
-        var _provider_combined = _provider.replace('%s', output_section);
-        var _file_contents = _provider_combined;
-        _file_contents += '\n' +
-                          'app.value("sections", ' + output_section + ');\n';
+        var output_sections = JSON.stringify(sections);
+        var _file_contents = 'app.constant("manifestRoutes", ' + output_sections + ');\n';
         stringSrc("sections.js", _file_contents).pipe(gulp.dest("js"));
       }));
 });
 
 // JS APP
-gulp.task('scripts:app', ['bundle-manifest', 'bundle-manifest-sections', 'config', 'scripts:app:base']);
+gulp.task('scripts:app', ['bundle-manifest', 'bundle-manifest-routes', 'config', 'scripts:app:base']);
 
 // JS APP BUILD
 gulp.task('scripts:app:base', function() {

@@ -18,19 +18,6 @@ app.directive('includeReplace',
                                 });
                  };
                })
-    .directive('menuLink',
-               function() {
-                 'use strict';
-                 return {
-                   scope: {section: '='},
-                   templateUrl: '/views/partials/menu-link.tmpl.html',
-                   link: function($scope, $element) {
-                     var controller = $element.parent().controller();
-
-                     $scope.isSelected = function() { return controller.isSelected($scope.section); };
-                   }
-                 };
-               })
     .directive("kubernetesUiMenu",
                function() {
                  'use strict';
