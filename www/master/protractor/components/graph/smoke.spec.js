@@ -45,6 +45,9 @@ describe('Kubernetes UI Graph', function() {
 
     var details = element(by.id('details'));
     expect(details).toBeDefined();
+    expect(details.isDisplayed()).toBe(false);
+
+    toggleBtn.click();
     expect(details.isDisplayed()).toBe(true);
   });
 
