@@ -9,6 +9,7 @@ module.exports = function(config) {
       'master/bower_components/angular-material/angular-material.js',
       'master/bower_components/angular-mocks/angular-mocks.js',
       'master/bower_components/angular-route/angular-route.js',
+      'master/bower_components/angularjs-jasmine-matchers/dist/matchers.js',
       'master/bower_components/hammerjs/hammer.js',
       'master/bower_components/lodash/dist/lodash.js',
       'app/assets/js/app.js',
