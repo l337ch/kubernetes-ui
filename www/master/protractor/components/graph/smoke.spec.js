@@ -7,7 +7,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     // Verify if the control action icons have been loaded.
     var expandCollapse = element(by.id('ExpandCollapse'));
@@ -37,7 +37,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     var toggleBtn = element(by.id('toggleDetails'));
     expect(toggleBtn).toBeDefined();
@@ -59,7 +59,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     var svg = element(by.css('d3-visualization svg'));
     expect(svg).toBeDefined();
