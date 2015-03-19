@@ -6,7 +6,13 @@ us manage and test the application.
 * We get the tools we depend upon via `npm`, the [node package manager](https://www.npmjs.com/).
 * We get the angular code via `bower`, a [client-side code package manager](http://bower.io/).
 
-`npm` is configured to automatically run `bower install` and `gulp`. From the `www/master` directory, simply run:
+`npm` is configured to automatically run `bower install` and `gulp`. Before you run the application for the first time, simply run this command from the `www/master` directory:
+
+```
+npm install
+```
+
+To start the application, run this command from the `www/master` directory:
 
 ```
 npm start
