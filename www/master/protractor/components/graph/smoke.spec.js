@@ -96,7 +96,7 @@ describe('Kubernetes UI Graph', function() {
         });
 
     // This id matches a node defined in /www/master/shared/assets/sampleData1.json.
-    var firstNode = element(by.datumIdMatches('Node:kubernetes-minion-63vc.c.shared-kraken.internal'));
+    var firstNode = element(by.datumIdMatches('Pod:redis-slave-controller-vi7hv'));
     expect(firstNode).toBeDefined();
 
     // Now click to select this node.
@@ -122,7 +122,7 @@ describe('Kubernetes UI Graph', function() {
     var backBtn = element(by.id('backButton'));
     expect(backBtn).toBeDefined();
     backBtn.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
   });
 
 });
