@@ -7,7 +7,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     // Verify if the control action icons have been loaded.
     var expandCollapse = element(by.id('ExpandCollapse'));
@@ -37,7 +37,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     var toggleBtn = element(by.id('toggleDetails'));
     expect(toggleBtn).toBeDefined();
@@ -59,7 +59,7 @@ describe('Kubernetes UI Graph', function() {
     var graphTab = element(by.id('tab_002'));
     expect(graphTab).toBeDefined();
     graphTab.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
 
     var svg = element(by.css('d3-visualization svg'));
     expect(svg).toBeDefined();
@@ -80,8 +80,23 @@ describe('Kubernetes UI Graph', function() {
     toggleSource.click();
     // Just pull once to get a stable graph.
     pollOnce.click();
-    var firstNode = element(by.id('d3Node0'));
-    expect(firstNode).toBeDefined(firstNode);
+
+    // Add a custom locator to match on the d3 data backing the circle element.
+    by.addLocator('datumIdMatches', function(datumId, opt_parentElement, opt_rootSelector) {
+      var matchingCircles = [];
+
+      window.d3.selectAll('circle').each(function(d) {
+        if (d && d.id === datumId) {
+          matchingCircles.push(this);
+        }
+      });
+
+      return matchingCircles;
+    });
+
+    // This id matches a node defined in /www/master/shared/assets/sampleData1.json.
+    var firstNode = element(by.datumIdMatches('Pod:redis-slave-controller-vi7hv'));
+    expect(firstNode).toBeDefined();
 
     // Now click to select this node.
     firstNode.click();
@@ -106,7 +121,7 @@ describe('Kubernetes UI Graph', function() {
     var backBtn = element(by.id('backButton'));
     expect(backBtn).toBeDefined();
     backBtn.click();
-    expect(browser.getLocationAbsUrl()).toBe('/graph');
+    expect(browser.getLocationAbsUrl()).toBe('/graph/');
   });
 
 });
