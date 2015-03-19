@@ -82,18 +82,17 @@ describe('Kubernetes UI Graph', function() {
     pollOnce.click();
 
     // Add a custom locator to match on the d3 data backing the circle element.
-    by.addLocator('datumIdMatches',
-        function(datumId, opt_parentElement, opt_rootSelector) {
-            var matchingCircles = [];
+    by.addLocator('datumIdMatches', function(datumId, opt_parentElement, opt_rootSelector) {
+      var matchingCircles = [];
 
-            window.d3.selectAll('circle').each(function (d) {
-                if (d && d.id === datumId) {
-                    matchingCircles.push(this);
-                }
-            });
+      window.d3.selectAll('circle').each(function(d) {
+        if (d && d.id === datumId) {
+          matchingCircles.push(this);
+        }
+      });
 
-            return matchingCircles;
-        });
+      return matchingCircles;
+    });
 
     // This id matches a node defined in /www/master/shared/assets/sampleData1.json.
     var firstNode = element(by.datumIdMatches('Pod:redis-slave-controller-vi7hv'));
